@@ -972,28 +972,40 @@ function JobFinder(){
   const filtered=useMemo(()=>JOBS.filter(j=>{const s=(q||'').toLowerCase();if(s&&!j.title.toLowerCase().includes(s)&&!j.company.toLowerCase().includes(s)&&!j.tags.some(t=>t.toLowerCase().includes(s)))return false;if(loc&&j.loc!==loc)return false;if(type&&j.type!==type)return false;return true;}),[q,loc,type]);
   const liveSearch=async()=>{
     const key=userRapidKey||RAPIDAPI_KEY;
-    if(!key){setErr('Add a RapidAPI key in Profile → API Keys to enable live search.');return;}
+    if(!key){setErr('No RapidAPI key. Profile → API Keys → paste your JSearch key, then retry.');return;}
     if(!q.trim()){setErr('Enter a job title (e.g. "react developer")');return;}
     setErr('');setLoading(true);setLive([]);
     try{
-      const query=encodeURIComponent(q+(loc?' in '+loc:' in India'));
-      const url=`https://${RAPIDAPI_JOBS_HOST}/search?query=${query}&page=1&num_pages=1&date_posted=month`+(exp?`&job_requirements=${exp}`:'');
+      // Build query — JSearch expects "title in city, country"
+      const queryStr=q.trim()+(loc?' in '+loc:' in India');
+      const params=new URLSearchParams({query:queryStr,page:'1',num_pages:'1',country:'in',date_posted:'all'});
+      if(exp)params.set('job_requirements',exp);
+      const url=`https://${RAPIDAPI_JOBS_HOST}/search?`+params.toString();
       const r=await fetch(url,{headers:{'X-RapidAPI-Key':key,'X-RapidAPI-Host':RAPIDAPI_JOBS_HOST}});
+      // Check HTTP status before parsing
+      if(r.status===401||r.status===403){setErr('RapidAPI rejected the key (HTTP '+r.status+'). Make sure you SUBSCRIBED to JSearch on rapidapi.com (free Basic tier is fine).');setLoading(false);return;}
+      if(r.status===429){setErr('Rate limited (HTTP 429). You hit the JSearch monthly quota — upgrade or wait.');setLoading(false);return;}
       const d=await r.json();
-      const items=(d.data||[]).map(j=>({
-        id:j.job_id,
-        title:j.job_title,
+      // JSearch error envelope
+      if(d.message&&!d.data){setErr('JSearch API: '+d.message);setLoading(false);return;}
+      if(d.error){setErr('JSearch error: '+(d.error.message||JSON.stringify(d.error)));setLoading(false);return;}
+      const raw=Array.isArray(d.data)?d.data:[];
+      const items=raw.map(j=>({
+        id:j.job_id||Math.random().toString(36),
+        title:j.job_title||'Untitled role',
         company:j.employer_name||'—',
-        loc:[j.job_city,j.job_country].filter(Boolean).join(', ')||(j.job_is_remote?'Remote':'India'),
+        loc:[j.job_city,j.job_state,j.job_country].filter(Boolean).join(', ')||(j.job_is_remote?'Remote':'India'),
         type:j.job_employment_type||'Full-time',
-        salary:j.job_min_salary?(`₹${j.job_min_salary}-${j.job_max_salary||''}`):(j.job_salary_currency?j.job_salary_currency:'—'),
+        salary:j.job_min_salary?(`${j.job_salary_currency||''} ${j.job_min_salary}-${j.job_max_salary||''}`).trim():'—',
         exp:j.job_required_experience?.required_experience_in_months?Math.round(j.job_required_experience.required_experience_in_months/12)+'+ yrs':'Any',
-        tags:(j.job_required_skills||[]).slice(0,5),
-        logo:'💼',
-        url:j.job_apply_link,
+        tags:(j.job_required_skills||j.job_highlights?.Qualifications||[]).slice(0,5),
+        logo:j.employer_logo?'🏢':'💼',
+        url:j.job_apply_link||j.job_google_link||'#',
       }));
       setLive(items);
-      if(!items.length)setErr('No live results from JSearch for that query.');
+      if(!items.length){
+        setErr(`JSearch returned 0 results for "${queryStr}". Try a broader title (e.g. "developer") or remove the experience filter.`);
+      }
     }catch(ex){setErr('Live search failed: '+(ex.message||'unknown'));}
     setLoading(false);
   };
@@ -1320,20 +1332,21 @@ function RecordingsPage({user,toast}){
 /* ── ADMIN DASHBOARD (enhanced) ── */
 function AdminDashboard({toast,addNotif}){
   const [tab,setTab]=useState('overview');
-  const seedUsers=[{name:'Priya S.',email:'priya@e.com',role:'student',status:'active',joined:'Jan 2025'},{name:'Rahul K.',email:'rahul@e.com',role:'student',status:'active',joined:'Feb 2025'},{name:'Prof. Rao',email:'rao@e.com',role:'teacher',status:'active',joined:'Dec 2024'}];
-  const users=[
-    ...allUsers.map(u=>({name:u.name,email:u.email,role:u.role,status:'active',joined:new Date(u.createdAt||Date.now()).toLocaleDateString('en',{month:'short',year:'numeric'})})),
-    ...seedUsers,
-  ];
+  // Hooks must be declared before they're used in derived values below
+  const [adminBooks,setAdminBooks]=useStore('cp_admin_books',[{id:1,title:'Admin Uploaded Book',author:'Admin',affLink:'https://amazon.in',active:true}]);
+  const [adminFeed]=useStore('cp_admin_feed',[]);
+  const [allUsers]=useStore('cp_users',[]);
   const [pdfs,setPdfs]=useState([
     {id:1,name:'DSA Notes Vol.1',by:'Prof. Rao',role:'teacher',status:'pending',date:'3 Apr 2025'},
     {id:2,name:'Web Dev Guide',by:'Amit Kumar',role:'student',status:'pending',date:'4 Apr 2025'},
     {id:3,name:'GATE Prep 2025',by:'Priya S.',role:'student',status:'approved',date:'1 Apr 2025'},
     {id:4,name:'OS Concepts',by:'Prof. Singh',role:'teacher',status:'rejected',date:'2 Apr 2025'},
   ]);
-  const [adminBooks,setAdminBooks]=useStore('cp_admin_books',[{id:1,title:'Admin Uploaded Book',author:'Admin',affLink:'https://amazon.in',active:true}]);
-  const [adminFeed]=useStore('cp_admin_feed',[]);
-  const [allUsers]=useStore('cp_users',[]);
+  const seedUsers=[{name:'Priya S.',email:'priya@e.com',role:'student',status:'active',joined:'Jan 2025'},{name:'Rahul K.',email:'rahul@e.com',role:'student',status:'active',joined:'Feb 2025'},{name:'Prof. Rao',email:'rao@e.com',role:'teacher',status:'active',joined:'Dec 2024'}];
+  const users=[
+    ...(allUsers||[]).map(u=>({name:u.name,email:u.email,role:u.role,status:'active',joined:new Date(u.createdAt||Date.now()).toLocaleDateString('en',{month:'short',year:'numeric'})})),
+    ...seedUsers,
+  ];
   const [bookTitle,setBookTitle]=useState('');const [bookAuthor,setBookAuthor]=useState('');const [bookLink,setBookLink]=useState('');
   const approve=i=>{setPdfs(p=>p.map((x,idx)=>idx===i?{...x,status:'approved'}:x));toast('PDF approved!','success');addNotif('Admin approved PDF: '+pdfs[i].name);};
   const reject=i=>{setPdfs(p=>p.map((x,idx)=>idx===i?{...x,status:'rejected'}:x));toast('PDF rejected','error');addNotif('Admin rejected PDF: '+pdfs[i].name);};
