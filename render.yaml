@@ -9,7 +9,7 @@ services:
     routes:
       - type: rewrite
         source: /
-        destination: /careerpilot.html
+        destination: /index.html
     headers:
       - path: /*
         name: X-Frame-Options
