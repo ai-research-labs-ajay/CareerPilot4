@@ -1,0 +1,13 @@
+Business_project/                  ← repo root (this becomes your GitHub repo)
+├── .gitignore                     ← (create at root — see below)
+├── render.yaml                    ← Render Blueprint, auto-deploys the static site
+└── webdashboard/                  ← Render's rootDir + staticPublishPath
+    ├── .gitignore                 ← already created (excludes config.local.js, .env*)
+    ├── build.sh                   ← Render runs this; writes config.local.js from env vars
+    ├── config.example.js          ← committed template (no secrets)
+    ├── config.local.js            ← ❌ DO NOT COMMIT (gitignored, secrets)
+    ├── careerpilot.html           ← main app
+    ├── Ajay.html                  ← (other dashboards — optional)
+    ├── brightstack.html
+    ├── README.md
+    └── folder-structure.md

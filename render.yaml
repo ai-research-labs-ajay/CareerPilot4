@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: careerpilot
+    runtime: static
+    rootDir: webdashboard
+    buildCommand: bash ./build.sh
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: true
+    routes:
+      - type: rewrite
+        source: /
+        destination: /careerpilot.html
+    headers:
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_S3_BUCKET
+        value: recordings
+      - key: SUPABASE_S3_REGION
+        value: ap-south-1
+      - key: SUPABASE_S3_ACCESS_KEY_ID
+        sync: false
+      - key: SUPABASE_S3_SECRET_ACCESS_KEY
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PIN
+        sync: false
+      - key: GROQ_DEMO_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama-3.1-8b-instant
+      - key: RAPIDAPI_KEY
+        sync: false
+      - key: RAPIDAPI_JOBS_HOST
+        value: jsearch.p.rapidapi.com

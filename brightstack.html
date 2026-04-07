@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerPilot – Student Success Platform</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.4/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',sans-serif;background:#0f0c29}
+  .grad{background:linear-gradient(135deg,#6366f1,#8b5cf6,#a855f7)}
+  .grad2{background:linear-gradient(135deg,#1e1b4b,#312e81)}
+  .glass{background:rgba(255,255,255,0.07);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12)}
+  .card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px}
+  .btn-primary{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;border:none;border-radius:10px;padding:10px 22px;cursor:pointer;font-weight:600;transition:opacity .2s}
+  .btn-primary:hover{opacity:.85}
+  .btn-ghost{background:transparent;color:#a5b4fc;border:1px solid #6366f1;border-radius:10px;padding:9px 20px;cursor:pointer;font-weight:500;transition:all .2s}
+  .btn-ghost:hover{background:#6366f1;color:#fff}
+  .input{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 14px;color:#e2e8f0;width:100%;outline:none;transition:border .2s}
+  .input:focus{border-color:#8b5cf6}
+  .input::placeholder{color:#94a3b8}
+  .select{background:rgba(30,27,75,0.9);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 14px;color:#e2e8f0;width:100%;outline:none;cursor:pointer}
+  .select option{background:#1e1b4b}
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+  .badge-purple{background:rgba(139,92,246,0.25);color:#c4b5fd}
+  .badge-green{background:rgba(16,185,129,0.2);color:#6ee7b7}
+  .badge-yellow{background:rgba(245,158,11,0.2);color:#fcd34d}
+  .badge-red{background:rgba(239,68,68,0.2);color:#fca5a5}
+  .badge-blue{background:rgba(59,130,246,0.2);color:#93c5fd}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;color:#94a3b8;cursor:pointer;transition:all .2s;font-size:14px}
+  .nav-item:hover,.nav-item.active{background:rgba(99,102,241,0.2);color:#a5b4fc}
+  .nav-item.active{border-left:3px solid #8b5cf6}
+  .float-timer{position:fixed;bottom:20px;right:20px;z-index:1000;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:50px;padding:8px 18px;color:#fff;font-size:13px;font-weight:700;box-shadow:0 8px 32px rgba(99,102,241,0.4);cursor:pointer;user-select:none}
+  .task-item{display:flex;align-items:flex-start;gap:12px;padding:12px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);margin-bottom:8px;transition:all .2s}
+  .task-item:hover{background:rgba(255,255,255,0.08)}
+  .task-item.done{opacity:.5}
+  .task-item.done .task-text{text-decoration:line-through;color:#64748b}
+  .book-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px;transition:transform .2s,box-shadow .2s}
+  .book-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(99,102,241,0.2)}
+  .job-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:18px;transition:all .2s;margin-bottom:12px}
+  .job-card:hover{border-color:#8b5cf6;box-shadow:0 8px 30px rgba(139,92,246,0.15)}
+  .progress-bar{height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6);border-radius:3px;transition:width .5s ease}
+  .tab-btn{padding:8px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;border:none;transition:all .2s}
+  .tab-btn.active{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
+  .tab-btn:not(.active){background:rgba(255,255,255,0.06);color:#94a3b8}
+  .tab-btn:not(.active):hover{background:rgba(255,255,255,0.1);color:#e2e8f0}
+  .star{color:#fbbf24}
+  ::-webkit-scrollbar{width:5px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:#4c1d95;border-radius:10px}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .fade-in{animation:fadeIn .4s ease}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+  .pulse{animation:pulse 2s infinite}
+  .streak-fire{font-size:24px;animation:pulse 1s infinite}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback}=React;
+
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+const BOOKS={
+  CSE:[
+    {id:1,title:"Introduction to Algorithms (CLRS)",author:"Cormen, Leiserson, Rivest & Stein",edition:"4th Ed",topic:"DSA",rating:4.9,free:true,amazon:"https://www.amazon.in/s?k=Introduction+to+Algorithms+CLRS&tag=careerpilot-21"},
+    {id:2,title:"Computer Networks",author:"Andrew Tanenbaum",edition:"5th Ed",topic:"Networks",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Computer+Networks+Tanenbaum&tag=careerpilot-21"},
+    {id:3,title:"Database System Concepts",author:"Silberschatz, Korth & Sudarshan",edition:"7th Ed",topic:"DBMS",rating:4.8,free:false,amazon:"https://www.amazon.in/s?k=Database+System+Concepts+Silberschatz&tag=careerpilot-21"},
+    {id:4,title:"Operating System Concepts",author:"Abraham Silberschatz",edition:"10th Ed",topic:"OS",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Operating+System+Concepts+Silberschatz&tag=careerpilot-21"},
+    {id:5,title:"Software Engineering",author:"Roger Pressman",edition:"8th Ed",topic:"SE",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Software+Engineering+Pressman&tag=careerpilot-21"},
+    {id:6,title:"Computer Organization & Architecture",author:"William Stallings",edition:"11th Ed",topic:"COA",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Computer+Organization+Architecture+Stallings&tag=careerpilot-21"},
+    {id:7,title:"Discrete Mathematics & Its Applications",author:"Kenneth Rosen",edition:"7th Ed",topic:"Maths",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Discrete+Mathematics+Rosen&tag=careerpilot-21"},
+    {id:8,title:"Introduction to the Theory of Computation",author:"Michael Sipser",edition:"3rd Ed",topic:"TOC",rating:4.8,free:false,amazon:"https://www.amazon.in/s?k=Theory+of+Computation+Sipser&tag=careerpilot-21"},
+    {id:9,title:"Compiler Design: Principles, Techniques",author:"Aho, Lam, Sethi & Ullman",edition:"2nd Ed",topic:"Compilers",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Compiler+Design+Aho&tag=careerpilot-21"},
+    {id:10,title:"Artificial Intelligence: A Modern Approach",author:"Russell & Norvig",edition:"4th Ed",topic:"AI",rating:4.9,free:false,amazon:"https://www.amazon.in/s?k=Artificial+Intelligence+Russell+Norvig&tag=careerpilot-21"},
+  ],
+  IT:[
+    {id:1,title:"Web Technologies: HTML, CSS, JS",author:"Kogent Learning",edition:"3rd Ed",topic:"Web Dev",rating:4.2,free:true,amazon:"https://www.amazon.in/s?k=Web+Technologies+Kogent&tag=careerpilot-21"},
+    {id:2,title:"Network Security & Cryptography",author:"William Stallings",edition:"7th Ed",topic:"Security",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Network+Security+Stallings&tag=careerpilot-21"},
+    {id:3,title:"Cloud Computing",author:"Rajkumar Buyya",edition:"1st Ed",topic:"Cloud",rating:4.4,free:false,amazon:"https://www.amazon.in/s?k=Cloud+Computing+Buyya&tag=careerpilot-21"},
+    {id:4,title:"Learning Python",author:"Mark Lutz",edition:"5th Ed",topic:"Python",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Learning+Python+Mark+Lutz&tag=careerpilot-21"},
+    {id:5,title:"Python for Data Analysis",author:"Wes McKinney",edition:"3rd Ed",topic:"Data Science",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Python+Data+Analysis+McKinney&tag=careerpilot-21"},
+    {id:6,title:"JavaScript: The Good Parts",author:"Douglas Crockford",edition:"1st Ed",topic:"JavaScript",rating:4.3,free:true,amazon:"https://www.amazon.in/s?k=JavaScript+Good+Parts+Crockford&tag=careerpilot-21"},
+    {id:7,title:"Docker Deep Dive",author:"Nigel Poulton",edition:"2023 Ed",topic:"DevOps",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Docker+Deep+Dive+Nigel+Poulton&tag=careerpilot-21"},
+    {id:8,title:"Designing Data-Intensive Applications",author:"Martin Kleppmann",edition:"1st Ed",topic:"System Design",rating:4.9,free:false,amazon:"https://www.amazon.in/s?k=Designing+Data+Intensive+Applications+Kleppmann&tag=careerpilot-21"},
+  ],
+  ECE:[
+    {id:1,title:"Electronic Devices & Circuit Theory",author:"Boylestad & Nashelsky",edition:"11th Ed",topic:"Analog",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Electronic+Devices+Boylestad&tag=careerpilot-21"},
+    {id:2,title:"Signals and Systems",author:"Oppenheim & Willsky",edition:"2nd Ed",topic:"Signals",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Signals+Systems+Oppenheim&tag=careerpilot-21"},
+    {id:3,title:"Digital Communications",author:"John Proakis",edition:"5th Ed",topic:"Communications",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Digital+Communications+Proakis&tag=careerpilot-21"},
+    {id:4,title:"Microprocessors and Microcontrollers",author:"Ramesh Gaonkar",edition:"5th Ed",topic:"Microprocessors",rating:4.4,free:false,amazon:"https://www.amazon.in/s?k=Microprocessors+Gaonkar&tag=careerpilot-21"},
+    {id:5,title:"VLSI Design",author:"Weste & Harris",edition:"4th Ed",topic:"VLSI",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=VLSI+Design+Weste&tag=careerpilot-21"},
+    {id:6,title:"Digital Electronics",author:"R.P. Jain",edition:"5th Ed",topic:"Digital",rating:4.3,free:false,amazon:"https://www.amazon.in/s?k=Digital+Electronics+RP+Jain&tag=careerpilot-21"},
+    {id:7,title:"Electromagnetic Field Theory",author:"Hayt & Buck",edition:"8th Ed",topic:"EMT",rating:4.4,free:false,amazon:"https://www.amazon.in/s?k=Electromagnetic+Fields+Hayt&tag=careerpilot-21"},
+  ],
+  ME:[
+    {id:1,title:"Engineering Mechanics",author:"R.C. Hibbeler",edition:"14th Ed",topic:"Mechanics",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Engineering+Mechanics+Hibbeler&tag=careerpilot-21"},
+    {id:2,title:"Thermodynamics: An Engineering Approach",author:"Cengel & Boles",edition:"9th Ed",topic:"Thermo",rating:4.8,free:false,amazon:"https://www.amazon.in/s?k=Thermodynamics+Cengel&tag=careerpilot-21"},
+    {id:3,title:"Manufacturing Science",author:"Ghosh & Mallik",edition:"2nd Ed",topic:"Manufacturing",rating:4.4,free:false,amazon:"https://www.amazon.in/s?k=Manufacturing+Science+Ghosh&tag=careerpilot-21"},
+    {id:4,title:"Mechanical Engineering Design",author:"Shigley",edition:"10th Ed",topic:"Design",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Mechanical+Engineering+Design+Shigley&tag=careerpilot-21"},
+    {id:5,title:"Fluid Mechanics",author:"Munson, Okiishi & Huebsch",edition:"8th Ed",topic:"Fluid Mech",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Fluid+Mechanics+Munson&tag=careerpilot-21"},
+    {id:6,title:"Strength of Materials",author:"R.K. Bansal",edition:"5th Ed",topic:"SOM",rating:4.4,free:false,amazon:"https://www.amazon.in/s?k=Strength+of+Materials+RK+Bansal&tag=careerpilot-21"},
+    {id:7,title:"Theory of Machines",author:"S.S. Rattan",edition:"3rd Ed",topic:"TOM",rating:4.3,free:false,amazon:"https://www.amazon.in/s?k=Theory+of+Machines+Rattan&tag=careerpilot-21"},
+  ],
+  EE:[
+    {id:1,title:"Electric Circuits",author:"Nilsson & Riedel",edition:"11th Ed",topic:"Circuits",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Electric+Circuits+Nilsson&tag=careerpilot-21"},
+    {id:2,title:"Power System Analysis",author:"Stevenson & Grainger",edition:"4th Ed",topic:"Power Systems",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Power+System+Analysis+Stevenson&tag=careerpilot-21"},
+    {id:3,title:"Control Systems Engineering",author:"Nagrath & Gopal",edition:"6th Ed",topic:"Control",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Control+Systems+Nagrath+Gopal&tag=careerpilot-21"},
+    {id:4,title:"Electric Machinery Fundamentals",author:"Stephen Chapman",edition:"5th Ed",topic:"Machines",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Electric+Machinery+Fundamentals+Chapman&tag=careerpilot-21"},
+    {id:5,title:"Power Electronics",author:"Mohan, Undeland & Robbins",edition:"3rd Ed",topic:"Power Electronics",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Power+Electronics+Mohan&tag=careerpilot-21"},
+    {id:6,title:"Electromagnetic Fields",author:"Hayt & Buck",edition:"8th Ed",topic:"EMF",rating:4.4,free:false,amazon:"https://www.amazon.in/s?k=Electromagnetic+Fields+Hayt+Buck&tag=careerpilot-21"},
+  ],
+  Civil:[
+    {id:1,title:"Strength of Materials",author:"James Gere & Barry Goodno",edition:"9th Ed",topic:"SOM",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Strength+of+Materials+Gere&tag=careerpilot-21"},
+    {id:2,title:"Structural Analysis",author:"R.C. Bhavikatti",edition:"6th Ed",topic:"Structures",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Structural+Analysis+Bhavikatti&tag=careerpilot-21"},
+    {id:3,title:"Principles of Geotechnical Engineering",author:"Braja M. Das",edition:"9th Ed",topic:"Geotechnical",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Geotechnical+Engineering+Das&tag=careerpilot-21"},
+    {id:4,title:"Transportation Engineering",author:"Garber & Hoel",edition:"5th Ed",topic:"Transport",rating:4.3,free:false,amazon:"https://www.amazon.in/s?k=Transportation+Engineering+Garber&tag=careerpilot-21"},
+    {id:5,title:"Fluid Mechanics & Hydraulics",author:"V.T. Chow",edition:"Classic",topic:"Fluid Mech",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Fluid+Mechanics+Chow&tag=careerpilot-21"},
+    {id:6,title:"Surveying",author:"S.K. Duggal",edition:"4th Ed",topic:"Surveying",rating:4.4,free:false,amazon:"https://www.amazon.in/s?k=Surveying+SK+Duggal&tag=careerpilot-21"},
+  ],
+  Science:[
+    {id:1,title:"Mathematical Methods for Physics",author:"Mary Boas",edition:"3rd Ed",topic:"Maths",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Mathematical+Methods+Physics+Boas&tag=careerpilot-21"},
+    {id:2,title:"Organic Chemistry",author:"Morrison & Boyd",edition:"7th Ed",topic:"Chemistry",rating:4.8,free:false,amazon:"https://www.amazon.in/s?k=Organic+Chemistry+Morrison+Boyd&tag=careerpilot-21"},
+    {id:3,title:"Molecular Biology of the Cell",author:"Alberts et al.",edition:"7th Ed",topic:"Biology",rating:4.9,free:false,amazon:"https://www.amazon.in/s?k=Molecular+Biology+Cell+Alberts&tag=careerpilot-21"},
+    {id:4,title:"Introduction to Quantum Mechanics",author:"David Griffiths",edition:"3rd Ed",topic:"Physics",rating:4.8,free:false,amazon:"https://www.amazon.in/s?k=Quantum+Mechanics+Griffiths&tag=careerpilot-21"},
+    {id:5,title:"Atkins' Physical Chemistry",author:"Atkins & de Paula",edition:"11th Ed",topic:"Physical Chem",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Atkins+Physical+Chemistry&tag=careerpilot-21"},
+  ],
+  Arts:[
+    {id:1,title:"A History of the Modern World",author:"R.R. Palmer",edition:"11th Ed",topic:"History",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=History+Modern+World+Palmer&tag=careerpilot-21"},
+    {id:2,title:"Political Theory",author:"Andrew Heywood",edition:"4th Ed",topic:"Political Science",rating:4.6,free:false,amazon:"https://www.amazon.in/s?k=Political+Theory+Heywood&tag=careerpilot-21"},
+    {id:3,title:"Sociology",author:"Anthony Giddens",edition:"8th Ed",topic:"Sociology",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Sociology+Giddens&tag=careerpilot-21"},
+    {id:4,title:"Modern Indian History",author:"Bipan Chandra",edition:"Revised",topic:"Indian History",rating:4.8,free:false,amazon:"https://www.amazon.in/s?k=Modern+Indian+History+Bipan+Chandra&tag=careerpilot-21"},
+    {id:5,title:"Indian Polity",author:"M. Laxmikanth",edition:"6th Ed",topic:"Polity",rating:4.9,free:false,amazon:"https://www.amazon.in/s?k=Indian+Polity+Laxmikanth&tag=careerpilot-21"},
+  ],
+  Commerce:[
+    {id:1,title:"Financial Accounting",author:"S.N. Maheshwari",edition:"7th Ed",topic:"Accounting",rating:4.5,free:false,amazon:"https://www.amazon.in/s?k=Financial+Accounting+Maheshwari&tag=careerpilot-21"},
+    {id:2,title:"Principles of Corporate Finance",author:"Brealey, Myers & Allen",edition:"13th Ed",topic:"Finance",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Corporate+Finance+Brealey&tag=careerpilot-21"},
+    {id:3,title:"Business Law",author:"Avtar Singh",edition:"12th Ed",topic:"Law",rating:4.4,free:false,amazon:"https://www.amazon.in/s?k=Business+Law+Avtar+Singh&tag=careerpilot-21"},
+    {id:4,title:"Marketing Management",author:"Philip Kotler",edition:"16th Ed",topic:"Marketing",rating:4.8,free:false,amazon:"https://www.amazon.in/s?k=Marketing+Management+Kotler&tag=careerpilot-21"},
+    {id:5,title:"Principles of Economics",author:"N. Gregory Mankiw",edition:"9th Ed",topic:"Economics",rating:4.7,free:false,amazon:"https://www.amazon.in/s?k=Principles+Economics+Mankiw&tag=careerpilot-21"},
+  ]
+};
+
+// ─── NOTES DATA ───────────────────────────────────────────────────────────────
+const NOTES=[
+  // ── FREE NOTES ──
+  {id:1,title:"GATE CSE – Data Structures Complete Notes",subject:"DSA",exam:"GATE (CSE)",type:"free",price:0,pages:52,size:"3.1 MB",downloads:4820,rating:4.8,preview:"Covers Arrays, Linked Lists, Stacks, Queues, Trees (BST,AVL,B-Tree), Graphs (BFS,DFS,Dijkstra), Hashing with diagrams & solved examples.",uploadedBy:"CareerPilot Team",color:"#6366f1",emoji:"📐",tags:["Arrays","Trees","Graphs","Hashing"]},
+  {id:2,title:"GATE CSE – Operating Systems Short Notes",subject:"OS",exam:"GATE (CSE)",type:"free",price:0,pages:38,size:"2.2 MB",downloads:3610,rating:4.7,preview:"Process scheduling, Memory management, Deadlock, Synchronization, File systems — concise revision notes with previous year questions.",uploadedBy:"CareerPilot Team",color:"#8b5cf6",emoji:"💻",tags:["Scheduling","Memory","Deadlock","File Systems"]},
+  {id:3,title:"UPSC – Indian Polity Quick Revision Notes",subject:"Polity",exam:"UPSC Civil Services",type:"free",price:0,pages:65,size:"4.0 MB",downloads:7230,rating:4.9,preview:"Constitution basics, Fundamental Rights, DPSP, Parliament, President, PM, Judiciary, Local Self Government — ideal for Prelims.",uploadedBy:"CareerPilot Team",color:"#10b981",emoji:"🏛️",tags:["Constitution","Rights","Parliament","Judiciary"]},
+  {id:4,title:"SSC CGL – Quantitative Aptitude Formula Sheet",subject:"Maths",exam:"SSC CGL",type:"free",price:0,pages:18,size:"1.2 MB",downloads:9140,rating:4.8,preview:"All formulas: Number system, Percentages, Profit & Loss, Time-Work-Distance, Algebra, Geometry, Trigonometry — one-page per topic.",uploadedBy:"CareerPilot Team",color:"#f59e0b",emoji:"🔢",tags:["Formulas","Algebra","Geometry","Trigonometry"]},
+  {id:5,title:"IBPS PO – Reasoning Ability Tricks & Shortcuts",subject:"Reasoning",exam:"IBPS PO",type:"free",price:0,pages:44,size:"2.8 MB",downloads:5320,rating:4.7,preview:"Seating arrangement, Puzzles, Blood relations, Syllogism, Coding-Decoding with fast-solving tricks and 200+ practice questions.",uploadedBy:"CareerPilot Team",color:"#06b6d4",emoji:"🧠",tags:["Puzzles","Syllogism","Coding","Relations"]},
+  {id:6,title:"B.Tech CSE – DBMS Notes with SQL Examples",subject:"DBMS",exam:"GATE (CSE)",type:"free",price:0,pages:48,size:"3.4 MB",downloads:4150,rating:4.7,preview:"ER Model, Relational Algebra, SQL (DDL+DML), Normalization (1NF–BCNF), Transaction Management, Indexing B+ Tree.",uploadedBy:"CareerPilot Team",color:"#ec4899",emoji:"🗄️",tags:["SQL","ER Model","Normalization","Transactions"]},
+  {id:7,title:"B.Tech ECE – Signals & Systems Quick Notes",subject:"Signals",exam:"GATE (ECE)",type:"free",price:0,pages:35,size:"2.5 MB",downloads:2870,rating:4.6,preview:"Continuous & Discrete signals, Fourier Series, Fourier Transform, Laplace Transform, Z-Transform, LTI Systems with solved examples.",uploadedBy:"CareerPilot Team",color:"#8b5cf6",emoji:"📡",tags:["Fourier","Laplace","Z-Transform","LTI"]},
+  {id:8,title:"General English – Grammar Rules & Usage",subject:"English",exam:"SSC CGL",type:"free",price:0,pages:28,size:"1.8 MB",downloads:6780,rating:4.6,preview:"Tenses, Subject-Verb Agreement, Articles, Prepositions, Active/Passive Voice, Reported Speech, Common Errors — with examples.",uploadedBy:"CareerPilot Team",color:"#10b981",emoji:"📝",tags:["Grammar","Tenses","Voice","Errors"]},
+
+  // ── PREMIUM NOTES ──
+  {id:9,title:"GATE CSE – Complete Premium Bundle (All Subjects)",subject:"All Subjects",exam:"GATE (CSE)",type:"premium",price:299,pages:380,size:"22 MB",downloads:1240,rating:4.9,preview:"Complete GATE CSE preparation: DSA, OS, DBMS, Networks, TOC, COA, Digital Logic, Algorithms, Discrete Maths — with 500+ PYQ solutions and topic-wise analysis.",uploadedBy:"CareerPilot Expert",color:"#f59e0b",emoji:"⭐",tags:["DSA","OS","DBMS","Networks","TOC","Complete"]},
+  {id:10,title:"UPSC Civil Services – GS 1+2+3 Master Notes",subject:"General Studies",exam:"UPSC Civil Services",type:"premium",price:499,pages:520,size:"35 MB",downloads:876,rating:4.9,preview:"Complete GS coverage: History, Geography, Polity, Economy, Environment, Science & Technology — UPSC pattern analysis, model answers, and 10 years PYQ analysis.",uploadedBy:"CareerPilot Expert",color:"#ef4444",emoji:"🏆",tags:["History","Geography","Polity","Economy"]},
+  {id:11,title:"SSC CGL – Tier 1+2 Complete Premium Pack",subject:"All Sections",exam:"SSC CGL",type:"premium",price:199,pages:290,size:"18 MB",downloads:2130,rating:4.8,preview:"Quant, Reasoning, English, GK — chapter-wise theory + 2000+ practice questions + 15 full mock tests with answer keys and performance analysis.",uploadedBy:"CareerPilot Expert",color:"#6366f1",emoji:"💎",tags:["Quant","Reasoning","English","GK","Mock Tests"]},
+  {id:12,title:"IBPS PO – Complete Banking Exam Notes",subject:"Banking & Finance",exam:"IBPS PO",type:"premium",price:149,pages:210,size:"14 MB",downloads:1540,rating:4.7,preview:"Quant DI, Reasoning Puzzles, English RC, Banking Awareness + Current Affairs Jan-Dec 2025 — topic-wise solved examples and 10 mock tests.",uploadedBy:"CareerPilot Expert",color:"#8b5cf6",emoji:"🏦",tags:["DI","Puzzles","Banking","Current Affairs"]},
+  {id:13,title:"GATE ECE – Electronics & Communication Premium Bundle",subject:"All Subjects",exam:"GATE (ECE)",type:"premium",price:349,pages:420,size:"28 MB",downloads:640,rating:4.8,preview:"Signals, Networks, Analog, Digital, Control Systems, Communications, VLSI, Microprocessors — with 400+ solved GATE questions & topic weights.",uploadedBy:"CareerPilot Expert",color:"#06b6d4",emoji:"📡",tags:["Analog","Digital","Control","Communications"]},
+  {id:14,title:"B.Tech Final Year – Interview & Placement Notes",subject:"Aptitude + Tech",exam:"Campus Placement",type:"premium",price:99,pages:160,size:"9 MB",downloads:3280,rating:4.9,preview:"Aptitude shortcuts, Core CS fundamentals, HR questions, Coding patterns (DSA), Resume tips, Group Discussion guide — your placement success kit.",uploadedBy:"CareerPilot Expert",color:"#10b981",emoji:"🎯",tags:["Aptitude","DSA","HR","Resume","Coding"]},
+];
+
+const JOBS=[
+  {id:1,title:"Software Engineer",company:"TCS",type:"Private",category:"IT",exp:"Freshers",location:"Bangalore/Pune/Chennai",salary:"3.5–7 LPA",skills:["Java","C++","Problem Solving"],deadline:"2026-04-30",posted:"2 days ago",hot:true},
+  {id:2,title:"Associate Engineer",company:"Infosys",type:"Private",category:"IT",exp:"Freshers",location:"Multiple Cities",salary:"3.6–4.5 LPA",skills:["Python","SQL","Communication"],deadline:"2026-04-15",posted:"5 days ago",hot:false},
+  {id:3,title:"Junior Data Analyst",company:"Wipro",type:"Private",category:"Data",exp:"0–2 Years",location:"Hyderabad/Bangalore",salary:"4–6 LPA",skills:["Python","Excel","SQL","Tableau"],deadline:"2026-04-20",posted:"1 week ago",hot:false},
+  {id:4,title:"GATE Score – PSU Recruitment",company:"BHEL / NTPC / ONGC",type:"Government",category:"Core Engineering",exp:"Freshers (GATE)",location:"All India",salary:"7–12 LPA",skills:["GATE Qualified","Technical Knowledge"],deadline:"2026-05-31",posted:"New",hot:true},
+  {id:5,title:"SSC CGL – Combined Graduate Level",company:"Staff Selection Commission",type:"Government",category:"Administrative",exp:"Graduate",location:"All India",salary:"4–8 LPA",skills:["English","Reasoning","Quantitative Aptitude"],deadline:"2026-04-10",posted:"3 days ago",hot:true},
+  {id:6,title:"IBPS PO – Probationary Officer",company:"IBPS (Multiple Banks)",type:"Government",category:"Banking",exp:"Graduate",location:"All India",salary:"5–10 LPA",skills:["Aptitude","English","Banking Knowledge"],deadline:"2026-05-01",posted:"1 week ago",hot:false},
+  {id:7,title:"Railway JE – Junior Engineer",company:"Indian Railways (RRB)",type:"Government",category:"Core Engineering",exp:"Diploma/B.Tech",location:"Zone-wise",salary:"3.5–5 LPA",skills:["Technical Branch Specific","General Science"],deadline:"2026-06-15",posted:"New",hot:true},
+  {id:8,title:"Scientist/Engineer – B",company:"DRDO",type:"Government",category:"Research",exp:"GATE Qualified",location:"Various Labs",salary:"8–15 LPA",skills:["GATE Score","Research Aptitude"],deadline:"2026-05-15",posted:"4 days ago",hot:true},
+  {id:9,title:"Full Stack Developer",company:"Zoho Corporation",type:"Private",category:"IT",exp:"Freshers",location:"Chennai",salary:"4.5–8 LPA",skills:["JavaScript","React","Node.js"],deadline:"2026-04-18",posted:"2 days ago",hot:false},
+  {id:10,title:"Network Engineer",company:"HCL Technologies",type:"Private",category:"Networking",exp:"0–1 Year",location:"Noida/Bangalore",salary:"3.5–5 LPA",skills:["Networking","CCNA","Troubleshooting"],deadline:"2026-04-25",posted:"1 week ago",hot:false},
+];
+
+const VIDEOS=[
+  {id:1,title:"Complete Data Structures & Algorithms",channel:"Abdul Bari",url:"https://www.youtube.com/results?search_query=Abdul+Bari+algorithms",emoji:"📊",subject:"DSA",duration:"25 hrs",views:"5M+",exam:"GATE"},
+  {id:2,title:"GATE CSE – Operating Systems Full Course",channel:"Gate Smashers",url:"https://www.youtube.com/results?search_query=Gate+Smashers+OS",emoji:"💻",subject:"OS",duration:"30 hrs",views:"3M+",exam:"GATE"},
+  {id:3,title:"DBMS Full Course for GATE",channel:"Knowledge Gate",url:"https://www.youtube.com/results?search_query=Knowledge+Gate+DBMS",emoji:"🗄️",subject:"DBMS",duration:"20 hrs",views:"1.5M+",exam:"GATE"},
+  {id:4,title:"Computer Networks – GATE & Interviews",channel:"Kunal Kushwaha",url:"https://www.youtube.com/results?search_query=Kunal+Kushwaha+Networks",emoji:"🌐",subject:"Networks",duration:"15 hrs",views:"800K+",exam:"GATE"},
+  {id:5,title:"UPSC Prelims GS Paper 1 – Complete Course",channel:"StudyIQ IAS",url:"https://www.youtube.com/results?search_query=StudyIQ+UPSC+GS1",emoji:"📜",subject:"History/GS",duration:"80 hrs",views:"10M+",exam:"UPSC"},
+  {id:6,title:"SSC CGL – Complete Maths Preparation",channel:"Abhinay Maths",url:"https://www.youtube.com/results?search_query=Abhinay+Maths+SSC",emoji:"🔢",subject:"Mathematics",duration:"60 hrs",views:"5M+",exam:"SSC CGL"},
+  {id:7,title:"IBPS PO – Reasoning & Aptitude",channel:"Adda247",url:"https://www.youtube.com/results?search_query=Adda247+IBPS+PO+Reasoning",emoji:"🧠",subject:"Reasoning",duration:"40 hrs",views:"2M+",exam:"IBPS PO"},
+  {id:8,title:"Python Full Course for Beginners",channel:"Traversy Media",url:"https://www.youtube.com/results?search_query=Python+Full+Course+Traversy",emoji:"🐍",subject:"Python",duration:"12 hrs",views:"2M+",exam:"General"},
+  {id:9,title:"GATE ECE – Signals & Systems",channel:"NPTEL",url:"https://www.youtube.com/results?search_query=NPTEL+Signals+Systems",emoji:"📡",subject:"Signals",duration:"35 hrs",views:"900K+",exam:"GATE ECE"},
+  {id:10,title:"CAT Preparation – Quant Full Course",channel:"2IIM CAT",url:"https://www.youtube.com/results?search_query=2IIM+CAT+Quant",emoji:"📈",subject:"Quant",duration:"50 hrs",views:"1.2M+",exam:"CAT"},
+];
+
+const TOPICS_BY_EXAM={
+  "GATE (CSE)":[
+    {subject:"Data Structures & Algorithms",subtopics:["Arrays, Linked Lists, Stacks, Queues","Trees: BST, AVL, B-Trees, Heaps","Graphs: BFS, DFS, Dijkstra, Bellman-Ford","Sorting: Merge, Quick, Heap, Radix","Hashing & Collision Resolution","Dynamic Programming","Greedy Algorithms","Divide and Conquer","NP-Hard & NP-Complete"],hours:60,priority:"High"},
+    {subject:"DBMS",subtopics:["ER Model & Relational Algebra","SQL – DDL, DML, Queries","Normalization: 1NF to BCNF","Transaction Management & ACID","Concurrency Control (2PL, MVCC)","Indexing: B+ Tree, Hashing","File Organization"],hours:40,priority:"High"},
+    {subject:"Operating Systems",subtopics:["Process & Thread Management","CPU Scheduling Algorithms","Memory Management & Paging","Virtual Memory & Page Replacement","File Systems","Deadlocks: Detection, Prevention","Synchronization: Mutex, Semaphores"],hours:45,priority:"High"},
+    {subject:"Computer Networks",subtopics:["OSI & TCP/IP Model","Data Link: MAC, ARP, Ethernet","Network Layer: IP, ICMP, Routing","Transport Layer: TCP, UDP, Ports","Application Layer: HTTP, DNS, SMTP","Congestion Control","Error Detection & Correction"],hours:40,priority:"High"},
+    {subject:"Theory of Computation",subtopics:["Regular Languages & Finite Automata","Context-Free Grammars & PDA","Turing Machines","Decidability & Halting Problem","Complexity Classes: P, NP"],hours:35,priority:"Medium"},
+    {subject:"Discrete Mathematics",subtopics:["Set Theory & Relations","Graph Theory","Propositional & Predicate Logic","Combinatorics & Counting","Probability & Bayes Theorem"],hours:30,priority:"Medium"},
+    {subject:"Digital Logic",subtopics:["Boolean Algebra & Simplification","Combinational Circuits","Sequential Circuits (FF, Registers)","Finite State Machines","Number Systems & Conversion"],hours:25,priority:"Medium"},
+    {subject:"Computer Organization",subtopics:["Data Representation","ALU & Control Unit","Memory Hierarchy & Cache","Pipeline & Hazards","I/O Organization"],hours:30,priority:"Medium"},
+  ],
+  "UPSC Civil Services":[
+    {subject:"History",subtopics:["Ancient India – Indus Valley to Gupta","Medieval India – Delhi Sultanate, Mughals","Modern India – 1857 to Independence","World History – Industrial Revolution, WW1, WW2","Art, Culture & Heritage"],hours:80,priority:"High"},
+    {subject:"Geography",subtopics:["Physical Geography – Geomorphology, Climatology","Indian Geography – Rivers, Soils, Vegetation","World Geography","Environment & Ecology","Disaster Management"],hours:70,priority:"High"},
+    {subject:"Indian Polity",subtopics:["Constitution – Preamble, Features, Amendments","Fundamental Rights & DPSP","Parliament & Legislative Process","Executive: President, PM, Cabinet","Judiciary: Supreme Court, Judicial Review","Local Self Government"],hours:60,priority:"High"},
+    {subject:"Economics",subtopics:["National Income – GDP, GNP, Measurement","Money & Banking – RBI, Monetary Policy","Fiscal Policy & Union Budget","Agriculture & Rural Development","International Trade & WTO"],hours:55,priority:"High"},
+    {subject:"Current Affairs",subtopics:["Government Schemes & Policies","International Relations","Science & Technology","Environment News","Economy & Finance News"],hours:90,priority:"High"},
+  ],
+  "SSC CGL":[
+    {subject:"Quantitative Aptitude",subtopics:["Number System","Percentage & Profit-Loss","Ratio, Proportion & Partnership","Time, Work & Distance","Algebra & Geometry","Trigonometry & Heights","Data Interpretation"],hours:60,priority:"High"},
+    {subject:"English Language",subtopics:["Reading Comprehension","Error Spotting & Sentence Correction","Fill in the Blanks","Idioms & Phrases","One-Word Substitution","Synonyms & Antonyms"],hours:40,priority:"High"},
+    {subject:"General Intelligence & Reasoning",subtopics:["Series: Number, Letter","Analogy & Classification","Coding-Decoding","Blood Relations","Direction Sense","Puzzles & Seating Arrangement","Syllogism"],hours:35,priority:"High"},
+    {subject:"General Awareness",subtopics:["Indian History & Culture","Geography & Environment","Indian Polity","Economics","Science & Technology","Current Events"],hours:45,priority:"Medium"},
+  ],
+  "IBPS PO":[
+    {subject:"Quantitative Aptitude",subtopics:["Data Interpretation","Number Series","Simplification","Quadratic Equations","Arithmetic: Percentages, SI/CI, Profit/Loss","Probability"],hours:45,priority:"High"},
+    {subject:"Reasoning Ability",subtopics:["Seating Arrangement","Puzzles","Syllogism","Inequality","Blood Relations","Coding-Decoding","Direction Sense"],hours:40,priority:"High"},
+    {subject:"English Language",subtopics:["Reading Comprehension","Error Detection","Fill in the Blanks","Cloze Test","Para Jumbles"],hours:30,priority:"High"},
+    {subject:"General Banking & Finance",subtopics:["Banking Terms & Concepts","RBI Functions","Financial Instruments","Insurance Basics","Current Banking Affairs"],hours:25,priority:"Medium"},
+  ],
+};
+
+const EXAMS=["GATE (CSE)","GATE (ECE)","GATE (ME)","GATE (EE)","GATE (Civil)","UPSC Civil Services","SSC CGL","SSC CHSL","IBPS PO","IBPS Clerk","SBI PO","CAT","GRE","NDA","UGC NET"];
+const GOVT_CATEGORIES=["Banking (IBPS, SBI, RBI)","Railway (RRB, NTPC, Group D)","Defense (CDS, NDA, AFCAT)","SSC (CGL, CHSL, MTS)","UPSC (Civil Services, CAPF)","State PSC","Teaching (UGC NET, CTET)","Research (DRDO, ISRO, BARC)","Insurance (LIC, GIC)","Engineering PSUs (BHEL, NTPC, ONGC)"];
+const QUOTES=["Success is not final, failure is not fatal – it is the courage to continue that counts.","The secret of getting ahead is getting started.","Education is the most powerful weapon to change the world.","Don't watch the clock; do what it does. Keep going.","The expert in anything was once a beginner.","Believe you can and you're halfway there."];
+
+// ─── UTILS ────────────────────────────────────────────────────────────────────
+function fmtTime(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sc=s%60;if(h>0)return `${h}h ${m}m`;return `${m}m ${sc}s`;}
+function today(){return new Date().toISOString().split('T')[0];}
+function ls(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function ss(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch{}}
+function stars(n){return '★'.repeat(Math.floor(n))+'☆'.repeat(5-Math.floor(n));}
+
+// ─── GROQ API ─────────────────────────────────────────────────────────────────
+async function groqCall(apiKey,prompt){
+  const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${apiKey}`},
+    body:JSON.stringify({model:'llama3-8b-8192',messages:[{role:'user',content:prompt}],max_tokens:1500})
+  });
+  if(!r.ok)throw new Error('Groq API error');
+  const d=await r.json();
+  return d.choices[0].message.content;
+}
+
+// ─── FLOATING TIMER ───────────────────────────────────────────────────────────
+function FloatingTimer({seconds,running,onToggle}){
+  return(
+    <div className="float-timer pulse" onClick={onToggle} title={running?"Pause timer":"Resume timer"}>
+      ⏱ {fmtTime(seconds)} {running?'▶':'⏸'}
+    </div>
+  );
+}
+
+// ─── LANDING PAGE ─────────────────────────────────────────────────────────────
+function LandingPage({onAuth}){
+  const features=[
+    {icon:"🤖",title:"AI Study Planner",desc:"Groq AI generates your personalized study routine based on exam goals"},
+    {icon:"📄",title:"Notes Library",desc:"Free & Premium PDF notes — download instantly, earn by selling yours"},
+    {icon:"📚",title:"Books Library",desc:"Filtered by CSE, IT, ECE, ME, EE, Civil + Amazon affiliate buy links"},
+    {icon:"💼",title:"Job Finder",desc:"Private & Government job listings matching your profile"},
+    {icon:"🔔",title:"Govt Job Alerts",desc:"Email notifications the moment new vacancies drop"},
+    {icon:"✅",title:"Task Manager",desc:"Track topics, mark YouTube videos watched, update daily progress"},
+    {icon:"⏱",title:"Study Timer",desc:"Automatic daily time tracker with performance dashboard"},
+    {icon:"🎯",title:"Important Topics",desc:"Curated high-priority topics for every major exam with PYQ analysis"},
+  ];
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)'}}>
+      {/* NAV */}
+      <nav style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 40px',borderBottom:'1px solid rgba(255,255,255,0.1)'}}>
+        <div style={{display:'flex',alignItems:'center',gap:10}}>
+          <span style={{fontSize:28}}>⚡</span>
+          <span style={{fontSize:22,fontWeight:800,color:'#fff',letterSpacing:-0.5}}>CareerPilot</span>
+        </div>
+        <div style={{display:'flex',gap:12}}>
+          <button className="btn-ghost" onClick={()=>onAuth('login')}>Login</button>
+          <button className="btn-primary" onClick={()=>onAuth('signup')}>Get Started Free</button>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <div style={{textAlign:'center',padding:'80px 20px 60px'}}>
+        <div style={{display:'inline-block',background:'rgba(139,92,246,0.2)',border:'1px solid rgba(139,92,246,0.4)',borderRadius:50,padding:'6px 20px',marginBottom:24,color:'#c4b5fd',fontSize:13}}>
+          🎯 India's #1 Student Success Platform
+        </div>
+        <h1 style={{fontSize:'clamp(32px,6vw,64px)',fontWeight:900,color:'#fff',lineHeight:1.15,marginBottom:20}}>
+          Your Complete <span style={{background:'linear-gradient(135deg,#818cf8,#c084fc)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Study Partner</span><br/>for B.Tech & Graduates
+        </h1>
+        <p style={{color:'#94a3b8',fontSize:18,maxWidth:580,margin:'0 auto 40px'}}>
+          AI-powered study routines, curated books, government job alerts, task tracking, and performance analytics — all in one place.
+        </p>
+        <div style={{display:'flex',gap:14,justifyContent:'center',flexWrap:'wrap'}}>
+          <button className="btn-primary" style={{fontSize:16,padding:'14px 36px'}} onClick={()=>onAuth('signup')}>
+            Start Learning Free →
+          </button>
+          <button className="btn-ghost" style={{fontSize:16,padding:'14px 36px'}} onClick={()=>onAuth('login')}>
+            Sign In
+          </button>
+        </div>
+        <div style={{marginTop:24,color:'#64748b',fontSize:13}}>
+          ✓ Free notes &nbsp;&nbsp; ✓ AI powered &nbsp;&nbsp; ✓ Affiliate earnings &nbsp;&nbsp; ✓ Govt job alerts
+        </div>
+      </div>
+
+      {/* FEATURES */}
+      <div style={{maxWidth:1100,margin:'0 auto',padding:'0 20px 80px'}}>
+        <h2 style={{color:'#fff',textAlign:'center',fontSize:28,fontWeight:700,marginBottom:40}}>Everything you need to <span style={{color:'#a78bfa'}}>succeed</span></h2>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(240px,1fr))',gap:20}}>
+          {features.map((f,i)=>(
+            <div key={i} className="card fade-in" style={{textAlign:'center'}}>
+              <div style={{fontSize:36,marginBottom:12}}>{f.icon}</div>
+              <h3 style={{color:'#e2e8f0',fontWeight:700,marginBottom:8,fontSize:15}}>{f.title}</h3>
+              <p style={{color:'#64748b',fontSize:13,lineHeight:1.5}}>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* STATS */}
+      <div style={{borderTop:'1px solid rgba(255,255,255,0.08)',padding:'40px 20px',textAlign:'center'}}>
+        <div style={{display:'flex',justifyContent:'center',gap:60,flexWrap:'wrap'}}>
+          {[["10,000+","Active Students"],["70+","Free & Premium Notes"],["500+","Study Topics"],["24/7","Job Alerts"]].map(([n,l])=>(
+            <div key={l}>
+              <div style={{color:'#a78bfa',fontSize:32,fontWeight:800}}>{n}</div>
+              <div style={{color:'#64748b',fontSize:13,marginTop:4}}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── AUTH PAGE ────────────────────────────────────────────────────────────────
+function AuthPage({mode,onDone,onSwitch}){
+  const [form,setForm]=useState({name:'',email:'',password:'',confirm:''});
+  const [err,setErr]=useState('');
+  const [loading,setLoading]=useState(false);
+
+  const handle=async()=>{
+    setErr('');setLoading(true);
+    await new Promise(r=>setTimeout(r,600));
+    if(mode==='signup'){
+      if(!form.name||!form.email||!form.password){setErr('Please fill all fields.');setLoading(false);return;}
+      if(form.password!==form.confirm){setErr('Passwords do not match.');setLoading(false);return;}
+      const users=ls('bs_users',[]);
+      if(users.find(u=>u.email===form.email)){setErr('Email already registered.');setLoading(false);return;}
+      users.push({name:form.name,email:form.email,password:form.password});
+      ss('bs_users',users);
+      ss('bs_current_user',{name:form.name,email:form.email});
+      onDone({name:form.name,email:form.email});
+    }else{
+      const users=ls('bs_users',[]);
+      const u=users.find(u=>u.email===form.email&&u.password===form.password);
+      if(!u){setErr('Invalid email or password.');setLoading(false);return;}
+      ss('bs_current_user',{name:u.name,email:u.email});
+      onDone({name:u.name,email:u.email});
+    }
+    setLoading(false);
+  };
+
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)',display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+      <div className="glass" style={{borderRadius:20,padding:40,width:'100%',maxWidth:420}}>
+        <div style={{textAlign:'center',marginBottom:30}}>
+          <div style={{fontSize:36,marginBottom:8}}>⚡</div>
+          <h2 style={{color:'#fff',fontWeight:800,fontSize:24}}>{mode==='signup'?'Create Account':'Welcome Back'}</h2>
+          <p style={{color:'#64748b',fontSize:13,marginTop:6}}>{mode==='signup'?'Join thousands of students on CareerPilot':'Continue your study journey'}</p>
+        </div>
+        <div style={{display:'flex',flexDirection:'column',gap:14}}>
+          {mode==='signup'&&<input className="input" placeholder="Full Name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})}/>}
+          <input className="input" placeholder="Email Address" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})}/>
+          <input className="input" placeholder="Password" type="password" value={form.password} onChange={e=>setForm({...form,password:e.target.value})}/>
+          {mode==='signup'&&<input className="input" placeholder="Confirm Password" type="password" value={form.confirm} onChange={e=>setForm({...form,confirm:e.target.value})}/>}
+          {err&&<div style={{color:'#fca5a5',fontSize:13,textAlign:'center'}}>{err}</div>}
+          <button className="btn-primary" style={{marginTop:6}} onClick={handle} disabled={loading}>
+            {loading?'Please wait…':mode==='signup'?'Create Account':'Sign In'}
+          </button>
+        </div>
+        <p style={{color:'#64748b',textAlign:'center',marginTop:20,fontSize:13}}>
+          {mode==='signup'?'Already have an account? ':'New here? '}
+          <span style={{color:'#a78bfa',cursor:'pointer'}} onClick={onSwitch}>{mode==='signup'?'Sign In':'Create Account'}</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── API KEY SETUP ─────────────────────────────────────────────────────────────
+function ApiKeySetup({onDone}){
+  const [key,setKey]=useState('');
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29,#302b63)',display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+      <div className="glass" style={{borderRadius:20,padding:40,width:'100%',maxWidth:500}}>
+        <div style={{textAlign:'center',marginBottom:28}}>
+          <div style={{fontSize:40,marginBottom:10}}>🤖</div>
+          <h2 style={{color:'#fff',fontWeight:800,fontSize:22}}>Enable AI Study Planner</h2>
+          <p style={{color:'#64748b',fontSize:13,marginTop:8}}>Enter your free Groq API key to generate personalized study routines with AI. You can skip and use demo plans.</p>
+        </div>
+        <div style={{background:'rgba(99,102,241,0.1)',border:'1px solid rgba(99,102,241,0.3)',borderRadius:12,padding:16,marginBottom:20,fontSize:13,color:'#a5b4fc'}}>
+          📌 Get a free key at <a href="https://console.groq.com" target="_blank" style={{color:'#c4b5fd',textDecoration:'underline'}}>console.groq.com</a> → Free tier, no credit card needed!
+        </div>
+        <input className="input" placeholder="gsk_xxxxxxxxxxxxxxxxxxxx (paste your Groq key)" value={key} onChange={e=>setKey(e.target.value)} style={{marginBottom:16}}/>
+        <div style={{display:'flex',gap:12}}>
+          <button className="btn-primary" style={{flex:1}} onClick={()=>onDone(key.trim())}>
+            {key.trim()?'Save & Continue →':'Continue with Demo AI →'}
+          </button>
+        </div>
+        <p style={{color:'#475569',fontSize:12,textAlign:'center',marginTop:14}}>Your key is stored only in your browser. We never see it.</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── PROFILE SETUP ─────────────────────────────────────────────────────────────
+function ProfileSetup({user,onDone}){
+  const [step,setStep]=useState(1);
+  const [form,setForm]=useState({
+    degree:'B.Tech',branch:'CSE',year:'2nd Year',college:'',
+    targetExam:'GATE (CSE)',hoursPerDay:4,weakSubjects:'',strongSubjects:'',targetDate:''
+  });
+  const [loading,setLoading]=useState(false);
+
+  const submit=async()=>{
+    setLoading(true);
+    await new Promise(r=>setTimeout(r,800));
+    ss('bs_profile',form);
+    onDone(form);
+    setLoading(false);
+  };
+
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29,#302b63)',display:'flex',alignItems:'center',justifyContent:'center',padding:20}}>
+      <div className="glass" style={{borderRadius:20,padding:40,width:'100%',maxWidth:560}}>
+        <div style={{textAlign:'center',marginBottom:24}}>
+          <div style={{fontSize:36}}>🎓</div>
+          <h2 style={{color:'#fff',fontWeight:800,fontSize:22,marginTop:8}}>Set Up Your Profile</h2>
+          <p style={{color:'#64748b',fontSize:13,marginTop:6}}>Help us personalize your study plan, Hello {user.name}!</p>
+        </div>
+
+        {/* Steps indicator */}
+        <div style={{display:'flex',gap:8,marginBottom:28}}>
+          {[1,2].map(s=>(
+            <div key={s} style={{flex:1,height:4,borderRadius:2,background:step>=s?'linear-gradient(90deg,#6366f1,#8b5cf6)':'rgba(255,255,255,0.1)'}}/>
+          ))}
+        </div>
+
+        {step===1&&(
+          <div style={{display:'flex',flexDirection:'column',gap:16}}>
+            <h3 style={{color:'#a5b4fc',fontSize:14,fontWeight:600,marginBottom:4}}>STEP 1 — Education Details</h3>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+              <div>
+                <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Degree</label>
+                <select className="select" value={form.degree} onChange={e=>setForm({...form,degree:e.target.value})}>
+                  {['B.Tech','B.E.','B.Sc','B.Com','B.A.','M.Tech','M.Sc','MBA','MCA'].map(d=><option key={d}>{d}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Branch / Stream</label>
+                <select className="select" value={form.branch} onChange={e=>setForm({...form,branch:e.target.value})}>
+                  {['CSE','IT','ECE','EE','ME','Civil','Science','Arts','Commerce','Other'].map(b=><option key={b}>{b}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Current Year</label>
+                <select className="select" value={form.year} onChange={e=>setForm({...form,year:e.target.value})}>
+                  {['1st Year','2nd Year','3rd Year','4th Year','Final Semester','Graduate'].map(y=><option key={y}>{y}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>College (optional)</label>
+                <input className="input" placeholder="Your college name" value={form.college} onChange={e=>setForm({...form,college:e.target.value})}/>
+              </div>
+            </div>
+            <button className="btn-primary" onClick={()=>setStep(2)}>Next →</button>
+          </div>
+        )}
+
+        {step===2&&(
+          <div style={{display:'flex',flexDirection:'column',gap:16}}>
+            <h3 style={{color:'#a5b4fc',fontSize:14,fontWeight:600,marginBottom:4}}>STEP 2 — Exam Goals</h3>
+            <div>
+              <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Target Exam</label>
+              <select className="select" value={form.targetExam} onChange={e=>setForm({...form,targetExam:e.target.value})}>
+                {EXAMS.map(e=><option key={e}>{e}</option>)}
+              </select>
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12}}>
+              <div>
+                <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Study Hours / Day</label>
+                <select className="select" value={form.hoursPerDay} onChange={e=>setForm({...form,hoursPerDay:+e.target.value})}>
+                  {[1,2,3,4,5,6,7,8].map(h=><option key={h} value={h}>{h} hours</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Target Date (optional)</label>
+                <input className="input" type="date" value={form.targetDate} onChange={e=>setForm({...form,targetDate:e.target.value})}/>
+              </div>
+            </div>
+            <div>
+              <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Weak Subjects (comma separated)</label>
+              <input className="input" placeholder="e.g. Algorithms, DBMS, OS" value={form.weakSubjects} onChange={e=>setForm({...form,weakSubjects:e.target.value})}/>
+            </div>
+            <div>
+              <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Strong Subjects (comma separated)</label>
+              <input className="input" placeholder="e.g. Networks, Digital Logic" value={form.strongSubjects} onChange={e=>setForm({...form,strongSubjects:e.target.value})}/>
+            </div>
+            <div style={{display:'flex',gap:12}}>
+              <button className="btn-ghost" onClick={()=>setStep(1)}>← Back</button>
+              <button className="btn-primary" style={{flex:1}} onClick={submit} disabled={loading}>
+                {loading?'Generating your plan… 🤖':'Generate My Study Plan 🚀'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── SIDEBAR ───────────────────────────────────────────────────────────────────
+function Sidebar({page,setPage,user}){
+  const nav=[
+    {id:'dashboard',icon:'🏠',label:'Dashboard'},
+    {id:'routine',icon:'📅',label:'Study Routine'},
+    {id:'tasks',icon:'✅',label:'Task Manager'},
+    {id:'videos',icon:'▶️',label:'Study Videos'},
+    {id:'topics',icon:'🎯',label:'Important Topics'},
+    {id:'notes',icon:'📄',label:'Notes Library'},
+    {id:'books',icon:'📚',label:'Books Library'},
+    {id:'jobs',icon:'💼',label:'Job Finder'},
+    {id:'alerts',icon:'🔔',label:'Govt Job Alerts'},
+    {id:'performance',icon:'📊',label:'Performance'},
+    {id:'settings',icon:'⚙️',label:'Settings'},
+  ];
+  return(
+    <div style={{width:220,minHeight:'100vh',background:'rgba(15,12,41,0.95)',borderRight:'1px solid rgba(255,255,255,0.08)',display:'flex',flexDirection:'column',padding:'20px 12px',position:'fixed',top:0,left:0,zIndex:100}}>
+      <div style={{display:'flex',alignItems:'center',gap:8,padding:'8px 8px 24px'}}>
+        <span style={{fontSize:22}}>⚡</span>
+        <span style={{color:'#fff',fontWeight:800,fontSize:17}}>CareerPilot</span>
+      </div>
+      {nav.map(n=>(
+        <div key={n.id} className={`nav-item${page===n.id?' active':''}`} onClick={()=>setPage(n.id)}>
+          <span style={{fontSize:16}}>{n.icon}</span>
+          <span>{n.label}</span>
+        </div>
+      ))}
+      <div style={{marginTop:'auto',padding:'16px 8px',borderTop:'1px solid rgba(255,255,255,0.08)'}}>
+        <div style={{color:'#94a3b8',fontSize:12}}>Signed in as</div>
+        <div style={{color:'#e2e8f0',fontSize:13,fontWeight:600,marginTop:2}}>{user.name}</div>
+        <div style={{color:'#475569',fontSize:11}}>{user.email}</div>
+      </div>
+    </div>
+  );
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+function Dashboard({user,profile,timerSecs,tasks,setPage}){
+  const allTasks=tasks||[];
+  const done=allTasks.filter(t=>t.done).length;
+  const pct=allTasks.length?Math.round(done/allTasks.length*100):0;
+  const streak=ls('bs_streak',0);
+  const quote=QUOTES[new Date().getDay()%QUOTES.length];
+  const today_mins=Math.floor((ls('bs_daily_times',{})[today()]||0)/60);
+
+  return(
+    <div className="fade-in">
+      {/* Header */}
+      <div style={{marginBottom:28}}>
+        <h1 style={{color:'#fff',fontSize:26,fontWeight:800}}>Good {new Date().getHours()<12?'Morning':'Afternoon'}, {user.name.split(' ')[0]}! 👋</h1>
+        <p style={{color:'#64748b',marginTop:4}}>{profile?`Preparing for ${profile.targetExam}`:'Complete your profile to get started'}</p>
+      </div>
+
+      {/* Quote */}
+      <div style={{background:'linear-gradient(135deg,rgba(99,102,241,0.15),rgba(139,92,246,0.15))',border:'1px solid rgba(139,92,246,0.2)',borderRadius:14,padding:'16px 20px',marginBottom:24}}>
+        <span style={{color:'#a78bfa',fontSize:13}}>✨ Daily Motivation</span>
+        <p style={{color:'#e2e8f0',marginTop:6,fontStyle:'italic',fontSize:14}}>"{quote}"</p>
+      </div>
+
+      {/* Stats */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',gap:16,marginBottom:24}}>
+        {[
+          {label:'Study Time Today',value:today_mins+'m',icon:'⏱',color:'#6366f1'},
+          {label:'Tasks Completed',value:`${done}/${allTasks.length}`,icon:'✅',color:'#10b981'},
+          {label:'Study Streak',value:`${streak} days`,icon:'🔥',color:'#f59e0b'},
+          {label:'Progress',value:pct+'%',icon:'📈',color:'#8b5cf6'},
+        ].map(s=>(
+          <div key={s.label} className="card" style={{textAlign:'center'}}>
+            <div style={{fontSize:28,marginBottom:6}}>{s.icon}</div>
+            <div style={{color:s.color,fontSize:22,fontWeight:800}}>{s.value}</div>
+            <div style={{color:'#64748b',fontSize:12,marginTop:4}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Progress bar */}
+      <div className="card" style={{marginBottom:20}}>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:10}}>
+          <span style={{color:'#e2e8f0',fontWeight:600}}>Overall Task Progress</span>
+          <span style={{color:'#a78bfa',fontWeight:700}}>{pct}%</span>
+        </div>
+        <div className="progress-bar"><div className="progress-fill" style={{width:pct+'%'}}/></div>
+        <p style={{color:'#475569',fontSize:12,marginTop:8}}>{allTasks.length-done} tasks remaining · {done} completed</p>
+      </div>
+
+      {/* Quick actions */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))',gap:14}}>
+        {[
+          {label:'Open Study Routine',icon:'📅',page:'routine',color:'#6366f1'},
+          {label:'Update Tasks',icon:'✅',page:'tasks',color:'#10b981'},
+          {label:'Download Notes',icon:'📄',page:'notes',color:'#f59e0b'},
+          {label:'Find Jobs',icon:'💼',page:'jobs',color:'#8b5cf6'},
+        ].map(a=>(
+          <div key={a.label} onClick={()=>setPage(a.page)} style={{background:`rgba(${a.color==='#6366f1'?'99,102,241':a.color==='#10b981'?'16,185,129':a.color==='#f59e0b'?'245,158,11':'139,92,246'},0.12)`,border:`1px solid rgba(${a.color==='#6366f1'?'99,102,241':a.color==='#10b981'?'16,185,129':a.color==='#f59e0b'?'245,158,11':'139,92,246'},0.25)`,borderRadius:14,padding:18,cursor:'pointer',display:'flex',alignItems:'center',gap:14,transition:'all .2s'}} className="job-card">
+            <span style={{fontSize:28}}>{a.icon}</span>
+            <span style={{color:'#e2e8f0',fontWeight:600,fontSize:14}}>{a.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── STUDY ROUTINE ────────────────────────────────────────────────────────────
+function StudyRoutine({profile,apiKey}){
+  const [routine,setRoutine]=useState(ls('bs_routine',null));
+  const [loading,setLoading]=useState(false);
+  const [aiText,setAiText]=useState(ls('bs_ai_advice',''));
+  const [activeSubj,setActiveSubj]=useState(0);
+
+  const topics=profile?(TOPICS_BY_EXAM[profile.targetExam]||TOPICS_BY_EXAM['GATE (CSE)']):TOPICS_BY_EXAM['GATE (CSE)'];
+
+  const generateWithAI=async()=>{
+    if(!apiKey){alert('Please add your Groq API key in Settings first.');return;}
+    setLoading(true);
+    try{
+      const prompt=`You are an expert study planner for Indian competitive exams. Create a detailed, week-by-week study schedule for a student with these details:
+- Degree: ${profile?.degree||'B.Tech'} ${profile?.branch||'CSE'}
+- Target Exam: ${profile?.targetExam||'GATE (CSE)'}
+- Study hours per day: ${profile?.hoursPerDay||4}
+- Weak subjects: ${profile?.weakSubjects||'Not specified'}
+- Strong subjects: ${profile?.strongSubjects||'Not specified'}
+
+Give a 4-week study plan with specific daily time allocation, subject order, and 3 key tips for the student. Be concise and practical.`;
+      const txt=await groqCall(apiKey,prompt);
+      setAiText(txt);
+      ss('bs_ai_advice',txt);
+    }catch(e){setAiText('Error calling Groq API. Please check your API key in Settings.');}
+    setLoading(false);
+  };
+
+  const totalHours=topics.reduce((a,t)=>a+t.hours,0);
+
+  return(
+    <div className="fade-in">
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:24}}>
+        <div>
+          <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>📅 Study Routine</h2>
+          <p style={{color:'#64748b',fontSize:13,marginTop:4}}>{profile?`${profile.targetExam} preparation plan`:'Your personalized study schedule'}</p>
+        </div>
+        <button className="btn-primary" onClick={generateWithAI} disabled={loading}>
+          {loading?'Generating… 🤖':'🤖 AI Generate Plan'}
+        </button>
+      </div>
+
+      {aiText&&(
+        <div className="card" style={{marginBottom:24,borderColor:'rgba(139,92,246,0.3)'}}>
+          <h3 style={{color:'#a78bfa',fontWeight:700,marginBottom:12}}>🤖 AI-Generated Study Plan</h3>
+          <pre style={{color:'#cbd5e1',fontSize:13,whiteSpace:'pre-wrap',lineHeight:1.7}}>{aiText}</pre>
+        </div>
+      )}
+
+      {/* Subject tabs */}
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:20}}>
+        {topics.map((t,i)=>(
+          <button key={i} className={`tab-btn${activeSubj===i?' active':''}`} onClick={()=>setActiveSubj(i)}>
+            {t.subject}
+          </button>
+        ))}
+      </div>
+
+      {/* Active subject detail */}
+      <div style={{display:'grid',gridTemplateColumns:'1fr 300px',gap:20}}>
+        <div className="card">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+            <h3 style={{color:'#fff',fontWeight:700,fontSize:16}}>{topics[activeSubj].subject}</h3>
+            <div style={{display:'flex',gap:8}}>
+              <span className={`badge ${topics[activeSubj].priority==='High'?'badge-red':'badge-yellow'}`}>{topics[activeSubj].priority} Priority</span>
+              <span className="badge badge-blue">{topics[activeSubj].hours} hrs</span>
+            </div>
+          </div>
+          <div style={{display:'flex',flexDirection:'column',gap:8}}>
+            {topics[activeSubj].subtopics.map((sub,j)=>(
+              <div key={j} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 14px',background:'rgba(255,255,255,0.04)',borderRadius:8,border:'1px solid rgba(255,255,255,0.06)'}}>
+                <span style={{color:'#6366f1',fontSize:18}}>◆</span>
+                <span style={{color:'#cbd5e1',fontSize:14}}>{sub}</span>
+                <span style={{marginLeft:'auto',color:'#475569',fontSize:12}}>~{Math.round(topics[activeSubj].hours/topics[activeSubj].subtopics.length)}h</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Summary panel */}
+        <div>
+          <div className="card" style={{marginBottom:16}}>
+            <h4 style={{color:'#a5b4fc',fontWeight:700,marginBottom:14,fontSize:13}}>📊 SUBJECT BREAKDOWN</h4>
+            {topics.map((t,i)=>(
+              <div key={i} style={{marginBottom:10}}>
+                <div style={{display:'flex',justifyContent:'space-between',marginBottom:4}}>
+                  <span style={{color:'#94a3b8',fontSize:12}}>{t.subject}</span>
+                  <span style={{color:'#a78bfa',fontSize:12,fontWeight:600}}>{t.hours}h</span>
+                </div>
+                <div className="progress-bar"><div className="progress-fill" style={{width:Math.round(t.hours/totalHours*100)+'%'}}/></div>
+              </div>
+            ))}
+            <div style={{borderTop:'1px solid rgba(255,255,255,0.08)',marginTop:12,paddingTop:12,display:'flex',justifyContent:'space-between'}}>
+              <span style={{color:'#64748b',fontSize:12}}>Total</span>
+              <span style={{color:'#10b981',fontWeight:700}}>{totalHours} hours</span>
+            </div>
+          </div>
+
+          <div className="card">
+            <h4 style={{color:'#a5b4fc',fontWeight:700,marginBottom:12,fontSize:13}}>⏰ DAILY SCHEDULE</h4>
+            {[
+              ['Morning 6–8 AM','Revision & Practice'],
+              ['Morning 8–10 AM','New Topic Study'],
+              ['Afternoon 2–4 PM','Problem Solving'],
+              ['Evening 6–8 PM','Mock Tests / PYQs'],
+            ].map(([time,act])=>(
+              <div key={time} style={{display:'flex',justifyContent:'space-between',padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.05)',fontSize:12}}>
+                <span style={{color:'#64748b'}}>{time}</span>
+                <span style={{color:'#cbd5e1'}}>{act}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── TASK MANAGER ─────────────────────────────────────────────────────────────
+function TaskManager({tasks,setTasks,profile}){
+  const [newTask,setNewTask]=useState('');
+  const [newType,setNewType]=useState('topic');
+  const [newSubject,setNewSubject]=useState('');
+  const [filter,setFilter]=useState('all');
+
+  const topics=profile?(TOPICS_BY_EXAM[profile.targetExam]||TOPICS_BY_EXAM['GATE (CSE)']):TOPICS_BY_EXAM['GATE (CSE)'];
+
+  // Auto-seed tasks from exam topics if empty
+  useEffect(()=>{
+    if(tasks.length===0&&profile){
+      const seed=[];
+      topics.forEach(subj=>{
+        subj.subtopics.slice(0,3).forEach(sub=>{
+          seed.push({id:Date.now()+Math.random(),text:sub,subject:subj.subject,type:'topic',done:false,addedAt:new Date().toISOString()});
+        });
+      });
+      setTasks(seed);
+    }
+  },[profile]);
+
+  const addTask=()=>{
+    if(!newTask.trim())return;
+    const t={id:Date.now(),text:newTask.trim(),subject:newSubject||'General',type:newType,done:false,addedAt:new Date().toISOString()};
+    const updated=[...tasks,t];
+    setTasks(updated);
+    ss('bs_tasks',updated);
+    setNewTask('');
+  };
+
+  const toggle=(id)=>{
+    const updated=tasks.map(t=>t.id===id?{...t,done:!t.done,doneAt:!t.done?new Date().toISOString():null}:t);
+    setTasks(updated);
+    ss('bs_tasks',updated);
+  };
+
+  const remove=(id)=>{
+    const updated=tasks.filter(t=>t.id!==id);
+    setTasks(updated);
+    ss('bs_tasks',updated);
+  };
+
+  const filtered=tasks.filter(t=>{
+    if(filter==='all')return true;
+    if(filter==='done')return t.done;
+    if(filter==='pending')return !t.done;
+    if(filter==='topic')return t.type==='topic';
+    if(filter==='video')return t.type==='video';
+    return true;
+  });
+
+  const done=tasks.filter(t=>t.done).length;
+  const pct=tasks.length?Math.round(done/tasks.length*100):0;
+
+  return(
+    <div className="fade-in">
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:20}}>
+        <div>
+          <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>✅ Task Manager</h2>
+          <p style={{color:'#64748b',fontSize:13,marginTop:4}}>{done}/{tasks.length} completed ({pct}%)</p>
+        </div>
+      </div>
+
+      {/* Progress */}
+      <div className="card" style={{marginBottom:20}}>
+        <div style={{display:'flex',justifyContent:'space-between',marginBottom:8}}>
+          <span style={{color:'#e2e8f0',fontSize:14}}>Overall Progress</span>
+          <span style={{color:'#10b981',fontWeight:700}}>{pct}%</span>
+        </div>
+        <div className="progress-bar" style={{height:10}}><div className="progress-fill" style={{width:pct+'%'}}/></div>
+      </div>
+
+      {/* Add task */}
+      <div className="card" style={{marginBottom:20}}>
+        <h4 style={{color:'#a5b4fc',fontSize:13,fontWeight:700,marginBottom:12}}>+ ADD NEW TASK</h4>
+        <div style={{display:'grid',gridTemplateColumns:'1fr auto auto',gap:10,alignItems:'end'}}>
+          <input className="input" placeholder="Task description…" value={newTask} onChange={e=>setNewTask(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addTask()}/>
+          <select className="select" value={newType} onChange={e=>setNewType(e.target.value)} style={{width:110}}>
+            <option value="topic">📖 Topic</option>
+            <option value="video">▶️ Video</option>
+            <option value="practice">✏️ Practice</option>
+            <option value="revision">🔄 Revision</option>
+          </select>
+          <button className="btn-primary" onClick={addTask}>Add</button>
+        </div>
+        <input className="input" placeholder="Subject (optional)" value={newSubject} onChange={e=>setNewSubject(e.target.value)} style={{marginTop:10}}/>
+      </div>
+
+      {/* Filters */}
+      <div style={{display:'flex',gap:8,marginBottom:16,flexWrap:'wrap'}}>
+        {['all','pending','done','topic','video'].map(f=>(
+          <button key={f} className={`tab-btn${filter===f?' active':''}`} onClick={()=>setFilter(f)}>
+            {f.charAt(0).toUpperCase()+f.slice(1)} {f==='all'?`(${tasks.length})`:f==='done'?`(${done})`:f==='pending'?`(${tasks.length-done})`:''}
+          </button>
+        ))}
+      </div>
+
+      {/* Task list */}
+      <div>
+        {filtered.length===0&&<div style={{textAlign:'center',color:'#475569',padding:40}}>No tasks here yet. Add one above!</div>}
+        {filtered.map(t=>(
+          <div key={t.id} className={`task-item${t.done?' done':''}`}>
+            <input type="checkbox" checked={t.done} onChange={()=>toggle(t.id)}
+              style={{width:18,height:18,cursor:'pointer',accentColor:'#8b5cf6',flexShrink:0,marginTop:2}}/>
+            <div style={{flex:1}}>
+              <span className="task-text" style={{color:'#e2e8f0',fontSize:14}}>{t.text}</span>
+              <div style={{display:'flex',gap:8,marginTop:6,flexWrap:'wrap'}}>
+                <span className="badge badge-purple">{t.subject}</span>
+                <span className={`badge ${t.type==='video'?'badge-blue':t.type==='practice'?'badge-green':'badge-purple'}`}>
+                  {t.type==='video'?'▶️ Video':t.type==='practice'?'✏️ Practice':t.type==='revision'?'🔄 Revision':'📖 Topic'}
+                </span>
+                {t.done&&t.doneAt&&<span className="badge badge-green">✓ Done</span>}
+              </div>
+            </div>
+            <button onClick={()=>remove(t.id)} style={{background:'transparent',border:'none',color:'#475569',cursor:'pointer',fontSize:18,padding:'0 4px'}}>×</button>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── BOOKS LIBRARY ────────────────────────────────────────────────────────────
+function BooksLibrary(){
+  const [dept,setDept]=useState('CSE');
+  const [search,setSearch]=useState('');
+  const [topicFilter,setTopicFilter]=useState('All');
+  const depts=['CSE','IT','ECE','ME','EE','Civil','Science','Arts','Commerce'];
+  const books=(BOOKS[dept]||[]).filter(b=>{
+    const matchSearch=b.title.toLowerCase().includes(search.toLowerCase())||b.author.toLowerCase().includes(search.toLowerCase());
+    const matchTopic=topicFilter==='All'||b.topic===topicFilter;
+    return matchSearch&&matchTopic;
+  });
+  const topics=['All',...new Set((BOOKS[dept]||[]).map(b=>b.topic))];
+
+  return(
+    <div className="fade-in">
+      <div style={{marginBottom:24}}>
+        <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>📚 Books Library</h2>
+        <p style={{color:'#64748b',fontSize:13,marginTop:4}}>Curated textbooks for every branch and stream</p>
+      </div>
+
+      {/* Search */}
+      <input className="input" placeholder="🔍 Search books, authors…" value={search} onChange={e=>setSearch(e.target.value)} style={{marginBottom:16}}/>
+
+      {/* Department tabs */}
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:16}}>
+        {depts.map(d=>(
+          <button key={d} className={`tab-btn${dept===d?' active':''}`} onClick={()=>{setDept(d);setTopicFilter('All');}}>
+            {d}
+          </button>
+        ))}
+      </div>
+
+      {/* Topic filter */}
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:20}}>
+        {topics.map(t=>(
+          <span key={t} onClick={()=>setTopicFilter(t)} style={{padding:'4px 12px',borderRadius:20,fontSize:12,cursor:'pointer',fontWeight:500,
+            background:topicFilter===t?'rgba(99,102,241,0.4)':'rgba(255,255,255,0.06)',
+            color:topicFilter===t?'#a5b4fc':'#64748b',border:`1px solid ${topicFilter===t?'rgba(99,102,241,0.5)':'transparent'}`}}>
+            {t}
+          </span>
+        ))}
+      </div>
+
+      {/* Books grid */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:16}}>
+        {books.map(b=>(
+          <div key={b.id} className="book-card">
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
+              <span style={{fontSize:32}}>📖</span>
+              <div style={{display:'flex',gap:6}}>
+                {b.free&&<span className="badge badge-green">Free PDF</span>}
+                <span className="badge badge-purple">{b.topic}</span>
+              </div>
+            </div>
+            <h4 style={{color:'#e2e8f0',fontWeight:700,fontSize:14,lineHeight:1.4,marginBottom:6}}>{b.title}</h4>
+            <p style={{color:'#64748b',fontSize:12,marginBottom:8}}>{b.author}</p>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+              <span style={{color:'#fbbf24',fontSize:13}}>{stars(b.rating)} <span style={{color:'#64748b'}}>{b.rating}</span></span>
+              <span style={{color:'#475569',fontSize:11}}>{b.edition}</span>
+            </div>
+            <div style={{display:'flex',gap:8,marginTop:12}}>
+              <button className="btn-ghost" style={{flex:1,fontSize:11,padding:'7px 0'}}
+                onClick={()=>window.open(`https://www.google.com/search?q=${encodeURIComponent(b.title+' '+b.author+' PDF free')}`,'_blank')}>
+                📄 Free PDF
+              </button>
+              <button style={{flex:1,background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',border:'none',borderRadius:8,padding:'7px 0',fontSize:11,fontWeight:700,cursor:'pointer'}}
+                onClick={()=>window.open(b.amazon,'_blank')}>
+                🛒 Buy on Amazon
+              </button>
+            </div>
+            <p style={{color:'#475569',fontSize:10,marginTop:6,textAlign:'center'}}>🔗 Affiliate link – supports CareerPilot</p>
+          </div>
+        ))}
+        {books.length===0&&<div style={{color:'#475569',gridColumn:'1/-1',textAlign:'center',padding:40}}>No books found.</div>}
+      </div>
+    </div>
+  );
+}
+
+// ─── JOB FINDER ───────────────────────────────────────────────────────────────
+function JobFinder(){
+  const [search,setSearch]=useState('');
+  const [typeFilter,setTypeFilter]=useState('All');
+  const [catFilter,setCatFilter]=useState('All');
+  const categories=['All',...new Set(JOBS.map(j=>j.category))];
+  const jobs=JOBS.filter(j=>{
+    const q=search.toLowerCase();
+    const matchS=j.title.toLowerCase().includes(q)||j.company.toLowerCase().includes(q)||j.skills.some(s=>s.toLowerCase().includes(q));
+    const matchT=typeFilter==='All'||j.type===typeFilter;
+    const matchC=catFilter==='All'||j.category===catFilter;
+    return matchS&&matchT&&matchC;
+  });
+
+  return(
+    <div className="fade-in">
+      <div style={{marginBottom:24}}>
+        <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>💼 Job Finder</h2>
+        <p style={{color:'#64748b',fontSize:13,marginTop:4}}>Private & Government jobs matching your profile</p>
+      </div>
+
+      <input className="input" placeholder="🔍 Search jobs, companies, skills…" value={search} onChange={e=>setSearch(e.target.value)} style={{marginBottom:16}}/>
+
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:16}}>
+        {['All','Government','Private'].map(t=>(
+          <button key={t} className={`tab-btn${typeFilter===t?' active':''}`} onClick={()=>setTypeFilter(t)}>{t}</button>
+        ))}
+        <div style={{borderLeft:'1px solid rgba(255,255,255,0.1)',margin:'0 8px'}}/>
+        {categories.map(c=>(
+          <span key={c} onClick={()=>setCatFilter(c)} style={{padding:'6px 14px',borderRadius:8,fontSize:12,cursor:'pointer',
+            background:catFilter===c?'rgba(139,92,246,0.3)':'rgba(255,255,255,0.05)',
+            color:catFilter===c?'#c4b5fd':'#94a3b8',border:`1px solid ${catFilter===c?'rgba(139,92,246,0.4)':'transparent'}`}}>
+            {c}
+          </span>
+        ))}
+      </div>
+
+      <div style={{color:'#64748b',fontSize:12,marginBottom:14}}>{jobs.length} jobs found</div>
+
+      {jobs.map(j=>(
+        <div key={j.id} className="job-card">
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+            <div>
+              <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:6}}>
+                <h3 style={{color:'#e2e8f0',fontWeight:700,fontSize:16}}>{j.title}</h3>
+                {j.hot&&<span className="badge badge-red">🔥 Hot</span>}
+                {j.posted==='New'&&<span className="badge badge-green">New</span>}
+              </div>
+              <p style={{color:'#94a3b8',fontSize:14}}>{j.company}</p>
+            </div>
+            <div style={{textAlign:'right'}}>
+              <div style={{color:'#10b981',fontWeight:700,fontSize:15}}>{j.salary}</div>
+              <div style={{color:'#475569',fontSize:12,marginTop:2}}>{j.posted}</div>
+            </div>
+          </div>
+          <div style={{display:'flex',gap:8,flexWrap:'wrap',margin:'12px 0'}}>
+            <span className={`badge ${j.type==='Government'?'badge-yellow':'badge-blue'}`}>{j.type}</span>
+            <span className="badge badge-purple">{j.category}</span>
+            <span className="badge" style={{background:'rgba(100,116,139,0.2)',color:'#94a3b8'}}>📍 {j.location}</span>
+            <span className="badge" style={{background:'rgba(100,116,139,0.2)',color:'#94a3b8'}}>👤 {j.exp}</span>
+          </div>
+          <div style={{display:'flex',gap:6,flexWrap:'wrap',marginBottom:12}}>
+            {j.skills.map(s=><span key={s} style={{background:'rgba(99,102,241,0.15)',color:'#a5b4fc',padding:'2px 10px',borderRadius:20,fontSize:11}}>{s}</span>)}
+          </div>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+            <span style={{color:'#475569',fontSize:12}}>Deadline: {j.deadline}</span>
+            <button className="btn-primary" style={{fontSize:12,padding:'6px 18px'}}
+              onClick={()=>window.open(`https://www.google.com/search?q=${encodeURIComponent(j.title+' '+j.company+' apply')}`,'_blank')}>
+              Apply Now →
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── GOVT ALERTS ──────────────────────────────────────────────────────────────
+function GovtAlerts(){
+  const [email,setEmail]=useState('');
+  const [selected,setSelected]=useState([]);
+  const [subscribed,setSubscribed]=useState(ls('bs_alert_sub',null));
+  const [freq,setFreq]=useState('daily');
+
+  const toggle=(cat)=>{
+    setSelected(s=>s.includes(cat)?s.filter(c=>c!==cat):[...s,cat]);
+  };
+
+  const subscribe=()=>{
+    if(!email.trim()||!email.includes('@')){alert('Please enter a valid email.');return;}
+    if(selected.length===0){alert('Please select at least one job category.');return;}
+    const sub={email,categories:selected,frequency:freq,subscribedAt:new Date().toISOString()};
+    setSubscribed(sub);
+    ss('bs_alert_sub',sub);
+  };
+
+  if(subscribed){
+    return(
+      <div className="fade-in">
+        <h2 style={{color:'#fff',fontSize:22,fontWeight:800,marginBottom:20}}>🔔 Government Job Alerts</h2>
+        <div style={{maxWidth:500}}>
+          <div style={{background:'rgba(16,185,129,0.1)',border:'1px solid rgba(16,185,129,0.3)',borderRadius:16,padding:30,textAlign:'center',marginBottom:24}}>
+            <div style={{fontSize:48,marginBottom:12}}>✅</div>
+            <h3 style={{color:'#6ee7b7',fontWeight:800,fontSize:20,marginBottom:8}}>Alerts Activated!</h3>
+            <p style={{color:'#94a3b8',fontSize:14}}>You'll receive {subscribed.frequency} alerts at <strong style={{color:'#e2e8f0'}}>{subscribed.email}</strong></p>
+          </div>
+          <div className="card">
+            <h4 style={{color:'#a5b4fc',fontWeight:700,marginBottom:12,fontSize:13}}>SUBSCRIBED CATEGORIES</h4>
+            {subscribed.categories.map(c=><div key={c} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 0',borderBottom:'1px solid rgba(255,255,255,0.05)',color:'#cbd5e1',fontSize:13}}>✓ {c}</div>)}
+          </div>
+          <button className="btn-ghost" style={{marginTop:16,width:'100%'}} onClick={()=>{setSubscribed(null);ss('bs_alert_sub',null);}}>
+            Change Preferences
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return(
+    <div className="fade-in">
+      <div style={{marginBottom:24}}>
+        <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>🔔 Government Job Alerts</h2>
+        <p style={{color:'#64748b',fontSize:13,marginTop:4}}>Get instant email notifications for new vacancies</p>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 340px',gap:24,maxWidth:900}}>
+        <div>
+          <div className="card" style={{marginBottom:20}}>
+            <h4 style={{color:'#a5b4fc',fontSize:13,fontWeight:700,marginBottom:14}}>SELECT JOB CATEGORIES</h4>
+            <div style={{display:'flex',flexDirection:'column',gap:8}}>
+              {GOVT_CATEGORIES.map(cat=>(
+                <label key={cat} style={{display:'flex',alignItems:'center',gap:12,padding:'10px 14px',borderRadius:10,cursor:'pointer',
+                  background:selected.includes(cat)?'rgba(99,102,241,0.15)':'rgba(255,255,255,0.03)',
+                  border:`1px solid ${selected.includes(cat)?'rgba(99,102,241,0.4)':'rgba(255,255,255,0.06)'}`,transition:'all .2s'}}>
+                  <input type="checkbox" checked={selected.includes(cat)} onChange={()=>toggle(cat)} style={{accentColor:'#8b5cf6',width:16,height:16}}/>
+                  <span style={{color:'#cbd5e1',fontSize:14}}>{cat}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div className="card">
+            <h4 style={{color:'#a5b4fc',fontSize:13,fontWeight:700,marginBottom:16}}>ALERT SETTINGS</h4>
+            <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Email Address</label>
+            <input className="input" type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)} style={{marginBottom:14}}/>
+            <label style={{color:'#94a3b8',fontSize:12,marginBottom:6,display:'block'}}>Alert Frequency</label>
+            <select className="select" value={freq} onChange={e=>setFreq(e.target.value)} style={{marginBottom:16}}>
+              <option value="instant">Instant (as soon as vacancy drops)</option>
+              <option value="daily">Daily Digest (9 AM)</option>
+              <option value="weekly">Weekly Summary</option>
+            </select>
+            <div style={{background:'rgba(245,158,11,0.1)',border:'1px solid rgba(245,158,11,0.2)',borderRadius:10,padding:12,marginBottom:16,fontSize:12,color:'#fcd34d'}}>
+              ⚡ We'll scan 200+ official websites including SSC, IBPS, Railway Board, UPSC, and State PSCs
+            </div>
+            <button className="btn-primary" style={{width:'100%'}} onClick={subscribe}>
+              🔔 Activate Alerts ({selected.length} categories)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── IMPORTANT TOPICS ─────────────────────────────────────────────────────────
+function ImportantTopics({profile}){
+  const [exam,setExam]=useState(profile?.targetExam||'GATE (CSE)');
+  const [expanded,setExpanded]=useState(null);
+  const topics=TOPICS_BY_EXAM[exam]||TOPICS_BY_EXAM['GATE (CSE)'];
+
+  const availExams=Object.keys(TOPICS_BY_EXAM);
+
+  return(
+    <div className="fade-in">
+      <div style={{marginBottom:24}}>
+        <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>🎯 Important Topics</h2>
+        <p style={{color:'#64748b',fontSize:13,marginTop:4}}>High-priority topics curated for each exam — focus on these first</p>
+      </div>
+
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:24}}>
+        {availExams.map(e=>(
+          <button key={e} className={`tab-btn${exam===e?' active':''}`} onClick={()=>{setExam(e);setExpanded(null);}}>
+            {e}
+          </button>
+        ))}
+      </div>
+
+      {topics.map((t,i)=>(
+        <div key={i} className="card" style={{marginBottom:12,cursor:'pointer'}} onClick={()=>setExpanded(expanded===i?null:i)}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+            <div style={{display:'flex',alignItems:'center',gap:14}}>
+              <span style={{fontSize:20}}>{i%4===0?'📐':i%4===1?'💾':i%4===2?'🌐':'🧮'}</span>
+              <div>
+                <h3 style={{color:'#e2e8f0',fontWeight:700,fontSize:15}}>{t.subject}</h3>
+                <p style={{color:'#64748b',fontSize:12,marginTop:2}}>{t.subtopics.length} key topics · {t.hours} hrs recommended</p>
+              </div>
+            </div>
+            <div style={{display:'flex',gap:8,alignItems:'center'}}>
+              <span className={`badge ${t.priority==='High'?'badge-red':'badge-yellow'}`}>{t.priority}</span>
+              {t.marks>0&&<span className="badge badge-blue">{t.marks} marks</span>}
+              <span style={{color:'#475569',fontSize:18}}>{expanded===i?'▲':'▼'}</span>
+            </div>
+          </div>
+
+          {expanded===i&&(
+            <div style={{marginTop:16,borderTop:'1px solid rgba(255,255,255,0.08)',paddingTop:16}}>
+              <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',gap:8}}>
+                {t.subtopics.map((sub,j)=>(
+                  <div key={j} style={{display:'flex',alignItems:'center',gap:8,padding:'8px 12px',background:'rgba(99,102,241,0.1)',borderRadius:8,border:'1px solid rgba(99,102,241,0.2)'}}>
+                    <span style={{color:'#8b5cf6',fontSize:14}}>◆</span>
+                    <span style={{color:'#cbd5e1',fontSize:13}}>{sub}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{marginTop:14,padding:'10px 14px',background:'rgba(245,158,11,0.1)',borderRadius:8,border:'1px solid rgba(245,158,11,0.2)'}}>
+                <span style={{color:'#fcd34d',fontSize:12}}>💡 Tip: Cover all {t.subtopics.length} subtopics to maximize your score in {t.subject}. Allocate ~{t.hours} hours total.</span>
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ─── STUDY VIDEOS ─────────────────────────────────────────────────────────────
+function StudyVideos({tasks,setTasks}){
+  const [filter,setFilter]=useState('All');
+  const [watched,setWatched]=useState(ls('bs_watched_videos',[]));
+  const exams=['All',...new Set(VIDEOS.map(v=>v.exam))];
+
+  const toggleWatch=(id,title)=>{
+    let newWatched;
+    if(watched.includes(id)){newWatched=watched.filter(w=>w!==id);}
+    else{
+      newWatched=[...watched,id];
+      // add to tasks
+      const exists=tasks.find(t=>t.text.includes(title.substring(0,30)));
+      if(!exists){
+        const t={id:Date.now(),text:`Watch: ${title}`,subject:'Videos',type:'video',done:true,addedAt:new Date().toISOString(),doneAt:new Date().toISOString()};
+        const updated=[...tasks,t];
+        setTasks(updated);
+        ss('bs_tasks',updated);
+      }
+    }
+    setWatched(newWatched);
+    ss('bs_watched_videos',newWatched);
+  };
+
+  const videos=VIDEOS.filter(v=>filter==='All'||v.exam===filter);
+
+  return(
+    <div className="fade-in">
+      <div style={{marginBottom:24}}>
+        <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>▶️ Study Videos</h2>
+        <p style={{color:'#64748b',fontSize:13,marginTop:4}}>Curated playlists — watch and automatically tick your task</p>
+      </div>
+
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:20}}>
+        {exams.map(e=>(
+          <button key={e} className={`tab-btn${filter===e?' active':''}`} onClick={()=>setFilter(e)}>{e}</button>
+        ))}
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(300px,1fr))',gap:16}}>
+        {videos.map(v=>(
+          <div key={v.id} className="book-card" style={{position:'relative',overflow:'hidden'}}>
+            {watched.includes(v.id)&&(
+              <div style={{position:'absolute',top:10,right:10,background:'#10b981',borderRadius:50,width:24,height:24,display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontSize:14}}>✓</div>
+            )}
+            <div style={{display:'flex',gap:14,marginBottom:12}}>
+              <div style={{width:56,height:56,background:'linear-gradient(135deg,#6366f1,#8b5cf6)',borderRadius:12,display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,flexShrink:0}}>
+                {v.emoji}
+              </div>
+              <div>
+                <h4 style={{color:'#e2e8f0',fontWeight:700,fontSize:13,lineHeight:1.4}}>{v.title}</h4>
+                <p style={{color:'#6366f1',fontSize:12,marginTop:4}}>{v.channel}</p>
+              </div>
+            </div>
+            <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:12}}>
+              <span className="badge badge-purple">{v.subject}</span>
+              <span className="badge badge-blue">⏱ {v.duration}</span>
+              <span className="badge" style={{background:'rgba(100,116,139,0.2)',color:'#94a3b8'}}>👁 {v.views}</span>
+            </div>
+            <div style={{display:'flex',gap:8}}>
+              <button className="btn-primary" style={{flex:1,fontSize:12,padding:'7px 0'}}
+                onClick={()=>window.open(v.url,'_blank')}>
+                ▶ Watch on YouTube
+              </button>
+              <button onClick={()=>toggleWatch(v.id,v.title)} style={{
+                padding:'7px 12px',borderRadius:8,border:'none',cursor:'pointer',fontSize:12,fontWeight:600,
+                background:watched.includes(v.id)?'rgba(16,185,129,0.2)':'rgba(255,255,255,0.06)',
+                color:watched.includes(v.id)?'#6ee7b7':'#94a3b8'}}>
+                {watched.includes(v.id)?'✓ Done':'Mark Done'}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── PERFORMANCE DASHBOARD ────────────────────────────────────────────────────
+function PerformanceDashboard({tasks,timerSecs}){
+  const dailyTimes=ls('bs_daily_times',{});
+  const streak=ls('bs_streak',0);
+  const done=tasks.filter(t=>t.done).length;
+  const total=tasks.length;
+  const bySubject={};
+  tasks.forEach(t=>{
+    if(!bySubject[t.subject])bySubject[t.subject]={done:0,total:0};
+    bySubject[t.subject].total++;
+    if(t.done)bySubject[t.subject].done++;
+  });
+
+  // Last 7 days
+  const last7=Array.from({length:7},(_,i)=>{
+    const d=new Date();d.setDate(d.getDate()-i);
+    const key=d.toISOString().split('T')[0];
+    const label=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+    return{label,mins:Math.round((dailyTimes[key]||0)/60),key};
+  }).reverse();
+
+  const maxMins=Math.max(...last7.map(d=>d.mins),1);
+
+  return(
+    <div className="fade-in">
+      <div style={{marginBottom:24}}>
+        <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>📊 Performance Dashboard</h2>
+        <p style={{color:'#64748b',fontSize:13,marginTop:4}}>Your study analytics and progress overview</p>
+      </div>
+
+      {/* Stats row */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(150px,1fr))',gap:16,marginBottom:24}}>
+        {[
+          {label:'Today',value:fmtTime(timerSecs),icon:'⏱',color:'#6366f1'},
+          {label:'Streak',value:streak+' days 🔥',icon:'',color:'#f59e0b'},
+          {label:'Tasks Done',value:`${done}/${total}`,icon:'✅',color:'#10b981'},
+          {label:'Videos Done',value:ls('bs_watched_videos',[]).length,icon:'▶️',color:'#8b5cf6'},
+        ].map(s=>(
+          <div key={s.label} className="card" style={{textAlign:'center'}}>
+            <div style={{color:s.color,fontSize:22,fontWeight:800,marginBottom:4}}>{s.value}</div>
+            <div style={{color:'#64748b',fontSize:12}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{display:'grid',gridTemplateColumns:'2fr 1fr',gap:20,marginBottom:20}}>
+        {/* Study time chart */}
+        <div className="card">
+          <h4 style={{color:'#a5b4fc',fontWeight:700,marginBottom:20,fontSize:13}}>📅 STUDY TIME – LAST 7 DAYS</h4>
+          <div style={{display:'flex',gap:8,alignItems:'flex-end',height:120}}>
+            {last7.map(d=>(
+              <div key={d.key} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:6}}>
+                <span style={{color:'#475569',fontSize:11}}>{d.mins}m</span>
+                <div style={{width:'100%',background:'linear-gradient(180deg,#8b5cf6,#6366f1)',borderRadius:'4px 4px 0 0',
+                  height:Math.max(4,Math.round(d.mins/maxMins*90))+'px',minHeight:4,
+                  opacity:d.key===today()?1:0.5,
+                  boxShadow:d.key===today()?'0 0 12px rgba(139,92,246,0.5)':'none'}}/>
+                <span style={{color:d.key===today()?'#a78bfa':'#475569',fontSize:11,fontWeight:d.key===today()?700:400}}>{d.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Subject progress */}
+        <div className="card">
+          <h4 style={{color:'#a5b4fc',fontWeight:700,marginBottom:14,fontSize:13}}>📚 SUBJECT PROGRESS</h4>
+          {Object.keys(bySubject).length===0&&<p style={{color:'#475569',fontSize:13}}>Add tasks to track subject progress</p>}
+          {Object.entries(bySubject).slice(0,6).map(([sub,{done:d,total:t}])=>(
+            <div key={sub} style={{marginBottom:10}}>
+              <div style={{display:'flex',justifyContent:'space-between',marginBottom:4}}>
+                <span style={{color:'#94a3b8',fontSize:12,maxWidth:130,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{sub}</span>
+                <span style={{color:'#a78bfa',fontSize:12,fontWeight:600}}>{d}/{t}</span>
+              </div>
+              <div className="progress-bar"><div className="progress-fill" style={{width:t?Math.round(d/t*100)+'%':'0%'}}/></div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Task completion */}
+      <div className="card">
+        <h4 style={{color:'#a5b4fc',fontWeight:700,marginBottom:16,fontSize:13}}>🏆 ACHIEVEMENTS</h4>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(160px,1fr))',gap:12}}>
+          {[
+            {icon:'🎯',label:'First Task Done',earned:done>=1},
+            {icon:'🔥',label:'3-Day Streak',earned:streak>=3},
+            {icon:'📚',label:'5 Tasks Done',earned:done>=5},
+            {icon:'⚡',label:'Power Learner (10+)',earned:done>=10},
+            {icon:'🌟',label:'Study Star (20+)',earned:done>=20},
+            {icon:'👑',label:'Champion (50+)',earned:done>=50},
+          ].map(a=>(
+            <div key={a.label} style={{padding:'14px',borderRadius:12,textAlign:'center',
+              background:a.earned?'rgba(139,92,246,0.15)':'rgba(255,255,255,0.03)',
+              border:`1px solid ${a.earned?'rgba(139,92,246,0.3)':'rgba(255,255,255,0.06)'}`,
+              opacity:a.earned?1:0.4}}>
+              <div style={{fontSize:28,marginBottom:6}}>{a.icon}</div>
+              <div style={{color:a.earned?'#c4b5fd':'#475569',fontSize:12,fontWeight:a.earned?600:400}}>{a.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── SETTINGS ─────────────────────────────────────────────────────────────────
+function Settings({apiKey,setApiKey,user,onLogout}){
+  const [key,setKey]=useState(apiKey);
+  const [saved,setSaved]=useState(false);
+
+  const save=()=>{
+    setApiKey(key);
+    ss('bs_groq_key',key);
+    setSaved(true);
+    setTimeout(()=>setSaved(false),2000);
+  };
+
+  return(
+    <div className="fade-in">
+      <h2 style={{color:'#fff',fontSize:22,fontWeight:800,marginBottom:24}}>⚙️ Settings</h2>
+
+      <div style={{display:'flex',flexDirection:'column',gap:16,maxWidth:540}}>
+        {/* Profile info */}
+        <div className="card">
+          <h4 style={{color:'#a5b4fc',fontWeight:700,fontSize:13,marginBottom:14}}>👤 ACCOUNT</h4>
+          <div style={{color:'#e2e8f0',fontWeight:600,marginBottom:4}}>{user.name}</div>
+          <div style={{color:'#64748b',fontSize:13}}>{user.email}</div>
+        </div>
+
+        {/* Groq API */}
+        <div className="card">
+          <h4 style={{color:'#a5b4fc',fontWeight:700,fontSize:13,marginBottom:8}}>🤖 GROQ API KEY</h4>
+          <p style={{color:'#64748b',fontSize:12,marginBottom:12}}>Used for AI study plan generation. Get free key at <a href="https://console.groq.com" target="_blank" style={{color:'#a78bfa'}}>console.groq.com</a></p>
+          <input className="input" placeholder="gsk_xxxxxxxxxxxxxxxxxxxx" value={key} onChange={e=>setKey(e.target.value)} style={{marginBottom:12}} type="password"/>
+          <button className="btn-primary" onClick={save}>{saved?'✓ Saved!':'Save API Key'}</button>
+        </div>
+
+        {/* Monetize info */}
+        <div className="card" style={{borderColor:'rgba(245,158,11,0.3)'}}>
+          <h4 style={{color:'#fcd34d',fontWeight:700,fontSize:13,marginBottom:10}}>💰 PREMIUM & EARNINGS</h4>
+          <div style={{display:'flex',flexDirection:'column',gap:12}}>
+            <div style={{background:'rgba(245,158,11,0.08)',borderRadius:10,padding:12}}>
+              <div style={{color:'#fcd34d',fontWeight:700,fontSize:13,marginBottom:4}}>⭐ Upgrade to Premium</div>
+              <p style={{color:'#94a3b8',fontSize:12,marginBottom:10}}>Unlock advanced AI features, unlimited mock tests, priority job alerts, and premium notes bundle.</p>
+              <button style={{background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',border:'none',borderRadius:8,padding:'9px 20px',cursor:'pointer',fontWeight:700,fontSize:13}}>
+                ⭐ Upgrade – ₹299/month
+              </button>
+            </div>
+            <div style={{background:'rgba(16,185,129,0.08)',borderRadius:10,padding:12}}>
+              <div style={{color:'#6ee7b7',fontWeight:700,fontSize:13,marginBottom:4}}>📄 Sell Your Notes</div>
+              <p style={{color:'#94a3b8',fontSize:12,marginBottom:10}}>Upload your handwritten or typed PDF notes and earn money every time a student downloads them. You keep 70% of every sale.</p>
+              <button style={{background:'linear-gradient(135deg,#10b981,#059669)',color:'#fff',border:'none',borderRadius:8,padding:'9px 20px',cursor:'pointer',fontWeight:700,fontSize:13}}
+                onClick={()=>alert('📩 To upload notes, email: upload@careerpilot.in with your PDF + pricing. We review & publish within 48 hours!')}>
+                📤 Upload Your Notes
+              </button>
+            </div>
+            <div style={{background:'rgba(99,102,241,0.08)',borderRadius:10,padding:12}}>
+              <div style={{color:'#a5b4fc',fontWeight:700,fontSize:13,marginBottom:4}}>🛒 Amazon Affiliate</div>
+              <p style={{color:'#94a3b8',fontSize:12}}>Every book you buy via CareerPilot's Amazon links earns us a small commission — keeping free notes & features free for all students.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Reset data */}
+        <div className="card">
+          <h4 style={{color:'#a5b4fc',fontWeight:700,fontSize:13,marginBottom:10}}>🗑 DATA</h4>
+          <div style={{display:'flex',gap:10}}>
+            <button className="btn-ghost" onClick={()=>{if(confirm('Clear all tasks?')){ss('bs_tasks',[]);window.location.reload();}}}>Clear Tasks</button>
+            <button onClick={()=>{if(confirm('Log out?')){onLogout();}}} style={{background:'rgba(239,68,68,0.15)',color:'#fca5a5',border:'1px solid rgba(239,68,68,0.3)',borderRadius:10,padding:'9px 20px',cursor:'pointer',fontWeight:500}}>
+              Log Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── NOTES SECTION ───────────────────────────────────────────────────────────
+function NotesSection(){
+  const [tab,setTab]=useState('all'); // all | free | premium
+  const [examFilter,setExamFilter]=useState('All');
+  const [search,setSearch]=useState('');
+  const [unlocked,setUnlocked]=useState(ls('bs_unlocked_notes',[]));
+  const [payModal,setPayModal]=useState(null); // note object
+  const [payStep,setPayStep]=useState(1);
+  const [upiId,setUpiId]=useState('');
+  const [txnId,setTxnId]=useState('');
+  const [payDone,setPayDone]=useState(false);
+
+  const exams=['All',...new Set(NOTES.map(n=>n.exam))];
+
+  const filtered=NOTES.filter(n=>{
+    const q=search.toLowerCase();
+    const matchS=n.title.toLowerCase().includes(q)||n.subject.toLowerCase().includes(q)||n.tags.some(t=>t.toLowerCase().includes(q));
+    const matchT=tab==='free'?n.type==='free':tab==='premium'?n.type==='premium':true;
+    const matchE=examFilter==='All'||n.exam===examFilter;
+    return matchS&&matchT&&matchE;
+  });
+
+  const handleUnlock=(note)=>{
+    if(note.type==='free'||unlocked.includes(note.id)){
+      // simulate download
+      alert(`✅ Downloading "${note.title}" (${note.size})…\n\nIn the live version, this triggers a real PDF download from your server.`);
+      return;
+    }
+    setPayModal(note);setPayStep(1);setPayDone(false);setUpiId('');setTxnId('');
+  };
+
+  const handlePayConfirm=()=>{
+    if(!upiId.trim()){alert('Please enter your UPI ID.');return;}
+    if(!txnId.trim()){alert('Please enter Transaction ID.');return;}
+    // In production: verify with backend
+    const updated=[...unlocked,payModal.id];
+    setUnlocked(updated);
+    ss('bs_unlocked_notes',updated);
+    setPayDone(true);
+  };
+
+  const freeCount=NOTES.filter(n=>n.type==='free').length;
+  const premCount=NOTES.filter(n=>n.type==='premium').length;
+
+  return(
+    <div className="fade-in">
+      {/* Header */}
+      <div style={{marginBottom:24}}>
+        <h2 style={{color:'#fff',fontSize:22,fontWeight:800}}>📄 Notes Library</h2>
+        <p style={{color:'#64748b',fontSize:13,marginTop:4}}>Free & Premium PDF notes curated by CareerPilot experts</p>
+      </div>
+
+      {/* Stats bar */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:20}}>
+        {[
+          {label:'Free Notes',value:freeCount,icon:'🆓',color:'#10b981'},
+          {label:'Premium Notes',value:premCount,icon:'⭐',color:'#f59e0b'},
+          {label:'Unlocked by You',value:unlocked.length+freeCount,icon:'🔓',color:'#6366f1'},
+        ].map(s=>(
+          <div key={s.label} className="card" style={{textAlign:'center',padding:14}}>
+            <div style={{fontSize:22}}>{s.icon}</div>
+            <div style={{color:s.color,fontWeight:800,fontSize:20,marginTop:4}}>{s.value}</div>
+            <div style={{color:'#64748b',fontSize:12,marginTop:2}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Search */}
+      <input className="input" placeholder="🔍 Search notes by title, subject, topic…" value={search} onChange={e=>setSearch(e.target.value)} style={{marginBottom:14}}/>
+
+      {/* Tabs + Exam filter */}
+      <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:12,marginBottom:18}}>
+        <div style={{display:'flex',gap:8}}>
+          {[['all','📚 All Notes'],['free','🆓 Free'],['premium','⭐ Premium']].map(([v,l])=>(
+            <button key={v} className={`tab-btn${tab===v?' active':''}`} onClick={()=>setTab(v)}>{l}</button>
+          ))}
+        </div>
+        <select className="select" value={examFilter} onChange={e=>setExamFilter(e.target.value)} style={{width:200}}>
+          {exams.map(e=><option key={e}>{e}</option>)}
+        </select>
+      </div>
+
+      {/* Notes grid */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(320px,1fr))',gap:16}}>
+        {filtered.map(n=>{
+          const isUnlocked=n.type==='free'||unlocked.includes(n.id);
+          return(
+            <div key={n.id} style={{background:'rgba(255,255,255,0.04)',border:`1px solid ${isUnlocked?'rgba(16,185,129,0.2)':'rgba(255,255,255,0.08)'}`,borderRadius:16,padding:20,transition:'all .2s',position:'relative',overflow:'hidden'}}>
+              {/* Color accent bar */}
+              <div style={{position:'absolute',top:0,left:0,right:0,height:3,background:`linear-gradient(90deg,${n.color},${n.color}88)`}}/>
+
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:12}}>
+                <div style={{display:'flex',gap:12,alignItems:'center'}}>
+                  <div style={{width:46,height:46,background:`${n.color}22`,border:`1px solid ${n.color}44`,borderRadius:12,display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>
+                    {n.emoji}
+                  </div>
+                  <div>
+                    <h4 style={{color:'#e2e8f0',fontWeight:700,fontSize:13,lineHeight:1.4}}>{n.title}</h4>
+                    <p style={{color:'#64748b',fontSize:11,marginTop:3}}>{n.uploadedBy}</p>
+                  </div>
+                </div>
+                <div style={{textAlign:'right',flexShrink:0}}>
+                  {n.type==='free'
+                    ?<span className="badge badge-green">FREE</span>
+                    :isUnlocked
+                      ?<span className="badge badge-green">UNLOCKED</span>
+                      :<span style={{background:'linear-gradient(135deg,#f59e0b,#d97706)',color:'#fff',padding:'3px 10px',borderRadius:20,fontSize:11,fontWeight:700}}>₹{n.price}</span>
+                  }
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div style={{display:'flex',gap:5,flexWrap:'wrap',marginBottom:10}}>
+                {n.tags.slice(0,4).map(t=>(
+                  <span key={t} style={{background:'rgba(99,102,241,0.12)',color:'#a5b4fc',padding:'2px 8px',borderRadius:20,fontSize:10}}>{t}</span>
+                ))}
+              </div>
+
+              {/* Preview */}
+              <p style={{color:'#64748b',fontSize:12,lineHeight:1.5,marginBottom:12}}>{n.preview.substring(0,110)}…</p>
+
+              {/* Meta */}
+              <div style={{display:'flex',gap:12,marginBottom:14,flexWrap:'wrap'}}>
+                <span style={{color:'#475569',fontSize:11}}>📄 {n.pages} pages</span>
+                <span style={{color:'#475569',fontSize:11}}>💾 {n.size}</span>
+                <span style={{color:'#475569',fontSize:11}}>⬇️ {n.downloads.toLocaleString()} downloads</span>
+                <span style={{color:'#fbbf24',fontSize:11}}>★ {n.rating}</span>
+              </div>
+
+              {/* Exam badge */}
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                <span className="badge badge-purple">{n.exam}</span>
+                <button onClick={()=>handleUnlock(n)} style={{
+                  padding:'8px 16px',borderRadius:8,border:'none',cursor:'pointer',fontSize:12,fontWeight:700,
+                  background:isUnlocked?'linear-gradient(135deg,#10b981,#059669)':'linear-gradient(135deg,#6366f1,#8b5cf6)',
+                  color:'#fff',display:'flex',alignItems:'center',gap:6}}>
+                  {isUnlocked?'⬇️ Download PDF':'🔓 Unlock & Download'}
+                </button>
+              </div>
+            </div>
+          );
+        })}
+        {filtered.length===0&&<div style={{color:'#475569',gridColumn:'1/-1',textAlign:'center',padding:40}}>No notes found matching your filters.</div>}
+      </div>
+
+      {/* Info banner */}
+      <div style={{marginTop:24,background:'rgba(245,158,11,0.08)',border:'1px solid rgba(245,158,11,0.2)',borderRadius:14,padding:18}}>
+        <h4 style={{color:'#fcd34d',fontWeight:700,marginBottom:8}}>💡 About Our Notes</h4>
+        <p style={{color:'#94a3b8',fontSize:13,lineHeight:1.6}}>
+          Free notes are prepared by CareerPilot Team and updated regularly. Premium notes include extra PYQ analysis, mock tests, and in-depth explanations.
+          Premium purchases are one-time — you get lifetime access. All payments go directly to the creator who made the notes.
+        </p>
+      </div>
+
+      {/* Payment Modal */}
+      {payModal&&!payDone&&(
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.7)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:2000,padding:20}} onClick={e=>e.target===e.currentTarget&&setPayModal(null)}>
+          <div className="glass" style={{borderRadius:20,padding:32,width:'100%',maxWidth:440}}>
+            <h3 style={{color:'#fff',fontWeight:800,fontSize:20,marginBottom:6}}>🔓 Unlock Premium Notes</h3>
+            <p style={{color:'#64748b',fontSize:13,marginBottom:20}}>{payModal.title}</p>
+
+            {payStep===1&&(
+              <>
+                <div style={{background:'rgba(99,102,241,0.1)',border:'1px solid rgba(99,102,241,0.3)',borderRadius:12,padding:16,marginBottom:20}}>
+                  <div style={{color:'#a5b4fc',fontWeight:700,fontSize:16,marginBottom:4}}>Amount: ₹{payModal.price}</div>
+                  <div style={{color:'#64748b',fontSize:13}}>One-time payment · Lifetime access · {payModal.pages} pages · {payModal.size}</div>
+                </div>
+                <div style={{background:'rgba(255,255,255,0.04)',borderRadius:12,padding:16,marginBottom:16,textAlign:'center'}}>
+                  <div style={{fontSize:40,marginBottom:8}}>📲</div>
+                  <div style={{color:'#e2e8f0',fontWeight:700,marginBottom:4}}>Pay via UPI</div>
+                  <div style={{color:'#a78bfa',fontSize:16,fontWeight:800,marginBottom:4}}>careerpilot@upi</div>
+                  <div style={{color:'#64748b',fontSize:13}}>Or scan QR code in the CareerPilot app</div>
+                </div>
+                <button className="btn-primary" style={{width:'100%'}} onClick={()=>setPayStep(2)}>I've Made the Payment →</button>
+                <button onClick={()=>setPayModal(null)} style={{width:'100%',marginTop:10,background:'transparent',border:'none',color:'#475569',cursor:'pointer',padding:'8px 0'}}>Cancel</button>
+              </>
+            )}
+
+            {payStep===2&&(
+              <>
+                <div style={{background:'rgba(16,185,129,0.1)',border:'1px solid rgba(16,185,129,0.2)',borderRadius:10,padding:12,marginBottom:16,color:'#6ee7b7',fontSize:13}}>
+                  ✓ Send ₹{payModal.price} to <strong>careerpilot@upi</strong> first, then enter details below.
+                </div>
+                <label style={{color:'#94a3b8',fontSize:12,display:'block',marginBottom:6}}>Your UPI ID</label>
+                <input className="input" placeholder="yourname@paytm / @gpay / @upi" value={upiId} onChange={e=>setUpiId(e.target.value)} style={{marginBottom:12}}/>
+                <label style={{color:'#94a3b8',fontSize:12,display:'block',marginBottom:6}}>UPI Transaction ID / Reference Number</label>
+                <input className="input" placeholder="12-digit transaction ID" value={txnId} onChange={e=>setTxnId(e.target.value)} style={{marginBottom:16}}/>
+                <p style={{color:'#475569',fontSize:11,marginBottom:14}}>⏱ Verification takes 5–10 minutes. Notes will auto-unlock on confirmation. (Demo: unlocks instantly)</p>
+                <button className="btn-primary" style={{width:'100%'}} onClick={handlePayConfirm}>✅ Confirm & Unlock</button>
+                <button onClick={()=>setPayStep(1)} style={{width:'100%',marginTop:10,background:'transparent',border:'none',color:'#64748b',cursor:'pointer',padding:'6px 0'}}>← Back</button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Success modal */}
+      {payModal&&payDone&&(
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.7)',display:'flex',alignItems:'center',justifyContent:'center',zIndex:2000,padding:20}}>
+          <div className="glass" style={{borderRadius:20,padding:32,width:'100%',maxWidth:400,textAlign:'center'}}>
+            <div style={{fontSize:56,marginBottom:16}}>🎉</div>
+            <h3 style={{color:'#6ee7b7',fontWeight:800,fontSize:22,marginBottom:8}}>Notes Unlocked!</h3>
+            <p style={{color:'#94a3b8',fontSize:14,marginBottom:20}}>{payModal.title} is now available for download.</p>
+            <button className="btn-primary" style={{width:'100%'}} onClick={()=>{setPayModal(null);setPayDone(false);}}>Download Now →</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── MAIN APP ──────────────────────────────────────────────────────────────────
+function App(){
+  const [screen,setScreen]=useState('landing'); // landing|auth|apikey|profile|app
+  const [authMode,setAuthMode]=useState('login');
+  const [user,setUser]=useState(ls('bs_current_user',null));
+  const [profile,setProfile]=useState(ls('bs_profile',null));
+  const [apiKey,setApiKey]=useState(ls('bs_groq_key',''));
+  const [page,setPage]=useState('dashboard');
+  const [tasks,setTasks]=useState(ls('bs_tasks',[]));
+  const [timerSecs,setTimerSecs]=useState(0);
+  const [timerRunning,setTimerRunning]=useState(false);
+  const timerRef=useRef(null);
+  const dailyRef=useRef(ls('bs_daily_times',{}));
+
+  // Determine initial screen
+  useEffect(()=>{
+    if(user){
+      if(!profile)setScreen('profile');
+      else setScreen('app');
+    }else{setScreen('landing');}
+  },[]);
+
+  // Timer logic
+  useEffect(()=>{
+    if(screen==='app'){
+      setTimerRunning(true);
+      const todayKey=today();
+      const base=ls('bs_daily_times',{})[todayKey]||0;
+      setTimerSecs(base);
+    }
+  },[screen]);
+
+  useEffect(()=>{
+    if(timerRunning){
+      timerRef.current=setInterval(()=>{
+        setTimerSecs(s=>{
+          const next=s+1;
+          // Save every 10 seconds
+          if(next%10===0){
+            const dt=ls('bs_daily_times',{});
+            dt[today()]=next;
+            ss('bs_daily_times',dt);
+            // update streak
+            const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+            const yk=yesterday.toISOString().split('T')[0];
+            const s2=ls('bs_streak',0);
+            if(dt[yk]){ss('bs_streak',s2+1);}
+          }
+          return next;
+        });
+      },1000);
+    }else{clearInterval(timerRef.current);}
+    return()=>clearInterval(timerRef.current);
+  },[timerRunning]);
+
+  const onAuthDone=(u)=>{setUser(u);setScreen(profile?'app':'apikey');};
+  const onApiKeyDone=(k)=>{if(k){setApiKey(k);ss('bs_groq_key',k);}setScreen(profile?'app':'profile');};
+  const onProfileDone=(p)=>{setProfile(p);setScreen('app');};
+  const onLogout=()=>{ss('bs_current_user',null);setUser(null);setProfile(null);setScreen('landing');};
+
+  if(screen==='landing')return <LandingPage onAuth={m=>{setAuthMode(m);setScreen('auth');}}/>;
+  if(screen==='auth')return <AuthPage mode={authMode} onDone={onAuthDone} onSwitch={()=>setAuthMode(m=>m==='login'?'signup':'login')}/>;
+  if(screen==='apikey')return <ApiKeySetup onDone={onApiKeyDone}/>;
+  if(screen==='profile')return <ProfileSetup user={user} onDone={onProfileDone}/>;
+
+  const renderPage=()=>{
+    switch(page){
+      case 'dashboard':return <Dashboard user={user} profile={profile} timerSecs={timerSecs} tasks={tasks} setPage={setPage}/>;
+      case 'routine':return <StudyRoutine profile={profile} apiKey={apiKey}/>;
+      case 'tasks':return <TaskManager tasks={tasks} setTasks={setTasks} profile={profile}/>;
+      case 'videos':return <StudyVideos tasks={tasks} setTasks={setTasks}/>;
+      case 'topics':return <ImportantTopics profile={profile}/>;
+      case 'notes':return <NotesSection/>;
+      case 'books':return <BooksLibrary/>;
+      case 'jobs':return <JobFinder/>;
+      case 'alerts':return <GovtAlerts/>;
+      case 'performance':return <PerformanceDashboard tasks={tasks} timerSecs={timerSecs}/>;
+      case 'settings':return <Settings apiKey={apiKey} setApiKey={setApiKey} user={user} onLogout={onLogout}/>;
+      default:return <Dashboard user={user} profile={profile} timerSecs={timerSecs} tasks={tasks} setPage={setPage}/>;
+    }
+  };
+
+  return(
+    <div style={{display:'flex',minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29,#1a1535,#0f0c29)'}}>
+      <Sidebar page={page} setPage={setPage} user={user}/>
+      <div style={{marginLeft:220,flex:1,padding:'32px 36px',maxWidth:'calc(100vw - 220px)',overflowX:'hidden'}}>
+        {renderPage()}
+      </div>
+      <FloatingTimer seconds={timerSecs} running={timerRunning} onToggle={()=>setTimerRunning(r=>!r)}/>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
