@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1705,4 +1705,2194 @@ function App(){
 ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
 </script>
 </body>
+</html> -->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CareerPilot – Student Success Platform</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.21.4/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="config.local.js" onerror="window.CAREERPILOT_CONFIG=window.CAREERPILOT_CONFIG||{}"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0f0c29;--bg2:#1a1535;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1);--text:#e2e8f0;--muted:#94a3b8;--accent:#6366f1;--accent2:#8b5cf6;}
+body.light{--bg:#f0f2ff;--bg2:#e8eaf6;--card:rgba(99,102,241,0.06);--border:rgba(99,102,241,0.15);--text:#1e293b;--muted:#475569;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#4c1d95;border-radius:4px}
+.btn{border:none;border-radius:10px;padding:10px 22px;cursor:pointer;font-weight:600;font-size:14px;transition:all .2s}
+.btn-p{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}.btn-p:hover{opacity:.85;transform:translateY(-1px)}
+.btn-g{background:transparent;color:#a5b4fc;border:1px solid #6366f1}.btn-g:hover{background:#6366f1;color:#fff}
+.btn-r{background:rgba(239,68,68,0.15);color:#fca5a5;border:1px solid rgba(239,68,68,0.3)}.btn-r:hover{background:rgba(239,68,68,0.3)}
+.inp{background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);width:100%;outline:none;font-size:14px;transition:border .2s}
+.inp:focus{border-color:#8b5cf6}.inp::placeholder{color:var(--muted)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px}
+.glass{background:rgba(15,12,41,0.65);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.12)}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.bp{background:rgba(139,92,246,0.2);color:#c4b5fd}.bg2{background:rgba(16,185,129,0.2);color:#6ee7b7}
+.by{background:rgba(245,158,11,0.2);color:#fcd34d}.br{background:rgba(239,68,68,0.2);color:#fca5a5}.bb{background:rgba(59,130,246,0.2);color:#93c5fd}
+.nav-i{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;color:var(--muted);cursor:pointer;transition:all .2s;font-size:14px;user-select:none}
+.nav-i:hover,.nav-i.on{background:rgba(99,102,241,0.15);color:#a5b4fc}.nav-i.on{border-left:3px solid #8b5cf6}
+.tab-b{padding:8px 18px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:500;border:none;transition:all .2s}
+.tab-b.on{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff}
+.tab-b:not(.on){background:rgba(255,255,255,0.06);color:var(--muted)}.tab-b:not(.on):hover{background:rgba(255,255,255,0.1);color:var(--text)}
+@keyframes orbF{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-40px) scale(1.05)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+@keyframes recPulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,0.6)}70%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
+.fade-up{animation:fadeUp .6s ease both}.fade-in{animation:fadeIn .4s ease}
+.particle{position:absolute;border-radius:50%;pointer-events:none;animation:orbF var(--d,6s) ease-in-out infinite}
+.wb-wrap{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:#1a1535}
+.wb-canvas-area{flex:1;position:relative;overflow:hidden}
+.wb-canvas-area canvas{position:absolute;top:0;left:0;width:100%;height:100%;cursor:crosshair}
+.wb-toolbar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(15,12,41,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.1);flex-wrap:wrap}
+.wb-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 10px;color:#e2e8f0;cursor:pointer;font-size:12px;transition:all .2s}
+.wb-btn:hover,.wb-btn.on{background:rgba(99,102,241,0.4);border-color:#6366f1}
+.wb-sep{width:1px;height:28px;background:rgba(255,255,255,0.12);margin:0 4px;flex-shrink:0}
+.job-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;transition:all .2s;margin-bottom:12px}
+.job-card:hover{border-color:#8b5cf6;box-shadow:0 8px 30px rgba(139,92,246,0.15)}
+.msg-bubble{max-width:70%;padding:10px 14px;border-radius:14px;font-size:14px;margin-bottom:8px;word-break:break-word}
+.msg-me{background:linear-gradient(135deg,#6366f1,#8b5cf6);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+.msg-other{background:rgba(255,255,255,0.08);color:var(--text);align-self:flex-start;border-bottom-left-radius:4px}
+.kanban-col{background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:14px;padding:14px;min-width:220px;flex:1}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;animation:blink 1.5s infinite}
+.glass-pro{position:relative;background:rgba(15,12,41,0.55);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);border:1px solid rgba(255,255,255,0.14);box-shadow:0 30px 80px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.08)}
+.glass-pro::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(135deg,#6366f1,#8b5cf6,#ec4899,#6366f1);background-size:300% 300%;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:ringMove 6s linear infinite;opacity:.55;pointer-events:none}
+@keyframes ringMove{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.gauth-btn{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);background:linear-gradient(135deg,rgba(255,255,255,0.10),rgba(255,255,255,0.04));color:#e2e8f0;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;transition:all .2s}
+.gauth-btn:hover{background:linear-gradient(135deg,rgba(255,255,255,0.16),rgba(255,255,255,0.06));border-color:#8b5cf6}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback,useMemo} = React;
+
+/* ── CONFIG (loaded from config.local.js) ── */
+const CFG=window.CAREERPILOT_CONFIG||{};
+const SB_URL=CFG.SUPABASE_URL||'https://example.supabase.co';
+const SB_KEY=CFG.SUPABASE_ANON_KEY||'YOUR_SUPABASE_ANON_KEY';
+const ADMIN_EMAIL=CFG.ADMIN_EMAIL||'admin@careerpilot.local';
+const ADMIN_PIN=CFG.ADMIN_PIN||'ADMIN2024';
+const GROQ_DEMO_KEY=CFG.GROQ_DEMO_KEY||'';
+const GROQ_MODEL=CFG.GROQ_MODEL||'llama-3.1-8b-instant';
+const RAPIDAPI_KEY=CFG.RAPIDAPI_KEY||'';
+const RAPIDAPI_JOBS_HOST=CFG.RAPIDAPI_JOBS_HOST||'jsearch.p.rapidapi.com';
+const SB_LIVE=!!(SB_KEY&&SB_KEY!=='YOUR_SUPABASE_ANON_KEY');
+
+let sb=null;
+try{if(window.supabase)sb=window.supabase.createClient(SB_URL,SB_KEY);}catch(e){}
+
+/* ── tiny shared store (localStorage + cross-tab events) ── */
+const Store={
+  get(k,fb){try{const v=localStorage.getItem(k);return v?JSON.parse(v):fb;}catch(e){return fb;}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}window.dispatchEvent(new CustomEvent('cp:store',{detail:{key:k,value:v}}));},
+  push(k,item){const arr=Store.get(k,[]);arr.unshift(item);Store.set(k,arr);return arr;},
+};
+function useStore(key,fallback){
+  const [v,setV]=useState(()=>Store.get(key,fallback));
+  useEffect(()=>{
+    const h=e=>{if(e.detail&&e.detail.key===key)setV(e.detail.value);};
+    const s=e=>{if(e.key===key){try{setV(JSON.parse(e.newValue));}catch(_){}}};
+    window.addEventListener('cp:store',h);window.addEventListener('storage',s);
+    return()=>{window.removeEventListener('cp:store',h);window.removeEventListener('storage',s);};
+  },[key]);
+  return [v,(nv)=>Store.set(key,typeof nv==='function'?nv(v):nv)];
+}
+
+const TARGETS=[
+  {id:'ssc',label:'SSC CGL/CHSL',cat:'Govt',icon:'📋'},
+  {id:'gate-cs',label:'GATE – Computer Science',cat:'Engineering',icon:'💻'},
+  {id:'gate-ece',label:'GATE – Electronics (ECE)',cat:'Engineering',icon:'📡'},
+  {id:'gate-me',label:'GATE – Mechanical',cat:'Engineering',icon:'⚙️'},
+  {id:'gate-ce',label:'GATE – Civil',cat:'Engineering',icon:'🏗️'},
+  {id:'aiml',label:'AIML Engineer',cat:'Tech',icon:'🤖'},
+  {id:'ai-eng',label:'AI Engineer',cat:'Tech',icon:'🧠'},
+  {id:'ml-eng',label:'ML Engineer',cat:'Tech',icon:'📊'},
+  {id:'railways',label:'Railways (RRB/NTPC)',cat:'Govt',icon:'🚂'},
+  {id:'upsc',label:'UPSC Civil Services',cat:'Govt',icon:'🏛️'},
+  {id:'bihar',label:'Bihar PSC (BPSC)',cat:'State',icon:'🌾'},
+  {id:'up',label:'UP PSC (UPPCS)',cat:'State',icon:'🏙️'},
+  {id:'mp',label:'MP PSC (MPPSC)',cat:'State',icon:'🌳'},
+  {id:'raj',label:'Rajasthan PSC (RPSC)',cat:'State',icon:'🏜️'},
+  {id:'maha',label:'Maharashtra PSC (MPSC)',cat:'State',icon:'🌊'},
+  {id:'state',label:'Other State Exams',cat:'State',icon:'📌'},
+];
+
+const INDIAN_STATES=['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Delhi','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Jammu & Kashmir','Ladakh','Andaman & Nicobar','Chandigarh','Dadra & Nagar Haveli','Lakshadweep','Puducherry'];
+
+const POPULAR_GOVT_EXAMS={
+  'Central':['SSC CGL','SSC CHSL','SSC MTS','SSC GD','UPSC CSE','UPSC CAPF','UPSC CDS','RRB NTPC','RRB Group D','RRB JE','IBPS PO','IBPS Clerk','SBI PO','SBI Clerk','RBI Grade B','LIC AAO','EPFO SSA','NDA','CAPF','CISF'],
+  'State PCS':['BPSC','UPPCS','MPPSC','RPSC RAS','MPSC','HPSC','APPSC','TSPSC','TNPSC','KPSC','KAS','OPSC','WBPSC','JPSC','UKPCS','HPPSC'],
+  'Teaching':['CTET','UPTET','HTET','REET','TET','UGC NET','KVS PRT','NVS TGT','DSSSB Teacher'],
+  'Defence':['NDA','CDS','AFCAT','Indian Coast Guard','Agniveer Army','Agniveer Air Force','Agniveer Navy'],
+  'Engineering':['GATE CSE','GATE ECE','GATE ME','GATE CE','GATE EE','ESE','ISRO','BARC','DRDO','BHEL','NTPC','PGCIL','SAIL'],
+};
+
+const TOPIC_DATA={
+  'gate-cs':['Algorithms & Data Structures','Operating Systems','Computer Networks','DBMS','Computer Organization','Theory of Computation','Compiler Design','Software Engineering','Discrete Mathematics','Digital Logic'],
+  'gate-ece':['Signals & Systems','Analog Electronics','Digital Electronics','Control Systems','EM Theory','Communication Systems','Electronic Devices','Microprocessors'],
+  'gate-me':['Thermodynamics','Fluid Mechanics','Strength of Materials','Manufacturing','Heat Transfer','Machine Design','Theory of Machines'],
+  'gate-ce':['Structural Analysis','Geotechnical Engg','Fluid Mechanics','Environmental Engg','Transportation','Surveying','RCC Design'],
+  'ssc':['English Grammar & Vocabulary','Quantitative Aptitude','General Intelligence & Reasoning','General Knowledge','Current Affairs','Data Interpretation'],
+  'upsc':['Indian Polity (Laxmikant)','History – Ancient/Medieval/Modern','Indian & World Geography','Indian Economy','Science & Technology','Environment & Ecology','Current Affairs','Ethics & Integrity (GS4)'],
+  'railways':['Mathematics (10th level)','General Intelligence & Reasoning','General Awareness','Basic Science','Technical Subjects (as applicable)'],
+  'aiml':['Python Programming','Machine Learning Algorithms','Deep Learning & Neural Networks','Natural Language Processing','Computer Vision','Statistics & Probability','Data Preprocessing','Model Deployment (MLOps)'],
+  'ai-eng':['LLMs & Prompt Engineering','Python & PyTorch','Vector Databases','RAG Architecture','API Integration','Cloud Platforms (AWS/GCP)','MLOps & CI/CD'],
+  'ml-eng':['Feature Engineering','Supervised & Unsupervised Learning','Model Selection & Tuning','Sklearn/XGBoost','A/B Testing','Data Pipelines','Statistical Analysis'],
+  'bihar':['Bihar GK & History','Indian Polity','General Science','Current Affairs','Maths & Reasoning','Hindi Language'],
+  'up':['UP GK & History','Indian Polity','General Science','Current Affairs','Maths & Reasoning','Hindi & Urdu'],
+  'mp':['MP GK & History','Indian Polity','General Science','Current Affairs','Maths & Reasoning'],
+  'raj':['Rajasthan GK & History','Indian Polity','General Science','Current Affairs','Maths & Reasoning'],
+  'maha':['Maharashtra GK','Indian Polity','General Science','Current Affairs','Maths & Reasoning','Marathi Language'],
+  'state':['State GK & History','Indian Polity','General Science','Current Affairs','Maths & Reasoning','Regional Language'],
+};
+
+const GOVT_JOBS=[
+  {id:1,title:'SSC CGL 2025',body:'Staff Selection Commission',posts:'17000+',last:'15 May 2025',pay:'₹25,500–81,100',cat:'SSC',icon:'📋',targets:['ssc']},
+  {id:2,title:'UPSC CSE 2025',body:'Union Public Service Commission',posts:'979',last:'20 Apr 2025',pay:'₹56,100–2,50,000',cat:'UPSC',icon:'🏛️',targets:['upsc']},
+  {id:3,title:'RRB NTPC 2025',body:'Railway Recruitment Board',posts:'11558',last:'30 Apr 2025',pay:'₹19,900–35,400',cat:'Railways',icon:'🚂',targets:['railways']},
+  {id:4,title:'BPSC 70th Exam',body:'Bihar Public Service Commission',posts:'1929',last:'10 May 2025',pay:'₹56,100+',cat:'State',icon:'🌾',targets:['bihar']},
+  {id:5,title:'GATE 2026',body:'IIT/NIT/IISC Admission',posts:'Unlimited',last:'Oct 2025',pay:'PSU Salary ₹40K–80K',cat:'GATE',icon:'💻',targets:['gate-cs','gate-ece','gate-me','gate-ce']},
+  {id:6,title:'UPPCS 2025',body:'UP Public Service Commission',posts:'220',last:'25 May 2025',pay:'₹56,100+',cat:'State',icon:'🏙️',targets:['up']},
+  {id:7,title:'RPSC RAS 2025',body:'Rajasthan PSC',posts:'733',last:'15 Jun 2025',pay:'₹56,100+',cat:'State',icon:'🏜️',targets:['raj']},
+  {id:8,title:'MPPSC State Service',body:'MP Public Service Commission',posts:'148',last:'20 May 2025',pay:'₹56,100+',cat:'State',icon:'🌳',targets:['mp']},
+];
+
+/* ── GROQ HELPER ── */
+async function groqAsk(prompt,apiKey,opts){
+  // Priority: explicit user key  ->  saved user key  ->  platform demo key
+  const userKey=apiKey||localStorage.getItem('groq_key')||'';
+  const key=(userKey&&userKey!=='YOUR_GROQ_KEY')?userKey:GROQ_DEMO_KEY;
+  if(!key) return demoGroq(prompt);
+  try{
+    const r=await fetch('https://api.groq.com/openai/v1/chat/completions',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+      body:JSON.stringify({
+        model:GROQ_MODEL,
+        messages:[
+          {role:'system',content:(opts&&opts.system)||'You are an expert educational assistant for Indian competitive exams. Be concise, practical and structured.'},
+          {role:'user',content:prompt},
+        ],
+        max_tokens:(opts&&opts.max_tokens)||700,
+        temperature:(opts&&opts.temperature)??0.4,
+      }),
+    });
+    const d=await r.json();
+    return d.choices?.[0]?.message?.content||demoGroq(prompt);
+  }catch(e){return demoGroq(prompt);}
+}
+async function groqJSON(prompt,apiKey){
+  // Ask Groq to return strict JSON (best-effort parse)
+  const txt=await groqAsk(prompt+'\n\nReturn ONLY valid JSON. No prose, no markdown fences.',apiKey,{system:'You output valid JSON only.',temperature:0.2});
+  try{const m=txt.match(/\{[\s\S]*\}|\[[\s\S]*\]/);return m?JSON.parse(m[0]):null;}catch(e){return null;}
+}
+function demoGroq(p){
+  const q=p.toLowerCase();
+  if(q.includes('gate')||q.includes('algorithm')||q.includes('os ')||q.includes('network')) return '📘 Key Points:\n• For GATE CS, focus on previous year questions (2010-2024)\n• Algorithms: Time/Space complexity, Sorting, Trees, Graphs\n• OS: Scheduling, Memory Management, Deadlocks\n• Networks: OSI Model, TCP/IP, Routing protocols\n• Practice 3-4 hours of subject questions daily\n• Score 60+ in mock tests before exam';
+  if(q.includes('ssc')||q.includes('cgl')) return '📋 SSC CGL Strategy:\n• Quant: Tables, % concepts, Geometry shortcuts\n• English: Daily vocab 10 words + Grammar rules\n• GK: NCERTs 6-10 + Monthly Current Affairs\n• Reasoning: Practice 50 questions daily\n• Attempt 80+ questions in Tier-1 for safe selection\n• Time management is key — 60 min for 100 Qs';
+  if(q.includes('upsc')||q.includes('ias')||q.includes('civil')) return '🏛️ UPSC Strategy:\n• Foundation: All NCERTs 6-12 first\n• Standard Books: Laxmikant, Bipin Chandra, Shankar IAS\n• Daily: The Hindu + PIB + Yojana Magazine\n• Answer writing from Day 1 of prep\n• Mains > Prelims in priority\n• 14-16 months dedicated preparation needed';
+  if(q.includes('ml')||q.includes('machine learning')||q.includes('ai')) return '🤖 ML/AI Roadmap:\n• Python: NumPy, Pandas, Matplotlib (Month 1)\n• ML: Sklearn, Regression, Classification, Clustering\n• DL: PyTorch/TensorFlow, CNNs, RNNs, Transformers\n• Projects: Kaggle competitions, GitHub portfolio\n• Papers: Attention is All You Need, ResNet, BERT\n• Target: 3 strong projects + leetcode 200+ problems';
+  return '💡 Study Tips:\n• Pomodoro: 25 min focus + 5 min break cycles\n• Active recall beats passive reading 3x\n• Spaced repetition for long-term retention\n• Solve previous year papers from Day 1\n• Weekly mock tests to track progress\n• 6-8 hours quality study beats 12 hours distracted';
+}
+
+/* ── LANDING ── */
+function FeatureCard({icon,title,desc,popup}){
+  const [h,setH]=useState(false);
+  return(
+    <div style={{position:'relative'}} onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)}>
+      {/* Ultra-HD hover popup */}
+      <div style={{position:'absolute',bottom:'calc(100% + 18px)',left:'50%',transform:`translateX(-50%) translateY(${h?0:20}px) scale(${h?1:0.9})`,opacity:h?1:0,transition:'opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1)',pointerEvents:'none',width:248,borderRadius:22,overflow:'hidden',background:'linear-gradient(155deg,rgba(8,6,28,0.98),rgba(18,14,48,0.98))',backdropFilter:'blur(36px)',border:'1px solid rgba(99,102,241,0.55)',boxShadow:'0 0 0 1px rgba(139,92,246,0.12),0 36px 90px rgba(0,0,0,0.75),inset 0 1px 0 rgba(255,255,255,0.07)',zIndex:200}}>
+        {/* Illustration zone */}
+        <div style={{position:'relative',height:128,background:`linear-gradient(135deg,${popup.bg1} 0%,${popup.bg2} 100%)`,display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}>
+          <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse at 50% -10%,rgba(255,255,255,0.08),transparent 65%)',pointerEvents:'none'}}/>
+          <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse at 50% 110%,rgba(0,0,0,0.4),transparent 60%)',pointerEvents:'none'}}/>
+          {popup.svg}
+        </div>
+        {/* Brand + description */}
+        <div style={{padding:'12px 16px 15px'}}>
+          <div style={{display:'flex',alignItems:'center',gap:7,marginBottom:7}}>
+            <div style={{width:22,height:22,borderRadius:7,background:'linear-gradient(135deg,#6366f1,#8b5cf6)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:11,flexShrink:0}}>🚀</div>
+            <span style={{fontWeight:800,fontSize:12,background:'linear-gradient(135deg,#a5b4fc,#c084fc)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>CareerPilot</span>
+            <span style={{marginLeft:'auto',padding:'2px 9px',borderRadius:20,fontSize:9,fontWeight:700,letterSpacing:.4,background:popup.tagBg,color:popup.tagCol}}>{popup.tag}</span>
+          </div>
+          <div style={{fontSize:11.5,color:'#94a3b8',lineHeight:1.7}}>{popup.detail}</div>
+        </div>
+        {/* Down caret */}
+        <div style={{position:'absolute',bottom:-8,left:'50%',transform:'translateX(-50%)',width:16,height:8,overflow:'hidden'}}>
+          <div style={{width:11,height:11,background:'rgba(18,14,48,0.98)',border:'1px solid rgba(99,102,241,0.55)',transform:'rotate(45deg)',margin:'0 auto',marginTop:-7}}/>
+        </div>
+      </div>
+      {/* Card — unchanged */}
+      <div style={{background:h?'rgba(99,102,241,0.15)':'rgba(255,255,255,0.05)',backdropFilter:'blur(16px)',border:h?'1px solid rgba(99,102,241,0.5)':'1px solid rgba(255,255,255,0.1)',borderRadius:20,padding:'26px 20px',width:150,textAlign:'center',transition:'all .3s',transform:h?'translateY(-8px)':'translateY(0)',boxShadow:h?'0 20px 60px rgba(99,102,241,0.25)':'none',cursor:'default'}}>
+        <div style={{fontSize:34,marginBottom:10}}>{icon}</div>
+        <div style={{fontWeight:700,color:'#e2e8f0',marginBottom:5,fontSize:13}}>{title}</div>
+        <div style={{fontSize:11,color:'#64748b',lineHeight:1.5}}>{desc}</div>
+      </div>
+    </div>
+  );
+}
+
+function LandingPage({onEnter}){
+  const [c,setC]=useState([0,0,0,0]);
+  useEffect(()=>{
+    const t=[10000,500,1000,95];let f;
+    const tick=()=>setC(p=>{const n=p.map((v,i)=>Math.min(t[i],v+Math.ceil(t[i]/60)));const done=n.every((v,i)=>v>=t[i]);if(!done)f=requestAnimationFrame(tick);return n;});
+    f=requestAnimationFrame(tick);return()=>cancelAnimationFrame(f);
+  },[]);
+  const stats=[{n:c[0].toLocaleString()+'+',l:'Students'},{n:c[1]+'+',l:'Teachers'},{n:c[2]+'K+',l:'Resources'},{n:c[3]+'%',l:'Success Rate'}];
+  const features=[
+    {icon:'🎓',title:'Smart Learning',desc:'AI-powered courses',popup:{bg1:'#0f0826',bg2:'#1e1060',tagBg:'rgba(99,102,241,0.25)',tagCol:'#a5b4fc',tag:'✦ AI',detail:'Personalised study plans, adaptive quizzes & real-time weak-area detection powered by Groq AI.',svg:(
+      <svg width="216" height="112" viewBox="0 0 216 112" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="sl_halo" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#6366f1" stopOpacity=".45"/><stop offset="100%" stopColor="#6366f1" stopOpacity="0"/></radialGradient>
+          <radialGradient id="sl_core" cx="35%" cy="35%" r="70%"><stop offset="0%" stopColor="#c4b5fd"/><stop offset="55%" stopColor="#6366f1"/><stop offset="100%" stopColor="#312e81"/></radialGradient>
+        </defs>
+        <ellipse cx="108" cy="56" rx="58" ry="44"><animate attributeName="rx" values="58;70;58" dur="3s" repeatCount="indefinite"/><animate attributeName="ry" values="44;52;44" dur="3s" repeatCount="indefinite"/><animate attributeName="fill" values="url(#sl_halo);url(#sl_halo)" dur="3s" repeatCount="indefinite"/></ellipse>
+        <ellipse cx="108" cy="56" rx="58" ry="44" fill="url(#sl_halo)"><animate attributeName="rx" values="58;70;58" dur="3s" repeatCount="indefinite"/><animate attributeName="ry" values="44;52;44" dur="3s" repeatCount="indefinite"/></ellipse>
+        <line x1="34" y1="18" x2="92" y2="48" stroke="#818cf8" strokeWidth="1.2" opacity=".5"/><line x1="182" y1="18" x2="124" y2="48" stroke="#818cf8" strokeWidth="1.2" opacity=".5"/><line x1="34" y1="94" x2="92" y2="64" stroke="#818cf8" strokeWidth="1.2" opacity=".5"/><line x1="182" y1="94" x2="124" y2="64" stroke="#818cf8" strokeWidth="1.2" opacity=".5"/><line x1="4" y1="56" x2="86" y2="56" stroke="#818cf8" strokeWidth="1.2" opacity=".4"/><line x1="130" y1="56" x2="212" y2="56" stroke="#818cf8" strokeWidth="1.2" opacity=".4"/>
+        <circle r="3" fill="#a5b4fc"><animateMotion dur="1.9s" repeatCount="indefinite" path="M34,18 L108,56"/><animate attributeName="opacity" values="0;1;0" dur="1.9s" repeatCount="indefinite"/></circle>
+        <circle r="3" fill="#c084fc"><animateMotion dur="2.2s" repeatCount="indefinite" begin="-0.8s" path="M182,18 L108,56"/><animate attributeName="opacity" values="0;1;0" dur="2.2s" repeatCount="indefinite" begin="-0.8s"/></circle>
+        <circle r="3" fill="#a5b4fc"><animateMotion dur="2.0s" repeatCount="indefinite" begin="-0.4s" path="M34,94 L108,56"/><animate attributeName="opacity" values="0;1;0" dur="2.0s" repeatCount="indefinite" begin="-0.4s"/></circle>
+        <circle r="3" fill="#c084fc"><animateMotion dur="1.7s" repeatCount="indefinite" begin="-1.2s" path="M182,94 L108,56"/><animate attributeName="opacity" values="0;1;0" dur="1.7s" repeatCount="indefinite" begin="-1.2s"/></circle>
+        <circle r="2.5" fill="#818cf8"><animateMotion dur="1.5s" repeatCount="indefinite" begin="-0.3s" path="M4,56 L108,56"/><animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="-0.3s"/></circle>
+        <circle cx="34" cy="18" r="13" fill="#1e1b4b" stroke="#6366f1" strokeWidth="1.8"><animate attributeName="r" values="13;14.5;13" dur="2.5s" repeatCount="indefinite"/></circle><text x="28" y="23" fontSize="13">📖</text>
+        <circle cx="182" cy="18" r="13" fill="#1e1b4b" stroke="#8b5cf6" strokeWidth="1.8"><animate attributeName="r" values="13;14.5;13" dur="2.2s" repeatCount="indefinite" begin="-0.7s"/></circle><text x="176" y="23" fontSize="13">🧮</text>
+        <circle cx="34" cy="94" r="13" fill="#1e1b4b" stroke="#a855f7" strokeWidth="1.8"><animate attributeName="r" values="13;14.5;13" dur="2.8s" repeatCount="indefinite" begin="-1.3s"/></circle><text x="28" y="99" fontSize="13">💡</text>
+        <circle cx="182" cy="94" r="13" fill="#1e1b4b" stroke="#6366f1" strokeWidth="1.8"><animate attributeName="r" values="13;14.5;13" dur="2.0s" repeatCount="indefinite" begin="-0.4s"/></circle><text x="176" y="99" fontSize="13">🔬</text>
+        <circle cx="4" cy="56" r="9" fill="#1e1b4b" stroke="#6366f1" strokeWidth="1.4"><animate attributeName="r" values="9;10;9" dur="2.3s" repeatCount="indefinite" begin="-0.6s"/></circle><text x="0" y="60" fontSize="9">✏️</text>
+        <circle cx="212" cy="56" r="9" fill="#1e1b4b" stroke="#8b5cf6" strokeWidth="1.4"><animate attributeName="r" values="9;10;9" dur="2.1s" repeatCount="indefinite" begin="-1.1s"/></circle><text x="208" y="60" fontSize="9">🎯</text>
+        <circle cx="108" cy="56" r="26" fill="url(#sl_core)"><animate attributeName="r" values="26;29;26" dur="2.5s" repeatCount="indefinite"/></circle>
+        <circle cx="108" cy="56" r="19" fill="rgba(10,8,38,0.75)"/>
+        <text x="99" y="62" fontSize="15" fill="white" fontWeight="bold" fontFamily="system-ui">AI</text>
+      </svg>
+    )}},
+    {icon:'💼',title:'Job Finder',desc:'Match your skills',popup:{bg1:'#0a0520',bg2:'#1a0e4a',tagBg:'rgba(16,185,129,0.2)',tagCol:'#6ee7b7',tag:'● Live',detail:'Browse 10,000+ live jobs across India. Filter by role, location & experience. One-click apply.',svg:(
+      <svg width="216" height="112" viewBox="0 0 216 112" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="jf_card" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#1e1b4b"/><stop offset="100%" stopColor="#312e81"/></linearGradient></defs>
+        <rect x="14" y="14" width="116" height="38" rx="8" fill="url(#jf_card)" stroke="#6366f1" strokeWidth="1.2"><animate attributeName="y" values="14;11;14" dur="3s" repeatCount="indefinite"/></rect>
+        <rect x="22" y="22" width="22" height="22" rx="5" fill="rgba(99,102,241,0.4)"/><text x="25" y="37" fontSize="14">💻</text>
+        <rect x="50" y="23" width="55" height="5" rx="2.5" fill="#a5b4fc" opacity=".8"/>
+        <rect x="50" y="32" width="38" height="3.5" rx="1.8" fill="#6366f1" opacity=".5"/>
+        <rect x="50" y="39" width="28" height="3" rx="1.5" fill="#10b981" opacity=".6"/>
+        <rect x="14" y="62" width="116" height="38" rx="8" fill="url(#jf_card)" stroke="#8b5cf6" strokeWidth="1.2"><animate attributeName="y" values="62;59;62" dur="3.4s" repeatCount="indefinite" begin="-0.8s"/></rect>
+        <rect x="22" y="70" width="22" height="22" rx="5" fill="rgba(139,92,246,0.4)"/><text x="25" y="85" fontSize="14">📊</text>
+        <rect x="50" y="71" width="48" height="5" rx="2.5" fill="#c4b5fd" opacity=".8"/>
+        <rect x="50" y="80" width="62" height="3.5" rx="1.8" fill="#8b5cf6" opacity=".5"/>
+        <rect x="50" y="87" width="32" height="3" rx="1.5" fill="#10b981" opacity=".6"/>
+        <circle cx="166" cy="36" r="22" fill="rgba(16,185,129,0.1)" stroke="#10b981" strokeWidth="1.5"><animate attributeName="r" values="22;25;22" dur="2.5s" repeatCount="indefinite"/></circle>
+        <circle cx="166" cy="36" r="14" fill="rgba(16,185,129,0.15)" stroke="#10b981" strokeWidth="1"/>
+        <text x="158" y="41" fontSize="14">🔍</text>
+        <line x1="175" y1="47" x2="185" y2="57" stroke="#10b981" strokeWidth="2.5" strokeLinecap="round"/>
+        <circle cx="166" cy="36" r="4" fill="rgba(16,185,129,0.4)"><animate attributeName="r" values="4;6;4" dur="1.5s" repeatCount="indefinite"/></circle>
+        <rect x="142" y="68" width="62" height="34" rx="8" fill="rgba(16,185,129,0.1)" stroke="#10b981" strokeWidth="1"><animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" begin="-0.5s"/></rect>
+        <text x="151" y="82" fontSize="10" fill="#6ee7b7" fontWeight="bold">10K+</text>
+        <text x="148" y="95" fontSize="9" fill="#94a3b8">Jobs Live</text>
+      </svg>
+    )}},
+    {icon:'🖌️',title:'Whiteboard',desc:'Live teaching',popup:{bg1:'#050e1a',bg2:'#0a2030',tagBg:'rgba(239,68,68,0.2)',tagCol:'#fca5a5',tag:'⏺ REC',detail:'Interactive canvas with pen, shapes, camera PIP and one-click session recording for teachers.',svg:(
+      <svg width="216" height="112" viewBox="0 0 216 112" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="wb_canvas" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#0d1f35"/><stop offset="100%" stopColor="#0a1628"/></linearGradient></defs>
+        <rect x="8" y="8" width="148" height="96" rx="6" fill="url(#wb_canvas)" stroke="#334155" strokeWidth="1.2"/>
+        <rect x="8" y="8" width="148" height="18" rx="6" fill="rgba(30,41,59,0.9)"/>
+        <rect x="8" y="20" width="148" height="6" rx="0" fill="rgba(30,41,59,0.9)"/>
+        <circle cx="16" cy="17" r="3.5" fill="#ef4444" opacity=".8"/><circle cx="25" cy="17" r="3.5" fill="#f59e0b" opacity=".8"/><circle cx="34" cy="17" r="3.5" fill="#10b981" opacity=".8"/>
+        <text x="44" y="20" fontSize="7" fill="#64748b">✏️ ⬜ 🧹 💾</text>
+        <path d="M22 80 Q45 55 68 68 Q88 80 108 52 Q118 38 136 44" stroke="#10b981" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <animate attributeName="stroke-dasharray" values="0,300;300,0" dur="3s" repeatCount="indefinite"/>
+        </path>
+        <path d="M22 88 L38 88" stroke="#6366f1" strokeWidth="5" strokeLinecap="round" opacity=".5"/>
+        <path d="M44 88 L72 88" stroke="#8b5cf6" strokeWidth="5" strokeLinecap="round" opacity=".4"/>
+        <path d="M78 88 L98 88" stroke="#a855f7" strokeWidth="5" strokeLinecap="round" opacity=".3"/>
+        <rect x="160" y="12" width="48" height="38" rx="6" fill="rgba(15,10,28,0.9)" stroke="#ef4444" strokeWidth="1.5"/>
+        <rect x="162" y="14" width="44" height="34" rx="5" fill="#0a0515"/>
+        <circle cx="184" cy="31" r="10" fill="rgba(99,102,241,0.3)" stroke="#6366f1" strokeWidth="1"/>
+        <circle cx="184" cy="27" r="4" fill="rgba(99,102,241,0.6)"/>
+        <ellipse cx="184" cy="36" rx="7" ry="4" fill="rgba(99,102,241,0.4)"/>
+        <circle cx="196" cy="16" r="3" fill="#ef4444"><animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite"/></circle>
+        <rect x="160" y="58" width="48" height="46" rx="6" fill="rgba(99,102,241,0.08)" stroke="#6366f1" strokeWidth="1"/>
+        <text x="169" y="74" fontSize="8" fill="#a5b4fc" fontWeight="bold">TOOLS</text>
+        <text x="164" y="86" fontSize="9">✏️ ⬜ ⭕</text>
+        <text x="164" y="98" fontSize="9">🗑️ 💾 🖼️</text>
+      </svg>
+    )}},
+    {icon:'💬',title:'Chat',desc:'Doubt solving',popup:{bg1:'#080520',bg2:'#120a38',tagBg:'rgba(99,102,241,0.25)',tagCol:'#a5b4fc',tag:'● Online',detail:'Live study groups, instant doubt resolution and note sharing with peers across India.',svg:(
+      <svg width="216" height="112" viewBox="0 0 216 112" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="ch_b1" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#6366f1"/><stop offset="100%" stopColor="#8b5cf6"/></linearGradient>
+        <linearGradient id="ch_b2" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stopColor="#1e1b4b"/><stop offset="100%" stopColor="#312e81"/></linearGradient></defs>
+        <rect x="10" y="10" width="112" height="30" rx="14" fill="url(#ch_b1)"><animate attributeName="opacity" values="0;1;1;1" dur="4s" repeatCount="indefinite" begin="0s"/></rect>
+        <text x="20" y="30" fontSize="12" fill="white">Hey! Doubt in OS? 🤔</text>
+        <path d="M14 40 L10 50 L26 44" fill="url(#ch_b1)"/>
+        <rect x="94" y="48" width="112" height="30" rx="14" fill="url(#ch_b2)" stroke="#6366f1" strokeWidth="1"><animate attributeName="opacity" values="0;0;1;1" dur="4s" repeatCount="indefinite" begin="0s"/></rect>
+        <text x="104" y="68" fontSize="12" fill="#a5b4fc">Deadlock — check this 👇</text>
+        <path d="M202 78 L206 88 L192 82" fill="url(#ch_b2)"/>
+        <rect x="10" y="72" width="90" height="30" rx="14" fill="url(#ch_b1)"><animate attributeName="opacity" values="0;0;0;1" dur="4s" repeatCount="indefinite" begin="0s"/></rect>
+        <text x="20" y="91" fontSize="11" fill="white">Got it, thanks! 🔥</text>
+        <path d="M14 102 L10 112 L26 106" fill="url(#ch_b1)"/>
+        <rect x="148" y="8" width="62" height="26" rx="12" fill="rgba(30,27,75,0.7)" stroke="#6366f1" strokeWidth="1">
+          <animate attributeName="opacity" values="0;0.5;1;0.5;0" dur="3s" repeatCount="indefinite" begin="-1s"/>
+        </rect>
+        <circle cx="162" cy="21" r="3.5" fill="#6366f1"><animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite" begin="0s"/></circle>
+        <circle cx="173" cy="21" r="3.5" fill="#8b5cf6"><animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite" begin="0.3s"/></circle>
+        <circle cx="184" cy="21" r="3.5" fill="#a855f7"><animate attributeName="opacity" values="0;1;0" dur="1s" repeatCount="indefinite" begin="0.6s"/></circle>
+        <circle cx="194" cy="6" r="4" fill="#10b981"/><circle cx="194" cy="6" r="4" fill="#10b981"><animate attributeName="r" values="4;7;4" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite"/></circle>
+        <text x="148" y="106" fontSize="9" fill="#64748b">234 online now</text>
+      </svg>
+    )}},
+    {icon:'📚',title:'Library',desc:'10K+ resources',popup:{bg1:'#0a0518',bg2:'#150830',tagBg:'rgba(168,85,247,0.2)',tagCol:'#d8b4fe',tag:'📚 10K+',detail:'Curated books, PDFs and admin picks for every Indian exam — SSC, GATE, UPSC and more.',svg:(
+      <svg width="216" height="112" viewBox="0 0 216 112" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lib_shelf" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#1e1b4b"/><stop offset="100%" stopColor="#0f0c29"/></linearGradient>
+        </defs>
+        <rect x="4" y="94" width="208" height="10" rx="3" fill="rgba(99,102,241,0.2)" stroke="#6366f1" strokeWidth="1"/>
+        <rect x="12"  y="30" width="18" height="64" rx="3" fill="#4f46e5"><animate attributeName="y" values="30;24;30" dur="3s" repeatCount="indefinite"/><animate attributeName="height" values="64;70;64" dur="3s" repeatCount="indefinite"/></rect><rect x="12" y="30" width="4" height="64" rx="2" fill="rgba(255,255,255,0.15)"/>
+        <rect x="32"  y="14" width="22" height="80" rx="3" fill="#7c3aed"><animate attributeName="y" values="14;10;14" dur="3.5s" repeatCount="indefinite" begin="-0.5s"/><animate attributeName="height" values="80;84;80" dur="3.5s" repeatCount="indefinite" begin="-0.5s"/></rect><rect x="32" y="14" width="5" height="80" rx="2" fill="rgba(255,255,255,0.12)"/>
+        <rect x="56"  y="22" width="20" height="72" rx="3" fill="#db2777"><animate attributeName="y" values="22;17;22" dur="2.8s" repeatCount="indefinite" begin="-1s"/><animate attributeName="height" values="72;77;72" dur="2.8s" repeatCount="indefinite" begin="-1s"/></rect><rect x="56" y="22" width="4" height="72" rx="2" fill="rgba(255,255,255,0.12)"/>
+        <rect x="78"  y="18" width="24" height="76" rx="3" fill="#0891b2"><animate attributeName="y" values="18;13;18" dur="3.2s" repeatCount="indefinite" begin="-1.5s"/><animate attributeName="height" values="76;81;76" dur="3.2s" repeatCount="indefinite" begin="-1.5s"/></rect><rect x="78" y="18" width="5" height="76" rx="2" fill="rgba(255,255,255,0.12)"/>
+        <rect x="104" y="26" width="18" height="68" rx="3" fill="#059669"><animate attributeName="y" values="26;21;26" dur="3.8s" repeatCount="indefinite" begin="-0.8s"/><animate attributeName="height" values="68;73;68" dur="3.8s" repeatCount="indefinite" begin="-0.8s"/></rect><rect x="104" y="26" width="4" height="68" rx="2" fill="rgba(255,255,255,0.12)"/>
+        <rect x="124" y="34" width="20" height="60" rx="3" fill="#b45309"><animate attributeName="y" values="34;29;34" dur="3.1s" repeatCount="indefinite" begin="-2s"/><animate attributeName="height" values="60;65;60" dur="3.1s" repeatCount="indefinite" begin="-2s"/></rect>
+        <rect x="146" y="16" width="22" height="78" rx="3" fill="#6366f1"><animate attributeName="y" values="16;11;16" dur="2.6s" repeatCount="indefinite" begin="-1.2s"/><animate attributeName="height" values="78;83;78" dur="2.6s" repeatCount="indefinite" begin="-1.2s"/></rect><rect x="146" y="16" width="5" height="78" rx="2" fill="rgba(255,255,255,0.13)"/>
+        <rect x="170" y="28" width="18" height="66" rx="3" fill="#a855f7"><animate attributeName="y" values="28;23;28" dur="3.4s" repeatCount="indefinite" begin="-0.3s"/><animate attributeName="height" values="66;71;66" dur="3.4s" repeatCount="indefinite" begin="-0.3s"/></rect>
+        <rect x="190" y="20" width="20" height="74" rx="3" fill="#ec4899"><animate attributeName="y" values="20;15;20" dur="2.9s" repeatCount="indefinite" begin="-1.7s"/><animate attributeName="height" values="74;79;74" dur="2.9s" repeatCount="indefinite" begin="-1.7s"/></rect>
+        <rect x="4" y="6" width="110" height="16" rx="8" fill="rgba(20,14,50,0.9)" stroke="#6366f1" strokeWidth="1"/>
+        <text x="12" y="17" fontSize="9" fill="#94a3b8">🔍 Search 10,000+ books...</text>
+      </svg>
+    )}},
+    {icon:'📊',title:'Analytics',desc:'Track progress',popup:{bg1:'#04101e',bg2:'#081c38',tagBg:'rgba(16,185,129,0.2)',tagCol:'#6ee7b7',tag:'↑ +18%',detail:'Weekly score trends, subject-wise breakdowns and streak tracking to keep you on target.',svg:(
+      <svg width="216" height="112" viewBox="0 0 216 112" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="an_b1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#6366f1"/><stop offset="100%" stopColor="#4338ca" stopOpacity=".7"/></linearGradient>
+        <linearGradient id="an_b2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#8b5cf6"/><stop offset="100%" stopColor="#7c3aed" stopOpacity=".7"/></linearGradient>
+        <linearGradient id="an_b3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#a855f7"/><stop offset="100%" stopColor="#9333ea" stopOpacity=".7"/></linearGradient>
+        <linearGradient id="an_b4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stopColor="#c084fc"/><stop offset="100%" stopColor="#a855f7" stopOpacity=".7"/></linearGradient></defs>
+        <line x1="18" y1="8" x2="18" y2="96" stroke="rgba(255,255,255,0.1)" strokeWidth="1"/>
+        <line x1="18" y1="96" x2="210" y2="96" stroke="rgba(255,255,255,0.1)" strokeWidth="1"/>
+        <text x="4" y="30" fontSize="7" fill="#475569">85</text><line x1="16" y1="28" x2="210" y2="28" stroke="rgba(255,255,255,0.05)" strokeWidth=".8"/>
+        <text x="4" y="55" fontSize="7" fill="#475569">60</text><line x1="16" y1="53" x2="210" y2="53" stroke="rgba(255,255,255,0.05)" strokeWidth=".8"/>
+        <text x="4" y="80" fontSize="7" fill="#475569">35</text><line x1="16" y1="78" x2="210" y2="78" stroke="rgba(255,255,255,0.05)" strokeWidth=".8"/>
+        <rect x="26" y="62" width="22" height="34" rx="3" fill="url(#an_b1)"><animate attributeName="y" values="96;62;62" dur="1.2s" repeatCount="indefinite" begin="0s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/><animate attributeName="height" values="0;34;34" dur="1.2s" repeatCount="indefinite" begin="0s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/></rect>
+        <rect x="64" y="45" width="22" height="51" rx="3" fill="url(#an_b2)"><animate attributeName="y" values="96;45;45" dur="1.4s" repeatCount="indefinite" begin="-0.2s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/><animate attributeName="height" values="0;51;51" dur="1.4s" repeatCount="indefinite" begin="-0.2s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/></rect>
+        <rect x="102" y="30" width="22" height="66" rx="3" fill="url(#an_b3)"><animate attributeName="y" values="96;30;30" dur="1.6s" repeatCount="indefinite" begin="-0.4s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/><animate attributeName="height" values="0;66;66" dur="1.6s" repeatCount="indefinite" begin="-0.4s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/></rect>
+        <rect x="140" y="14" width="22" height="82" rx="3" fill="url(#an_b4)"><animate attributeName="y" values="96;14;14" dur="1.8s" repeatCount="indefinite" begin="-0.6s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/><animate attributeName="height" values="0;82;82" dur="1.8s" repeatCount="indefinite" begin="-0.6s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/></rect>
+        <polyline points="37,61 75,44 113,29 151,13" stroke="#10b981" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <animate attributeName="stroke-dasharray" values="0,300;300,0" dur="2s" repeatCount="indefinite" begin="-0.2s"/>
+        </polyline>
+        <circle cx="37" cy="61" r="4" fill="#10b981"><animate attributeName="r" values="4;5.5;4" dur="2s" repeatCount="indefinite"/></circle>
+        <circle cx="75" cy="44" r="4" fill="#10b981"><animate attributeName="r" values="4;5.5;4" dur="2s" repeatCount="indefinite" begin="-0.5s"/></circle>
+        <circle cx="113" cy="29" r="4" fill="#10b981"><animate attributeName="r" values="4;5.5;4" dur="2s" repeatCount="indefinite" begin="-1s"/></circle>
+        <circle cx="151" cy="13" r="4" fill="#10b981"><animate attributeName="r" values="4;5.5;4" dur="2s" repeatCount="indefinite" begin="-1.5s"/></circle>
+        <rect x="170" y="8" width="42" height="52" rx="8" fill="rgba(16,185,129,0.12)" stroke="#10b981" strokeWidth="1"/>
+        <text x="180" y="26" fontSize="16" fill="#10b981" fontWeight="bold">84%</text>
+        <text x="175" y="38" fontSize="8" fill="#6ee7b7">Best Score</text>
+        <text x="174" y="52" fontSize="9">🔥 7 day streak</text>
+        <text x="26" y="108" fontSize="7" fill="#475569">W1</text><text x="64" y="108" fontSize="7" fill="#475569">W2</text><text x="102" y="108" fontSize="7" fill="#475569">W3</text><text x="140" y="108" fontSize="7" fill="#475569">W4</text>
+      </svg>
+    )}},
+  ];
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%)',position:'relative',overflow:'hidden'}}>
+      <div className="particle" style={{width:500,height:500,top:'-15%',left:'-10%',background:'rgba(99,102,241,0.18)',filter:'blur(80px)'}}/>
+      <div className="particle" style={{width:400,height:400,bottom:'-10%',right:'-8%',background:'rgba(139,92,246,0.18)',filter:'blur(80px)','--d':'9s'}}/>
+      <div className="particle" style={{width:250,height:250,top:'40%',left:'50%',background:'rgba(168,85,247,0.12)',filter:'blur(60px)','--d':'11s'}}/>
+      <nav style={{position:'relative',zIndex:10,display:'flex',alignItems:'center',justifyContent:'space-between',padding:'20px 40px'}}>
+        <div style={{display:'flex',alignItems:'center',gap:10}}>
+          <div style={{width:36,height:36,borderRadius:10,background:'linear-gradient(135deg,#6366f1,#8b5cf6)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>🚀</div>
+          <span style={{fontWeight:800,fontSize:20,background:'linear-gradient(135deg,#a5b4fc,#c084fc)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>CareerPilot</span>
+        </div>
+        <div style={{display:'flex',gap:12}}>
+          <button className="btn btn-g" style={{padding:'8px 20px',fontSize:13}} onClick={onEnter}>Login</button>
+          <button className="btn btn-p" style={{padding:'8px 20px',fontSize:13}} onClick={onEnter}>Get Started</button>
+        </div>
+      </nav>
+      <div style={{position:'relative',zIndex:10,textAlign:'center',padding:'50px 20px 30px'}}>
+        <div className="fade-up" style={{display:'inline-block',padding:'6px 18px',borderRadius:50,background:'rgba(99,102,241,0.2)',border:'1px solid rgba(99,102,241,0.4)',fontSize:13,color:'#a5b4fc',marginBottom:24,fontWeight:600}}>✨ India's #1 Student Success Platform</div>
+        <h1 className="fade-up" style={{animationDelay:'.1s',fontSize:'clamp(38px,7vw,76px)',fontWeight:900,lineHeight:1.1,marginBottom:20,background:'linear-gradient(135deg,#fff 0%,#a5b4fc 50%,#c084fc 100%)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>Launch Your<br/>Dream Career 🚀</h1>
+        <p className="fade-up" style={{animationDelay:'.2s',fontSize:'clamp(15px,2vw,19px)',color:'#94a3b8',maxWidth:520,margin:'0 auto 36px',lineHeight:1.7}}>All-in-one platform for students and teachers — learning, career guidance, live sessions and more.</p>
+        <div className="fade-up" style={{animationDelay:'.3s',display:'flex',gap:16,justifyContent:'center',flexWrap:'wrap'}}>
+          <button className="btn btn-p" onClick={onEnter} style={{fontSize:16,padding:'14px 42px',borderRadius:50,boxShadow:'0 20px 60px rgba(99,102,241,0.4)'}}>Start for Free →</button>
+          <button className="btn btn-g" onClick={onEnter} style={{fontSize:16,padding:'14px 42px',borderRadius:50}}>Watch Demo ▶</button>
+        </div>
+      </div>
+      <div className="fade-up" style={{animationDelay:'.4s',position:'relative',zIndex:10,display:'flex',justifyContent:'center',gap:'clamp(24px,5vw,64px)',flexWrap:'wrap',padding:'32px 20px'}}>
+        {stats.map((s,i)=>(
+          <div key={i} style={{textAlign:'center'}}>
+            <div style={{fontSize:'clamp(22px,4vw,34px)',fontWeight:900,color:'#a5b4fc'}}>{s.n}</div>
+            <div style={{fontSize:13,color:'#64748b',marginTop:4}}>{s.l}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{position:'relative',zIndex:10,display:'flex',flexWrap:'wrap',justifyContent:'center',gap:14,padding:'10px 40px 70px',maxWidth:1100,margin:'0 auto'}}>
+        {features.map((f,i)=><FeatureCard key={i} {...f}/>)}
+      </div>
+    </div>
+  );
+}
+
+/* ── ROLE SELECT ── */
+function RoleCard({role,onSelect}){
+  const [h,setH]=useState(false);
+  const cols={'student':'99,102,241','teacher':'139,92,246','admin':'168,85,247'};
+  const c=cols[role.id]||'99,102,241';
+  return(
+    <div onMouseEnter={()=>setH(true)} onMouseLeave={()=>setH(false)} onClick={onSelect} style={{width:190,padding:'36px 22px',borderRadius:24,textAlign:'center',cursor:'pointer',background:h?`rgba(${c},0.2)`:'rgba(255,255,255,0.06)',backdropFilter:'blur(20px)',border:h?`2px solid rgba(${c},0.8)`:'2px solid rgba(255,255,255,0.1)',transition:'all .3s',transform:h?'translateY(-12px) scale(1.04)':'translateY(0) scale(1)',boxShadow:h?`0 24px 60px rgba(${c},0.3)`:'none'}}>
+      <div style={{fontSize:50,marginBottom:16}}>{role.icon}</div>
+      <div style={{fontWeight:800,fontSize:19,color:'#fff',marginBottom:8}}>{role.label}</div>
+      <div style={{fontSize:13,color:'#94a3b8'}}>{role.desc}</div>
+    </div>
+  );
+}
+function RoleSelectPage({onSelect}){
+  const roles=[{id:'student',icon:'🎓',label:'Student',desc:'Access courses, jobs & books'},{id:'teacher',icon:'👩‍🏫',label:'Teacher',desc:'Teach with whiteboard & upload content'},{id:'admin',icon:'🛡️',label:'Admin',desc:'Manage platform & users'}];
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:20,position:'relative',overflow:'hidden'}}>
+      <div className="particle" style={{width:400,height:400,top:'-10%',left:'-5%',background:'rgba(99,102,241,0.15)',filter:'blur(80px)'}}/>
+      <div className="particle" style={{width:300,height:300,bottom:'-5%',right:'-5%',background:'rgba(139,92,246,0.15)',filter:'blur(80px)','--d':'8s'}}/>
+      <div style={{position:'relative',zIndex:10,textAlign:'center',marginBottom:40}}>
+        <div style={{fontSize:46,marginBottom:12}}>👋</div>
+        <h2 style={{fontSize:'clamp(24px,4vw,40px)',fontWeight:800,color:'#fff',marginBottom:8}}>Who are you?</h2>
+        <p style={{color:'#94a3b8',fontSize:16}}>Select your role to continue</p>
+      </div>
+      <div style={{position:'relative',zIndex:10,display:'flex',gap:24,flexWrap:'wrap',justifyContent:'center'}}>
+        {roles.map(r=><RoleCard key={r.id} role={r} onSelect={()=>onSelect(r.id)}/>)}
+      </div>
+    </div>
+  );
+}
+
+/* ── TARGET / GOAL SELECT (Students) ── */
+function TargetSelectPage({onSelect,onBack}){
+  const [category,setCategory]=useState('Central');
+  const [examName,setExamName]=useState('');
+  const [state,setState]=useState('');
+  const [goal,setGoal]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [plan,setPlan]=useState(null);
+  const [err,setErr]=useState('');
+  const showState=(category==='State PCS');
+  const isReady=examName.trim().length>1&&(!showState||state)&&goal.trim().length>2;
+  const generate=async()=>{
+    if(!isReady){setErr('Pick exam, set goal' + (showState?' and state':''));return;}
+    setErr('');setLoading(true);setPlan(null);
+    const prompt=`I am preparing for the Indian competitive exam "${examName}"${showState?` (state: ${state})`:''}. My personal goal: "${goal}". Generate a structured preparation plan as JSON with this exact shape:
+{
+  "exam": string,
+  "subjects": [ { "name": string, "weight": number, "key_topics": [string,string,string,string] } ],
+  "monthly_milestones": [string,string,string,string,string,string],
+  "projects": [ { "title": string, "why": string, "stack_or_tools": [string], "weeks": number } ],
+  "daily_routine": [string,string,string,string,string,string]
+}
+Constraints: 6-10 subjects, 3-5 projects (relevant for resume / portfolio), realistic for an Indian student. No prose outside the JSON.`;
+    const data=await groqJSON(prompt,'');  // auto-uses localStorage key → GROQ_DEMO_KEY
+    setLoading(false);
+    if(!data){setErr('Could not parse AI response. Check your Groq key in Profile → API Keys and try again.');return;}
+    setPlan(data);
+  };
+  const finish=()=>{
+    // Persist into localStorage so dashboard/topics can read it
+    Store.set('cp_exam_plan',{examName,state:showState?state:'',category,goal,plan,createdAt:new Date().toISOString()});
+    // Map to a TARGETS id (best effort) so existing components keep working
+    const lower=examName.toLowerCase();
+    let tid='state';
+    if(lower.includes('ssc'))tid='ssc';
+    else if(lower.includes('upsc'))tid='upsc';
+    else if(lower.includes('rrb')||lower.includes('railway'))tid='railways';
+    else if(lower.includes('gate')&&lower.includes('cs'))tid='gate-cs';
+    else if(lower.includes('gate')&&lower.includes('ec'))tid='gate-ece';
+    else if(lower.includes('gate')&&lower.includes('me'))tid='gate-me';
+    else if(lower.includes('gate')&&lower.includes('ce'))tid='gate-ce';
+    else if(lower.includes('bpsc'))tid='bihar';
+    else if(lower.includes('uppcs'))tid='up';
+    else if(lower.includes('mppsc'))tid='mp';
+    else if(lower.includes('rpsc'))tid='raj';
+    else if(lower.includes('mpsc'))tid='maha';
+    onSelect(tid);
+  };
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)',display:'flex',flexDirection:'column',alignItems:'center',padding:'24px 20px 60px',position:'relative',overflow:'hidden'}}>
+      <div className="particle" style={{width:400,height:400,top:'-10%',left:'-5%',background:'rgba(99,102,241,0.15)',filter:'blur(80px)'}}/>
+      <div className="particle" style={{width:300,height:300,bottom:'-5%',right:'-5%',background:'rgba(139,92,246,0.15)',filter:'blur(80px)','--d':'8s'}}/>
+      <div style={{position:'relative',zIndex:10,width:'100%',maxWidth:760}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:14}}>
+          <button onClick={onBack} style={{background:'none',border:'none',color:'#94a3b8',cursor:'pointer',fontSize:13,display:'flex',alignItems:'center',gap:6}}>← Back</button>
+          <button onClick={()=>onSelect('state')} style={{background:'rgba(99,102,241,0.18)',border:'1px solid rgba(99,102,241,0.4)',borderRadius:9,padding:'7px 16px',color:'#a5b4fc',cursor:'pointer',fontSize:13,fontWeight:600}}>Skip → Sign In directly</button>
+        </div>
+        <div style={{textAlign:'center',marginBottom:24}}>
+          <div style={{fontSize:42,marginBottom:8}}>🎯</div>
+          <h2 style={{fontWeight:800,fontSize:'clamp(22px,4vw,34px)',color:'#fff',marginBottom:6}}>Pick Your Exam & Goal</h2>
+          <p style={{color:'#94a3b8',fontSize:14}}>AI will draft real subjects, milestones and projects tailored to you — or skip to sign in directly</p>
+        </div>
+        <div className="glass-pro" style={{borderRadius:22,padding:24,marginBottom:18}}>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:14}}>
+            <div>
+              <label style={{fontSize:12,color:'#94a3b8',display:'block',marginBottom:6}}>Category</label>
+              <select className="inp" value={category} onChange={e=>{setCategory(e.target.value);setExamName('');}}>
+                {Object.keys(POPULAR_GOVT_EXAMS).map(c=><option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={{fontSize:12,color:'#94a3b8',display:'block',marginBottom:6}}>Exam Name</label>
+              <input className="inp" list="exam-list" placeholder="e.g. SSC CGL" value={examName} onChange={e=>setExamName(e.target.value)}/>
+              <datalist id="exam-list">{(POPULAR_GOVT_EXAMS[category]||[]).map(n=><option key={n} value={n}/>)}</datalist>
+            </div>
+            {showState&&(
+              <div>
+                <label style={{fontSize:12,color:'#94a3b8',display:'block',marginBottom:6}}>State</label>
+                <select className="inp" value={state} onChange={e=>setState(e.target.value)}>
+                  <option value="">— select —</option>
+                  {INDIAN_STATES.map(s=><option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+            )}
+            <div style={{gridColumn:showState?'auto':'1 / -1'}}>
+              <label style={{fontSize:12,color:'#94a3b8',display:'block',marginBottom:6}}>Your Goal</label>
+              <input className="inp" placeholder='e.g. "Crack SSC CGL Tier-1 in 6 months with 160+"' value={goal} onChange={e=>setGoal(e.target.value)}/>
+            </div>
+          </div>
+          {err&&<div style={{marginTop:12,background:'rgba(239,68,68,0.1)',border:'1px solid rgba(239,68,68,0.3)',borderRadius:10,padding:'10px 14px',color:'#fca5a5',fontSize:13}}>{err}</div>}
+          <div style={{marginTop:16}}>
+            <button className="btn btn-p" disabled={loading||!isReady} onClick={generate} style={{width:'100%',padding:'13px',fontSize:14,opacity:(loading||!isReady)?.6:1}}>{loading?'⏳ Generating plan…':'⚡ Generate My Preparation Plan'}</button>
+            <div style={{textAlign:'center',fontSize:11,color:'#64748b',marginTop:8}}>🤖 Powered by Groq AI · Set your own key in Profile → API Keys</div>
+          </div>
+        </div>
+        {plan&&(
+          <div className="glass-pro fade-up" style={{borderRadius:22,padding:24,marginBottom:18}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14,flexWrap:'wrap',gap:8}}>
+              <h3 style={{fontWeight:800,fontSize:18,color:'#fff'}}>📚 {plan.exam||examName} — Plan</h3>
+              <span className="badge bp">AI generated</span>
+            </div>
+            {Array.isArray(plan.subjects)&&(
+              <div style={{marginBottom:18}}>
+                <div style={{fontSize:12,color:'#94a3b8',marginBottom:8,fontWeight:700,letterSpacing:1}}>SUBJECTS</div>
+                <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',gap:10}}>
+                  {plan.subjects.map((s,i)=>(
+                    <div key={i} className="card" style={{padding:14}}>
+                      <div style={{display:'flex',justifyContent:'space-between',alignItems:'baseline',marginBottom:6}}>
+                        <div style={{fontWeight:700,fontSize:14,color:'#e2e8f0'}}>{s.name}</div>
+                        {typeof s.weight==='number'&&<span style={{fontSize:11,color:'#a5b4fc'}}>{s.weight}%</span>}
+                      </div>
+                      <div style={{fontSize:11,color:'#94a3b8',lineHeight:1.6}}>{(s.key_topics||[]).slice(0,4).join(' · ')}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {Array.isArray(plan.projects)&&(
+              <div style={{marginBottom:18}}>
+                <div style={{fontSize:12,color:'#94a3b8',marginBottom:8,fontWeight:700,letterSpacing:1}}>PROJECTS / DELIVERABLES</div>
+                <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                  {plan.projects.map((p,i)=>(
+                    <div key={i} className="card" style={{padding:14}}>
+                      <div style={{fontWeight:700,fontSize:14,marginBottom:4}}>{p.title} {p.weeks?<span style={{fontSize:11,color:'#a5b4fc',marginLeft:6}}>· {p.weeks} wk</span>:null}</div>
+                      <div style={{fontSize:12,color:'#94a3b8',marginBottom:6}}>{p.why}</div>
+                      <div style={{display:'flex',flexWrap:'wrap',gap:5}}>{(p.stack_or_tools||[]).map((t,j)=><span key={j} className="badge bb">{t}</span>)}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {Array.isArray(plan.monthly_milestones)&&(
+              <div style={{marginBottom:18}}>
+                <div style={{fontSize:12,color:'#94a3b8',marginBottom:8,fontWeight:700,letterSpacing:1}}>MILESTONES</div>
+                <ol style={{paddingLeft:18,color:'#cbd5e1',fontSize:13,lineHeight:1.7}}>{plan.monthly_milestones.map((m,i)=><li key={i}>{m}</li>)}</ol>
+              </div>
+            )}
+            {Array.isArray(plan.daily_routine)&&(
+              <div>
+                <div style={{fontSize:12,color:'#94a3b8',marginBottom:8,fontWeight:700,letterSpacing:1}}>DAILY ROUTINE</div>
+                <ul style={{paddingLeft:18,color:'#cbd5e1',fontSize:13,lineHeight:1.7}}>{plan.daily_routine.map((m,i)=><li key={i}>{m}</li>)}</ul>
+              </div>
+            )}
+          </div>
+        )}
+        <button className="btn btn-p" onClick={finish} style={{width:'100%',padding:'14px',fontSize:15}}>{plan?'Save plan & continue →':'Continue to Sign In →'}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── AUTH (glass-pro, signup-first enforcement, Google OAuth, admin notify) ── */
+function AuthPage({role,onBack,onLogin}){
+  const [mode,setMode]=useState('login');
+  const [email,setEmail]=useState('');
+  const [pass,setPass]=useState('');
+  const [name,setName]=useState('');
+  const [phone,setPhone]=useState('');
+  const [otp,setOtp]=useState('');
+  const [adminPin,setAdminPin]=useState('');
+  const [err,setErr]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [otpSent,setOtpSent]=useState(false);
+  const [forgotSent,setForgotSent]=useState(false);
+  const lastAttemptRef=useRef(0);
+  const findUser=(em)=>{const list=Store.get('cp_users',[]);return list.find(u=>u.email.toLowerCase()===em.toLowerCase()&&u.role===role);};
+  const recordSignup=(rec)=>{
+    const list=Store.get('cp_users',[]);
+    if(!list.find(u=>u.email.toLowerCase()===rec.email.toLowerCase()&&u.role===rec.role)){
+      list.unshift(rec);Store.set('cp_users',list);
+      Store.push('cp_admin_feed',{id:Date.now(),type:'signup',msg:`New ${rec.role} signed up: ${rec.name} (${rec.email})`,time:new Date().toISOString()});
+    }
+  };
+  const validate=()=>{
+    if(mode==='forgot')return email.includes('@')?'':'Enter a valid email';
+    if(mode==='register'&&name.trim().length<2)return 'Name must be at least 2 characters';
+    if(mode!=='otp'&&!email.includes('@'))return 'Enter a valid email';
+    if(mode!=='otp'&&pass.length<6)return 'Password must be at least 6 characters';
+    if(role==='admin'&&adminPin!==ADMIN_PIN)return 'Invalid admin PIN';
+    // Local-only gate — skip when Supabase is live (it is the source of truth)
+    if(!SB_LIVE){
+      if(mode==='login'&&!findUser(email))return 'No account found. Please switch to Register first.';
+      if(mode==='register'&&findUser(email))return 'Account already exists. Please sign in.';
+    }
+    return '';
+  };
+  const handleSubmit=async(e)=>{
+    e.preventDefault();
+    // Client-side rate limit: 4 seconds between attempts
+    const now=Date.now();
+    if(now-lastAttemptRef.current<4000){setErr('Please wait a moment before trying again.');return;}
+    lastAttemptRef.current=now;
+    const v=validate();if(v){setErr(v);return;}
+    setErr('');setLoading(true);
+    try{
+      // ── Forgot Password ──
+      if(mode==='forgot'){
+        if(sb&&SB_LIVE){
+          const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.origin+window.location.pathname});
+          if(error)throw error;
+        }
+        setForgotSent(true);setLoading(false);return;
+      }
+      // ── Register / Login ──
+      if(sb&&SB_LIVE){
+        if(mode==='register'){
+          const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name,role}}});
+          if(error)throw error;
+          // Email confirmation required — Supabase returns no session
+          if(data&&!data.session){
+            setErr('✅ Account created! Check your email and click the confirmation link, then sign in.');
+            setLoading(false);
+            recordSignup({email,name,role,createdAt:new Date().toISOString(),via:'password-pending'});
+            setMode('login');return;
+          }
+        }else{
+          const {error}=await sb.auth.signInWithPassword({email,password:pass});
+          if(error)throw error;
+        }
+      }
+      const finalName=name||(findUser(email)?.name)||email.split('@')[0];
+      if(mode==='register')recordSignup({email,name:finalName,role,createdAt:new Date().toISOString(),via:'password'});
+      else Store.push('cp_admin_feed',{id:Date.now(),type:'login',msg:`${role} signed in: ${finalName} (${email})`,time:new Date().toISOString()});
+      onLogin({email,name:finalName,role});
+    }catch(ex){
+      const m=(ex.message||'').toLowerCase();
+      if(m.includes('rate')||m.includes('too many')||m.includes('429'))
+        setErr('Too many attempts. Please wait 60 seconds and try again.');
+      else if(m.includes('email not confirmed'))
+        setErr('Email not confirmed yet. Check your inbox and click the link, then sign in.');
+      else if(m.includes('invalid login')||m.includes('invalid credentials')||m.includes('wrong password'))
+        setErr('Wrong email or password. Please try again.');
+      else if(m.includes('user already registered')||m.includes('already registered'))
+        setErr('Email already registered. Please sign in instead.');
+      else setErr(ex.message||'Authentication failed. Please try again.');
+    }
+    setLoading(false);
+  };
+  const handleGoogle=async()=>{
+    setErr('');
+    if(sb&&SB_LIVE){
+      try{
+        // redirectTo must match an allowed URL in Supabase → Authentication → URL Configuration
+        const redirectTo=window.location.origin+(window.location.pathname==='/'?'':window.location.pathname);
+        const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo,queryParams:{prompt:'select_account'}}});
+        if(error)throw error;
+        // Page will redirect to Google — onAuthStateChange in App handles the callback
+        return;
+      }catch(ex){setErr(ex.message||'Google sign-in failed. Check Supabase Google provider is enabled.');return;}
+    }
+    // Demo fallback (Supabase not configured)
+    const demoEmail=(email&&email.includes('@'))?email:'demo@gmail.com';
+    const existing=findUser(demoEmail);
+    const finalName=name||existing?.name||demoEmail.split('@')[0];
+    if(!existing)recordSignup({email:demoEmail,name:finalName,role,createdAt:new Date().toISOString(),via:'google'});
+    onLogin({email:demoEmail,name:finalName,role});
+  };
+  const sendOtp=async()=>{if(!phone||phone.length<10){setErr('Enter valid phone');return;}setLoading(true);try{if(sb&&SB_LIVE){const {error}=await sb.auth.signInWithOtp({phone});if(error)throw error;}setOtpSent(true);setErr('');}catch(ex){setErr(ex.message||'Failed');}setLoading(false);};
+  const verifyOtp=async()=>{
+    if(otp.length<4){setErr('Enter OTP');return;}
+    setLoading(true);
+    try{
+      if(sb&&SB_LIVE){const {error}=await sb.auth.verifyOtp({phone,token:otp,type:'sms'});if(error)throw error;}
+      const em=phone+'@phone.user';
+      if(!findUser(em))recordSignup({email:em,name:'Phone User',role,createdAt:new Date().toISOString(),via:'phone'});
+      onLogin({email:em,name:'Phone User',role});
+    }catch(ex){setErr(ex.message||'Invalid OTP');}
+    setLoading(false);
+  };
+  const icons={student:'🎓',teacher:'👩‍🏫',admin:'🛡️'};
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#0f0c29,#302b63,#24243e)',display:'flex',alignItems:'center',justifyContent:'center',padding:20,position:'relative',overflow:'hidden'}}>
+      <div className="particle" style={{width:500,height:500,top:'-20%',left:'-15%',background:'rgba(99,102,241,0.15)',filter:'blur(100px)'}}/>
+      <div className="particle" style={{width:400,height:400,bottom:'-10%',right:'-10%',background:'rgba(139,92,246,0.15)',filter:'blur(80px)','--d':'9s'}}/>
+      <div className="glass-pro fade-up" style={{width:'100%',maxWidth:440,borderRadius:28,padding:'38px 34px',position:'relative',zIndex:10}}>
+        <button onClick={onBack} style={{background:'none',border:'none',color:'#94a3b8',cursor:'pointer',fontSize:13,marginBottom:22,display:'flex',alignItems:'center',gap:6}}>← Back</button>
+        <div style={{textAlign:'center',marginBottom:26}}>
+          <div style={{fontSize:42,marginBottom:8}}>{icons[role]||'👤'}</div>
+          <h2 style={{fontWeight:800,fontSize:23,color:'#fff',marginBottom:4}}>{mode==='otp'?'Phone Login':mode==='register'?'Create Account':mode==='forgot'?'Reset Password':'Welcome Back'}</h2>
+          <p style={{color:'#64748b',fontSize:14}}>{role.charAt(0).toUpperCase()+role.slice(1)} Portal</p>
+        </div>
+        {mode!=='forgot'&&(
+          <div style={{display:'flex',gap:6,marginBottom:22,background:'rgba(255,255,255,0.05)',borderRadius:12,padding:4}}>
+            {(role==='admin'?[['login','Login'],['register','Register']]:[['login','Login'],['register','Register'],['otp','📱 OTP']]).map(([m,l])=>(
+              <button key={m} className={'tab-b'+(mode===m?' on':'')} style={{flex:1,fontSize:12}} onClick={()=>{setMode(m);setErr('');}}>{l}</button>
+            ))}
+          </div>
+        )}
+        {err&&<div style={{background:'rgba(239,68,68,0.1)',border:'1px solid rgba(239,68,68,0.3)',borderRadius:10,padding:'10px 14px',color:'#fca5a5',fontSize:13,marginBottom:14}}>{err}</div>}
+        {mode==='forgot'?(
+          <div>
+            {forgotSent?(
+              <div style={{textAlign:'center',padding:'10px 0'}}>
+                <div style={{fontSize:46,marginBottom:12}}>📧</div>
+                <div style={{fontWeight:700,fontSize:16,color:'#fff',marginBottom:8}}>Check your inbox!</div>
+                <div style={{color:'#94a3b8',fontSize:13,marginBottom:20,lineHeight:1.6}}>A reset link was sent to <strong style={{color:'#a5b4fc'}}>{email}</strong>. Click it to set a new password.</div>
+                <button className="btn btn-g" style={{width:'100%'}} onClick={()=>{setMode('login');setForgotSent(false);}}>← Back to Sign In</button>
+              </div>
+            ):(
+              <form onSubmit={handleSubmit}>
+                <div style={{marginBottom:14}}><label style={{fontSize:13,color:'#94a3b8',display:'block',marginBottom:6}}>Your email address</label><input className="inp" type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)}/></div>
+                <button className="btn btn-p" type="submit" style={{width:'100%',padding:'13px',fontSize:15,marginBottom:12}} disabled={loading}>{loading?'⏳ Sending...':'Send Reset Email'}</button>
+                <button type="button" style={{background:'none',border:'none',color:'#6366f1',cursor:'pointer',fontSize:13,width:'100%'}} onClick={()=>{setMode('login');setErr('');}}>← Back to Sign In</button>
+              </form>
+            )}
+          </div>
+        ):mode==='otp'?(
+          <div>
+            {!otpSent?(
+              <div>
+                <label style={{fontSize:13,color:'#94a3b8',display:'block',marginBottom:6}}>Phone Number</label>
+                <input className="inp" type="tel" placeholder="+91 9876543210" value={phone} onChange={e=>setPhone(e.target.value)} style={{marginBottom:14}}/>
+                <button className="btn btn-p" style={{width:'100%',padding:'13px',fontSize:15}} onClick={sendOtp} disabled={loading}>{loading?'⏳ Sending...':'Send OTP'}</button>
+              </div>
+            ):(
+              <div>
+                <label style={{fontSize:13,color:'#94a3b8',display:'block',marginBottom:6}}>OTP sent to {phone}</label>
+                <input className="inp" type="text" placeholder="123456" maxLength={6} value={otp} onChange={e=>setOtp(e.target.value)} style={{textAlign:'center',fontSize:22,letterSpacing:8,marginBottom:14}}/>
+                <button className="btn btn-p" style={{width:'100%',padding:'13px',fontSize:15}} onClick={verifyOtp} disabled={loading}>{loading?'⏳ Verifying...':'Verify OTP'}</button>
+                <button style={{background:'none',border:'none',color:'#6366f1',cursor:'pointer',fontSize:13,marginTop:10,width:'100%'}} onClick={()=>setOtpSent(false)}>Resend OTP</button>
+              </div>
+            )}
+          </div>
+        ):(
+          <form onSubmit={handleSubmit}>
+            {mode==='register'&&<div style={{marginBottom:14}}><label style={{fontSize:13,color:'#94a3b8',display:'block',marginBottom:6}}>Full Name</label><input className="inp" type="text" placeholder="John Doe" value={name} onChange={e=>setName(e.target.value)}/></div>}
+            <div style={{marginBottom:14}}><label style={{fontSize:13,color:'#94a3b8',display:'block',marginBottom:6}}>Email</label><input className="inp" type="email" placeholder="you@example.com" value={email} onChange={e=>setEmail(e.target.value)}/></div>
+            <div style={{marginBottom:mode==='login'?4:14}}><label style={{fontSize:13,color:'#94a3b8',display:'block',marginBottom:6}}>Password</label><input className="inp" type="password" placeholder="••••••••" value={pass} onChange={e=>setPass(e.target.value)}/></div>
+            {mode==='login'&&<div style={{textAlign:'right',marginBottom:14}}><button type="button" style={{background:'none',border:'none',color:'#6366f1',cursor:'pointer',fontSize:12,fontWeight:600}} onClick={()=>{setMode('forgot');setErr('');}}>Forgot Password?</button></div>}
+            {role==='admin'&&<div style={{marginBottom:14}}><label style={{fontSize:13,color:'#94a3b8',display:'block',marginBottom:6}}>Admin PIN</label><input className="inp" type="password" placeholder="Admin PIN" value={adminPin} onChange={e=>setAdminPin(e.target.value)}/></div>}
+            <button className="btn btn-p" type="submit" style={{width:'100%',padding:'13px',fontSize:15,marginBottom:12}} disabled={loading}>{loading?'⏳ Please wait...':mode==='register'?'Create Account':'Sign In'}</button>
+            <div style={{position:'relative',textAlign:'center',marginBottom:12}}><div style={{height:1,background:'rgba(255,255,255,0.1)',position:'absolute',top:'50%',width:'100%'}}/><span style={{background:'rgba(15,12,41,0.8)',padding:'0 12px',color:'#64748b',fontSize:12,position:'relative'}}>or</span></div>
+            <button type="button" onClick={handleGoogle} className="gauth-btn">
+              <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.6-6 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.5 29.3 4.5 24 4.5 12.7 4.5 3.5 13.7 3.5 25S12.7 45.5 24 45.5c11.3 0 20.5-9.2 20.5-20.5 0-1.5-.2-3-.4-4.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.5 29.3 4.5 24 4.5 16.3 4.5 9.7 8.7 6.3 14.7z"/><path fill="#4CAF50" d="M24 45.5c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.3 36.7 26.8 37.5 24 37.5c-5.3 0-9.7-3.4-11.3-8l-6.5 5C9.6 41.2 16.2 45.5 24 45.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.6l6.2 5.2c-.4.4 6.6-4.8 6.6-13.8 0-1.5-.2-3-.4-4.5z"/></svg>
+              Continue with Google {SB_LIVE?'':<span style={{opacity:.6,fontSize:11}}>(demo)</span>}
+            </button>
+            <div style={{fontSize:11,color:'#64748b',marginTop:10,textAlign:'center',lineHeight:1.5}}>
+              {mode==='login'?'No account yet? Switch to Register tab.':'Already registered? Switch to Login.'}
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── HOME DASH ── */
+function HomeDash({user,toast,target}){
+  const tgt=TARGETS.find(t=>t.id===target);
+  const stats=[{icon:'📖',label:'Lessons Done',val:'24',color:'#6366f1'},{icon:'⏱️',label:'Study Hours',val:'48h',color:'#8b5cf6'},{icon:'🔥',label:'Day Streak',val:'7',color:'#f59e0b'},{icon:'🏆',label:'Rank',val:'#42',color:'#10b981'}];
+  const [tasks,setTasks]=useState([{text:'Complete today study plan',done:true},{text:'Solve 20 practice questions',done:false},{text:'Revise yesterday topics',done:false},{text:'Watch 1 video lecture',done:false}]);
+  const toggle=i=>setTasks(p=>p.map((t,idx)=>idx===i?{...t,done:!t.done}:t));
+  return(
+    <div>
+      <div style={{marginBottom:22}}>
+        <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:10}}>
+          <div>
+            <h1 style={{fontSize:25,fontWeight:800,marginBottom:4}}>Good day, {user.name.split(' ')[0]} 👋</h1>
+            <p style={{color:'var(--muted)',fontSize:14}}>Your learning overview for today.</p>
+          </div>
+          {tgt&&<div style={{display:'flex',alignItems:'center',gap:8,padding:'8px 16px',borderRadius:12,background:'rgba(99,102,241,0.15)',border:'1px solid rgba(99,102,241,0.3)'}}><span style={{fontSize:20}}>{tgt.icon}</span><div><div style={{fontSize:11,color:'var(--muted)'}}>Target</div><div style={{fontWeight:700,fontSize:13,color:'#a5b4fc'}}>{tgt.label}</div></div></div>}
+        </div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(155px,1fr))',gap:12,marginBottom:22}}>
+        {stats.map((s,i)=>(
+          <div key={i} className="card" style={{display:'flex',alignItems:'center',gap:12}}>
+            <div style={{width:42,height:42,borderRadius:12,background:`${s.color}22`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:20}}>{s.icon}</div>
+            <div><div style={{fontWeight:800,fontSize:20,color:s.color}}>{s.val}</div><div style={{fontSize:12,color:'var(--muted)'}}>{s.label}</div></div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:20}}>
+        <div className="card">
+          <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>📊 Course Progress</h3>
+          {[['Web Development','72%',72,'#6366f1'],['Data Structures','55%',55,'#8b5cf6'],['Subject 3','30%',30,'#a855f7']].map(([c,p,n,col])=>(
+            <div key={c} style={{marginBottom:12}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:13,marginBottom:5}}><span>{c}</span><span style={{color:col,fontWeight:700}}>{p}</span></div>
+              <div style={{height:6,background:'rgba(255,255,255,0.08)',borderRadius:3}}><div style={{height:'100%',width:p,background:`linear-gradient(90deg,${col},${col}cc)`,borderRadius:3}}/></div>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>✅ Today's Tasks</h3>
+          {tasks.map((t,i)=>(
+            <div key={i} onClick={()=>toggle(i)} style={{display:'flex',alignItems:'center',gap:9,padding:'8px',borderRadius:8,background:'rgba(255,255,255,0.04)',marginBottom:7,cursor:'pointer'}}>
+              <div style={{width:17,height:17,borderRadius:5,border:t.done?'none':'2px solid #6366f1',background:t.done?'#6366f1':'transparent',display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,flexShrink:0,color:'#fff'}}>{t.done&&'✓'}</div>
+              <span style={{fontSize:13,textDecoration:t.done?'line-through':'none',color:t.done?'var(--muted)':'var(--text)'}}>{t.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="card">
+        <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>⚡ Quick Actions</h3>
+        <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+          {[['💼','Find Jobs'],['📚','Browse Books'],['💬','Ask Doubt'],['🎯','View Topics']].map(([ic,lb])=>(
+            <button key={lb} className="btn btn-g" onClick={()=>toast('Opening '+lb+'...','info')} style={{display:'flex',alignItems:'center',gap:7,fontSize:13}}><span>{ic}</span>{lb}</button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── STUDY ROUTINE ── */
+function StudyRoutine(){
+  const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const [slots,setSlots]=useState({
+    Mon:[{time:'6-8 AM',sub:'Maths',done:false},{time:'8-10 AM',sub:'English',done:false}],
+    Tue:[{time:'6-8 AM',sub:'Reasoning',done:false},{time:'8-10 AM',sub:'GK/GS',done:false}],
+    Wed:[{time:'6-8 AM',sub:'Mock Test',done:false}],
+    Thu:[{time:'6-8 AM',sub:'Revision',done:false},{time:'8-10 AM',sub:'Practice',done:false}],
+    Fri:[{time:'6-8 AM',sub:'Current Affairs',done:false},{time:'9-11 AM',sub:'English',done:false}],
+    Sat:[{time:'9-11 AM',sub:'Full Mock Test',done:false},{time:'2-4 PM',sub:'Analysis',done:false}],
+    Sun:[{time:'10 AM-12 PM',sub:'Weekly Revision',done:false}],
+  });
+  const [activeDay,setActiveDay]=useState('Mon');
+  const [newTime,setNewTime]=useState('');
+  const [newSub,setNewSub]=useState('');
+  const toggleDone=(day,i)=>setSlots(p=>({...p,[day]:p[day].map((s,idx)=>idx===i?{...s,done:!s.done}:s)}));
+  const addSlot=()=>{if(!newTime||!newSub)return;setSlots(p=>({...p,[activeDay]:[...p[activeDay],{time:newTime,sub:newSub,done:false}]}));setNewTime('');setNewSub('');};
+  const del=(day,i)=>setSlots(p=>({...p,[day]:p[day].filter((_,idx)=>idx!==i)}));
+  return(
+    <div>
+      <div style={{marginBottom:22}}><h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>📅 Study Routine</h2><p style={{color:'var(--muted)',fontSize:14}}>Plan your daily study schedule</p></div>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:20}}>
+        {days.map(d=><button key={d} className={'tab-b'+(activeDay===d?' on':'')} onClick={()=>setActiveDay(d)}>{d}<span style={{fontSize:10,marginLeft:4,color:'var(--muted)'}}>({(slots[d]||[]).length})</span></button>)}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+        <div className="card">
+          <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>📌 {activeDay}'s Schedule</h3>
+          {(slots[activeDay]||[]).length===0&&<div style={{textAlign:'center',padding:20,color:'var(--muted)',fontSize:13}}>No slots yet. Add one →</div>}
+          {(slots[activeDay]||[]).map((s,i)=>(
+            <div key={i} style={{display:'flex',alignItems:'center',gap:10,padding:'10px 12px',borderRadius:10,background:s.done?'rgba(16,185,129,0.08)':'rgba(255,255,255,0.04)',border:`1px solid ${s.done?'rgba(16,185,129,0.2)':'var(--border)'}`,marginBottom:8,transition:'all .2s'}}>
+              <div onClick={()=>toggleDone(activeDay,i)} style={{width:18,height:18,borderRadius:5,border:s.done?'none':'2px solid #6366f1',background:s.done?'#10b981':'transparent',display:'flex',alignItems:'center',justifyContent:'center',cursor:'pointer',fontSize:11,color:'#fff',flexShrink:0}}>{s.done&&'✓'}</div>
+              <div style={{flex:1}}>
+                <div style={{fontWeight:600,fontSize:13,textDecoration:s.done?'line-through':'none',color:s.done?'var(--muted)':'var(--text)'}}>{s.sub}</div>
+                <div style={{fontSize:11,color:'var(--muted)'}}>{s.time}</div>
+              </div>
+              <button onClick={()=>del(activeDay,i)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:15,padding:'0 4px'}}>✕</button>
+            </div>
+          ))}
+        </div>
+        <div className="card">
+          <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>➕ Add Slot</h3>
+          <div style={{marginBottom:10}}><label style={{fontSize:12,color:'var(--muted)',display:'block',marginBottom:5}}>Time Slot</label><input className="inp" placeholder="e.g. 6-8 AM" value={newTime} onChange={e=>setNewTime(e.target.value)}/></div>
+          <div style={{marginBottom:14}}><label style={{fontSize:12,color:'var(--muted)',display:'block',marginBottom:5}}>Subject</label><input className="inp" placeholder="e.g. Mathematics" value={newSub} onChange={e=>setNewSub(e.target.value)}/></div>
+          <button className="btn btn-p" onClick={addSlot} style={{width:'100%'}}>Add to {activeDay}</button>
+          <div style={{marginTop:16,padding:'12px',background:'rgba(99,102,241,0.08)',borderRadius:10}}>
+            <div style={{fontSize:12,fontWeight:700,color:'#a5b4fc',marginBottom:8}}>📊 Weekly Summary</div>
+            {days.map(d=>(
+              <div key={d} style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:4}}>
+                <span style={{color:'var(--muted)'}}>{d}</span>
+                <span style={{color:(slots[d]||[]).some(s=>s.done)?'#10b981':'var(--muted)'}}>{(slots[d]||[]).filter(s=>s.done).length}/{(slots[d]||[]).length} done</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── TASK MANAGER ── */
+function TaskManager(){
+  const [cols,setCols]=useState({
+    todo:[{id:1,text:'Read Chapter 5',pri:'high'},{id:2,text:'Solve 30 questions',pri:'med'},{id:3,text:'Watch lecture video',pri:'low'}],
+    inprog:[{id:4,text:'Practice mock test',pri:'high'}],
+    done:[{id:5,text:'Read NCERT Ch 3',pri:'med'},{id:6,text:'Make revision notes',pri:'low'}],
+  });
+  const [input,setInput]=useState('');
+  const [pri,setPri]=useState('med');
+  const [drag,setDrag]=useState(null);
+  const priColor={high:'#ef4444',med:'#f59e0b',low:'#10b981'};
+  const addTask=()=>{if(!input.trim())return;setCols(p=>({...p,todo:[{id:Date.now(),text:input.trim(),pri},...p.todo]}));setInput('');};
+  const move=(id,fromCol,toCol)=>{
+    if(fromCol===toCol)return;
+    const task=cols[fromCol].find(t=>t.id===id);
+    setCols(p=>({...p,[fromCol]:p[fromCol].filter(t=>t.id!==id),[toCol]:[...(p[toCol]||[]),task]}));
+  };
+  const delTask=(col,id)=>setCols(p=>({...p,[col]:p[col].filter(t=>t.id!==id)}));
+  const colDef=[{key:'todo',label:'📋 To Do',color:'#6366f1'},{key:'inprog',label:'⚡ In Progress',color:'#f59e0b'},{key:'done',label:'✅ Done',color:'#10b981'}];
+  return(
+    <div>
+      <div style={{marginBottom:22}}><h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>📋 Task Manager</h2><p style={{color:'var(--muted)',fontSize:14}}>Kanban board for your study tasks</p></div>
+      <div className="card" style={{marginBottom:20}}>
+        <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+          <input className="inp" placeholder="Add a task..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addTask()} style={{flex:1,minWidth:200}}/>
+          <select className="inp" value={pri} onChange={e=>setPri(e.target.value)} style={{width:130,cursor:'pointer'}}><option value="high">🔴 High</option><option value="med">🟡 Medium</option><option value="low">🟢 Low</option></select>
+          <button className="btn btn-p" onClick={addTask} style={{flexShrink:0}}>Add Task</button>
+        </div>
+      </div>
+      <div style={{display:'flex',gap:14,overflowX:'auto',paddingBottom:10}}>
+        {colDef.map(cd=>(
+          <div key={cd.key} className="kanban-col">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:12}}>
+              <span style={{fontWeight:700,fontSize:14}}>{cd.label}</span>
+              <span className="badge" style={{background:`${cd.color}22`,color:cd.color}}>{(cols[cd.key]||[]).length}</span>
+            </div>
+            {(cols[cd.key]||[]).map(t=>(
+              <div key={t.id} style={{background:'rgba(255,255,255,0.06)',borderRadius:10,padding:'10px 12px',marginBottom:8,border:'1px solid var(--border)',position:'relative'}}>
+                <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:6}}>
+                  <span style={{fontSize:13,lineHeight:1.4}}>{t.text}</span>
+                  <button onClick={()=>delTask(cd.key,t.id)} style={{background:'none',border:'none',color:'var(--muted)',cursor:'pointer',fontSize:13,flexShrink:0}}>✕</button>
+                </div>
+                <div style={{display:'flex',gap:6,marginTop:8,flexWrap:'wrap'}}>
+                  <span style={{fontSize:10,padding:'2px 8px',borderRadius:10,background:`${priColor[t.pri]}22`,color:priColor[t.pri]}}>{t.pri}</span>
+                  {colDef.filter(c=>c.key!==cd.key).map(c=>(
+                    <button key={c.key} onClick={()=>move(t.id,cd.key,c.key)} style={{fontSize:10,padding:'2px 8px',borderRadius:10,background:'rgba(99,102,241,0.15)',color:'#a5b4fc',border:'none',cursor:'pointer'}}>→ {c.label.split(' ')[1]}</button>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── IMPORTANT TOPICS (GROQ powered) ── */
+function ImportantTopics({target}){
+  const tgt=TARGETS.find(t=>t.id===target);
+  const topics=TOPIC_DATA[target]||TOPIC_DATA['gate-cs'];
+  const [selTopic,setSelTopic]=useState(null);
+  const [aiResp,setAiResp]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [aiErr,setAiErr]=useState('');
+  const hasKey=!!(localStorage.getItem('groq_key')||GROQ_DEMO_KEY);
+  const ask=async(topic)=>{
+    setSelTopic(topic);setLoading(true);setAiResp('');setAiErr('');
+    try{
+      const resp=await groqAsk(
+        `You are an expert tutor for Indian competitive exams. Explain the topic "${topic}" for ${tgt?.label||'competitive exam'} preparation.\n\nProvide:\n1. What this topic covers (2-3 lines)\n2. Key subtopics to study (bullet list)\n3. Important formulas/concepts (if any)\n4. How many marks/weightage in exam\n5. Best resources/books\n6. Pro tips for scoring high\n\nBe specific, practical and concise.`,
+        ''  // groqAsk auto-reads localStorage key → GROQ_DEMO_KEY
+      );
+      if(resp&&resp.trim())setAiResp(resp);
+      else setAiErr('No response received. Please try again.');
+    }catch(e){setAiErr('Error: '+e.message);}
+    setLoading(false);
+  };
+  const icons=['📌','📐','📝','📊','🔬','📖','🧮','🌐','🔧','💡','🎯','⚡'];
+  return(
+    <div>
+      <div style={{marginBottom:22}}>
+        <h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>🎯 Important Topics</h2>
+        <div style={{display:'flex',alignItems:'center',gap:12,flexWrap:'wrap'}}>
+          <p style={{color:'var(--muted)',fontSize:14}}>Target: <strong style={{color:'#a5b4fc'}}>{tgt?.label||'Set target in Profile'}</strong></p>
+          <span style={{padding:'3px 10px',borderRadius:20,fontSize:11,fontWeight:600,background:hasKey?'rgba(16,185,129,0.2)':'rgba(245,158,11,0.2)',color:hasKey?'#6ee7b7':'#fcd34d'}}>
+            {hasKey?'✅ AI Ready':'⚠️ Set Groq key in Profile → API Keys'}
+          </span>
+        </div>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1.4fr',gap:16}}>
+        <div className="card">
+          <div style={{fontSize:12,color:'var(--muted)',marginBottom:10,fontWeight:600,letterSpacing:.5}}>TOPIC LIST — click any for AI explanation</div>
+          {topics.map((t,i)=>(
+            <div key={i} onClick={()=>ask(t)} style={{display:'flex',alignItems:'center',gap:10,padding:'10px 12px',borderRadius:10,cursor:'pointer',background:selTopic===t?'rgba(99,102,241,0.2)':'rgba(255,255,255,0.04)',border:selTopic===t?'1px solid #6366f1':'1px solid transparent',marginBottom:6,transition:'all .2s'}}>
+              <span style={{fontSize:18,flexShrink:0,width:22,textAlign:'center'}}>{icons[i%icons.length]}</span>
+              <span style={{fontSize:13,fontWeight:selTopic===t?700:400,flex:1}}>{t}</span>
+              {selTopic===t&&loading&&<span style={{fontSize:11,color:'#a5b4fc'}}>⏳</span>}
+              {selTopic===t&&!loading&&aiResp&&<span style={{fontSize:11,color:'#10b981'}}>✓</span>}
+            </div>
+          ))}
+        </div>
+        <div className="card" style={{minHeight:320}}>
+          {!selTopic&&(
+            <div style={{textAlign:'center',padding:'40px 20px',color:'var(--muted)'}}>
+              <div style={{fontSize:52,marginBottom:14}}>🤖</div>
+              <div style={{fontWeight:600,marginBottom:6}}>Click any topic for AI explanation</div>
+              <div style={{fontSize:12}}>Powered by Groq AI · {hasKey?'Using platform key':'Add your key in Profile for best results'}</div>
+            </div>
+          )}
+          {selTopic&&loading&&(
+            <div style={{textAlign:'center',padding:'40px 20px',color:'#a5b4fc'}}>
+              <div style={{fontSize:40,marginBottom:12,animation:'pulse 1s infinite'}}>✨</div>
+              <div style={{fontWeight:600,marginBottom:4}}>Generating explanation…</div>
+              <div style={{fontSize:12,color:'var(--muted)'}}>Asking Groq AI about {selTopic}</div>
+            </div>
+          )}
+          {selTopic&&!loading&&aiErr&&(
+            <div>
+              <div style={{fontWeight:700,fontSize:15,marginBottom:12,color:'#a5b4fc'}}>{selTopic}</div>
+              <div style={{background:'rgba(239,68,68,0.1)',border:'1px solid rgba(239,68,68,0.3)',borderRadius:10,padding:14,fontSize:13,color:'#fca5a5'}}>{aiErr}</div>
+            </div>
+          )}
+          {selTopic&&!loading&&aiResp&&(
+            <div>
+              <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:14}}>
+                <div style={{fontWeight:700,fontSize:15,color:'#a5b4fc'}}>{selTopic}</div>
+                <span style={{fontSize:10,padding:'2px 8px',borderRadius:20,background:'rgba(99,102,241,0.2)',color:'#a5b4fc'}}>🤖 Groq AI</span>
+              </div>
+              <div style={{fontSize:14,lineHeight:1.9,color:'var(--text)',whiteSpace:'pre-line'}}>{aiResp}</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── NOTES LIBRARY ── */
+function NotesLibrary(){
+  const [notes,setNotes]=useState([
+    {id:1,title:'Algorithms – Sorting Techniques',sub:'DSA',pages:12,date:'Mar 2025',type:'PDF',star:true},
+    {id:2,title:'OS – Process Scheduling',sub:'Operating Systems',pages:8,date:'Feb 2025',type:'Notes',star:false},
+    {id:3,title:'DBMS – Normalization',sub:'Database',pages:15,date:'Jan 2025',type:'PDF',star:true},
+    {id:4,title:'Network Layers (OSI Model)',sub:'Networks',pages:10,date:'Mar 2025',type:'Notes',star:false},
+  ]);
+  const [search,setSearch]=useState('');
+  const [uploading,setUploading]=useState(false);
+  const shown=notes.filter(n=>n.title.toLowerCase().includes(search.toLowerCase())||n.sub.toLowerCase().includes(search.toLowerCase()));
+  const toggleStar=id=>setNotes(p=>p.map(n=>n.id===id?{...n,star:!n.star}:n));
+  const handleUpload=e=>{
+    const file=e.target.files[0];if(!file)return;
+    setUploading(true);
+    setTimeout(()=>{
+      setNotes(p=>[{id:Date.now(),title:file.name.replace(/\.[^.]+$/,''),sub:'Uploaded',pages:Math.floor(Math.random()*20)+5,date:'Apr 2025',type:file.name.endsWith('.pdf')?'PDF':'Notes',star:false},...p]);
+      setUploading(false);
+    },1200);
+    e.target.value='';
+  };
+  return(
+    <div>
+      <div style={{marginBottom:22}}><h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>📝 Notes Library</h2><p style={{color:'var(--muted)',fontSize:14}}>Your personal collection of notes and PDFs</p></div>
+      <div style={{display:'flex',gap:12,marginBottom:18,flexWrap:'wrap'}}>
+        <input className="inp" placeholder="🔍 Search notes..." value={search} onChange={e=>setSearch(e.target.value)} style={{flex:1,minWidth:200}}/>
+        <label className="btn btn-p" style={{cursor:'pointer',display:'flex',alignItems:'center',gap:8}}>
+          {uploading?'⏳ Uploading...':'📤 Upload Note'}
+          <input type="file" accept=".pdf,.doc,.docx,.txt" style={{display:'none'}} onChange={handleUpload}/>
+        </label>
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',gap:14}}>
+        {shown.map(n=>(
+          <div key={n.id} className="card" style={{transition:'transform .2s,box-shadow .2s'}} onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-3px)';e.currentTarget.style.boxShadow='0 10px 40px rgba(99,102,241,0.2)'}} onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='none'}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
+              <div style={{fontSize:32}}>{n.type==='PDF'?'📄':'📝'}</div>
+              <button onClick={()=>toggleStar(n.id)} style={{background:'none',border:'none',cursor:'pointer',fontSize:18,color:n.star?'#f59e0b':'var(--muted)'}}>{n.star?'⭐':'☆'}</button>
+            </div>
+            <div style={{fontWeight:700,fontSize:14,marginBottom:4,lineHeight:1.3}}>{n.title}</div>
+            <div style={{fontSize:12,color:'var(--muted)',marginBottom:10}}>{n.sub} · {n.pages} pages · {n.date}</div>
+            <div style={{display:'flex',gap:8}}>
+              <span className={'badge '+(n.type==='PDF'?'br':'bb')}>{n.type}</span>
+              <button className="btn btn-g" style={{padding:'4px 12px',fontSize:12,flex:1}}>View</button>
+            </div>
+          </div>
+        ))}
+      </div>
+      {!shown.length&&<div className="card" style={{textAlign:'center',padding:40,color:'var(--muted)'}}>📭 No notes found. Upload your first note!</div>}
+    </div>
+  );
+}
+
+/* ── GOVT JOB ALERTS ── */
+function GovtJobAlerts({target}){
+  const [filter,setFilter]=useState('all');
+  const tgt=TARGETS.find(t=>t.id===target);
+  const shown=filter==='all'?GOVT_JOBS:GOVT_JOBS.filter(j=>j.targets.includes(filter));
+  return(
+    <div>
+      <div style={{marginBottom:22}}>
+        <h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>🏛️ Govt Job Alerts</h2>
+        <p style={{color:'var(--muted)',fontSize:14}}>Latest government job notifications · <span style={{color:'#10b981'}}>Updated daily</span></p>
+      </div>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:18}}>
+        <button className={'tab-b'+(filter==='all'?' on':'')} onClick={()=>setFilter('all')}>All Jobs</button>
+        {tgt&&<button className={'tab-b'+(filter===target?' on':'')} onClick={()=>setFilter(target)}>{tgt.icon} My Target</button>}
+        {['ssc','upsc','railways'].map(id=>{const t=TARGETS.find(x=>x.id===id);return<button key={id} className={'tab-b'+(filter===id?' on':'')} onClick={()=>setFilter(id)}>{t?.icon} {t?.id.toUpperCase()}</button>;})}
+      </div>
+      <div style={{display:'grid',gap:12}}>
+        {shown.map(j=>(
+          <div key={j.id} className="card" style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap',transition:'all .2s'}} onMouseEnter={e=>e.currentTarget.style.borderColor='#8b5cf6'} onMouseLeave={e=>e.currentTarget.style.borderColor='var(--border)'}>
+            <div style={{fontSize:36,flexShrink:0}}>{j.icon}</div>
+            <div style={{flex:1,minWidth:180}}>
+              <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:4}}>
+                <div style={{fontWeight:800,fontSize:15}}>{j.title}</div>
+                <span className="badge bg2" style={{fontSize:10}}>NEW</span>
+              </div>
+              <div style={{color:'var(--muted)',fontSize:13,marginBottom:6}}>{j.body}</div>
+              <div style={{display:'flex',gap:10,flexWrap:'wrap'}}>
+                <span style={{fontSize:12}}><span style={{color:'var(--muted)'}}>Posts: </span><span style={{color:'#a5b4fc',fontWeight:700}}>{j.posts}</span></span>
+                <span style={{fontSize:12}}><span style={{color:'var(--muted)'}}>Pay: </span><span style={{color:'#10b981',fontWeight:700}}>{j.pay}</span></span>
+                <span style={{fontSize:12}}><span style={{color:'var(--muted)'}}>Last: </span><span style={{color:'#f59e0b',fontWeight:700}}>{j.last}</span></span>
+              </div>
+            </div>
+            <div style={{display:'flex',gap:8,flexShrink:0}}>
+              <button className="btn btn-p" style={{padding:'8px 16px',fontSize:13}}>Apply Now</button>
+              <button className="btn btn-g" style={{padding:'8px 14px',fontSize:13}}>Details</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── PERFORMANCE DASHBOARD ── */
+function PerformanceDash(){
+  const weeks=['W1','W2','W3','W4'];
+  const scores=[45,62,71,84];
+  const subjects=[{s:'Mathematics',score:78,total:100,color:'#6366f1'},{s:'English',score:65,total:100,color:'#8b5cf6'},{s:'Reasoning',score:82,total:100,color:'#a855f7'},{s:'GK/GS',score:55,total:100,color:'#ec4899'},{s:'Current Affairs',score:70,total:100,color:'#10b981'}];
+  const maxScore=Math.max(...scores);
+  return(
+    <div>
+      <div style={{marginBottom:22}}><h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>📊 Performance Dashboard</h2><p style={{color:'var(--muted)',fontSize:14}}>Track your mock test scores and subject-wise progress</p></div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(140px,1fr))',gap:12,marginBottom:22}}>
+        {[['🧪','Tests Taken','12','#6366f1'],['📈','Avg Score','67%','#8b5cf6'],['🏆','Best Score','84%','#f59e0b'],['🔥','Study Streak','7 days','#10b981']].map(([ic,lb,v,c])=>(
+          <div key={lb} className="card" style={{textAlign:'center'}}>
+            <div style={{fontSize:26,marginBottom:6}}>{ic}</div>
+            <div style={{fontWeight:800,fontSize:20,color:c}}>{v}</div>
+            <div style={{fontSize:12,color:'var(--muted)'}}>{lb}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+        <div className="card">
+          <h3 style={{fontWeight:700,marginBottom:16,fontSize:14}}>📈 Weekly Score Trend</h3>
+          <div style={{display:'flex',alignItems:'flex-end',gap:12,height:120,padding:'0 10px'}}>
+            {scores.map((s,i)=>(
+              <div key={i} style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',gap:4}}>
+                <div style={{fontSize:11,color:'#a5b4fc',fontWeight:700}}>{s}%</div>
+                <div style={{width:'100%',background:'linear-gradient(180deg,#6366f1,#8b5cf6)',borderRadius:'6px 6px 0 0',height:`${(s/maxScore)*90}px`,transition:'height 1s ease'}}/>
+                <div style={{fontSize:11,color:'var(--muted)'}}>{weeks[i]}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="card">
+          <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>📚 Subject-wise Performance</h3>
+          {subjects.map((s,i)=>(
+            <div key={i} style={{marginBottom:11}}>
+              <div style={{display:'flex',justifyContent:'space-between',fontSize:12,marginBottom:4}}><span>{s.s}</span><span style={{color:s.color,fontWeight:700}}>{s.score}/{s.total}</span></div>
+              <div style={{height:6,background:'rgba(255,255,255,0.08)',borderRadius:3}}><div style={{height:'100%',width:`${s.score}%`,background:`linear-gradient(90deg,${s.color},${s.color}aa)`,borderRadius:3,transition:'width 1s ease'}}/></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── JOB FINDER ── */
+const JOBS=[
+  {id:1,title:'Frontend Developer',company:'TechCorp',loc:'Bangalore',type:'Full-time',salary:'8-12 LPA',exp:'1-3 yrs',tags:['React','JS','CSS'],logo:'💻'},
+  {id:2,title:'Data Analyst Intern',company:'Analytics Inc',loc:'Remote',type:'Internship',salary:'15K/mo',exp:'Fresher',tags:['Python','SQL','Excel'],logo:'📊'},
+  {id:3,title:'UI/UX Designer',company:'DesignHub',loc:'Mumbai',type:'Full-time',salary:'6-10 LPA',exp:'0-2 yrs',tags:['Figma','XD'],logo:'🎨'},
+  {id:4,title:'Backend Engineer',company:'CloudBase',loc:'Hyderabad',type:'Full-time',salary:'12-18 LPA',exp:'2-5 yrs',tags:['Node.js','AWS','MongoDB'],logo:'⚙️'},
+  {id:5,title:'ML Intern',company:'AI Labs',loc:'Remote',type:'Internship',salary:'20K/mo',exp:'Fresher',tags:['Python','TensorFlow'],logo:'🤖'},
+  {id:6,title:'Android Developer',company:'MobileFirst',loc:'Pune',type:'Full-time',salary:'7-11 LPA',exp:'1-3 yrs',tags:['Kotlin','Java'],logo:'📱'},
+  {id:7,title:'DevOps Engineer',company:'Infra Co',loc:'Chennai',type:'Full-time',salary:'10-16 LPA',exp:'2-4 yrs',tags:['Docker','K8s'],logo:'🔧'},
+  {id:8,title:'Product Manager',company:'StartupXYZ',loc:'Bangalore',type:'Full-time',salary:'15-25 LPA',exp:'3-6 yrs',tags:['Strategy','Agile'],logo:'📋'},
+];
+function JobCard({job}){
+  const [saved,setSaved]=useState(false);
+  return(
+    <div className="job-card">
+      <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12}}>
+        <div style={{display:'flex',alignItems:'center',gap:13}}>
+          <div style={{width:46,height:46,borderRadius:12,background:'rgba(99,102,241,0.2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{job.logo}</div>
+          <div><div style={{fontWeight:700,fontSize:15,marginBottom:2}}>{job.title}</div><div style={{color:'var(--muted)',fontSize:13}}>{job.company} · {job.loc}</div></div>
+        </div>
+        <button onClick={()=>setSaved(!saved)} style={{background:'none',border:'none',fontSize:20,cursor:'pointer',color:saved?'#f59e0b':'var(--muted)'}}>{saved?'⭐':'☆'}</button>
+      </div>
+      <div style={{display:'flex',gap:7,flexWrap:'wrap',margin:'11px 0'}}>
+        <span className="badge bp">{job.type}</span>
+        <span className="badge bg2">💰 {job.salary}</span>
+        <span className="badge bb">🎯 {job.exp}</span>
+        {job.tags.map(t=><span key={t} className="badge" style={{background:'rgba(255,255,255,0.07)',color:'var(--muted)'}}>{t}</span>)}
+      </div>
+      <div style={{display:'flex',gap:10}}>
+        <a href={'https://www.google.com/search?q='+encodeURIComponent(job.title+' '+job.company)} target="_blank" rel="noreferrer"><button className="btn btn-p" style={{padding:'8px 18px',fontSize:13}}>Apply Now →</button></a>
+        <button className="btn btn-g" style={{padding:'8px 14px',fontSize:13}}>Details</button>
+      </div>
+    </div>
+  );
+}
+function JobFinder(){
+  const [q,setQ]=useState('');const [loc,setLoc]=useState('');const [type,setType]=useState('');
+  const [exp,setExp]=useState('');
+  const [live,setLive]=useState([]);const [loading,setLoading]=useState(false);const [err,setErr]=useState('');
+  const [aiMode,setAiMode]=useState(false);
+  const userRapidKey=localStorage.getItem('rapidapi_key')||'';
+  const filtered=useMemo(()=>JOBS.filter(j=>{const s=(q||'').toLowerCase();if(s&&!j.title.toLowerCase().includes(s)&&!j.company.toLowerCase().includes(s)&&!j.tags.some(t=>t.toLowerCase().includes(s)))return false;if(loc&&j.loc!==loc)return false;if(type&&j.type!==type)return false;return true;}),[q,loc,type]);
+  const aiSearch=async()=>{
+    if(!q.trim()){setErr('Enter a job title to search');return;}
+    setErr('');setLoading(true);setLive([]);setAiMode(true);
+    const prompt=`Generate 8 realistic job listings for "${q.trim()}" role${loc?' in '+loc:' in India'} for the Indian job market in 2025. Return ONLY a JSON array with this exact shape:
+[{"title":"...","company":"...","loc":"...","type":"Full-time","salary":"X-Y LPA","exp":"0-2 yrs","tags":["skill1","skill2","skill3"],"url":"#"}]
+Mix different companies (startups, MNCs, product companies). Be realistic about Indian salaries in LPA or K/month for interns.`;
+    try{
+      const data=await groqJSON(prompt,'');
+      if(Array.isArray(data)&&data.length){
+        setLive(data.map((j,i)=>({...j,id:i+1,logo:'🤖'})));
+      }else{
+        setErr('AI could not generate results. Try a more specific job title.');
+      }
+    }catch(e){setErr('AI search failed: '+e.message);}
+    setLoading(false);
+  };
+  const liveSearch=async()=>{
+    const key=userRapidKey||RAPIDAPI_KEY;
+    if(!key){
+      // No RapidAPI key — fall back to Groq AI search
+      await aiSearch();
+      return;
+    }
+    if(!q.trim()){setErr('Enter a job title (e.g. "react developer")');return;}
+    setErr('');setLoading(true);setLive([]);setAiMode(false);
+    try{
+      // Build query — JSearch expects "title in city, country"
+      const queryStr=q.trim()+(loc?' in '+loc:' in India');
+      const params=new URLSearchParams({query:queryStr,page:'1',num_pages:'1',country:'in',date_posted:'all'});
+      if(exp)params.set('job_requirements',exp);
+      const url=`https://${RAPIDAPI_JOBS_HOST}/search?`+params.toString();
+      const r=await fetch(url,{headers:{'X-RapidAPI-Key':key,'X-RapidAPI-Host':RAPIDAPI_JOBS_HOST}});
+      // Check HTTP status before parsing
+      if(r.status===401||r.status===403){setErr('RapidAPI rejected the key (HTTP '+r.status+'). Make sure you SUBSCRIBED to JSearch on rapidapi.com (free Basic tier is fine).');setLoading(false);return;}
+      if(r.status===429){setErr('Rate limited (HTTP 429). You hit the JSearch monthly quota — upgrade or wait.');setLoading(false);return;}
+      const d=await r.json();
+      // JSearch error envelope
+      if(d.message&&!d.data){setErr('JSearch API: '+d.message);setLoading(false);return;}
+      if(d.error){setErr('JSearch error: '+(d.error.message||JSON.stringify(d.error)));setLoading(false);return;}
+      const raw=Array.isArray(d.data)?d.data:[];
+      const items=raw.map(j=>({
+        id:j.job_id||Math.random().toString(36),
+        title:j.job_title||'Untitled role',
+        company:j.employer_name||'—',
+        loc:[j.job_city,j.job_state,j.job_country].filter(Boolean).join(', ')||(j.job_is_remote?'Remote':'India'),
+        type:j.job_employment_type||'Full-time',
+        salary:j.job_min_salary?(`${j.job_salary_currency||''} ${j.job_min_salary}-${j.job_max_salary||''}`).trim():'—',
+        exp:j.job_required_experience?.required_experience_in_months?Math.round(j.job_required_experience.required_experience_in_months/12)+'+ yrs':'Any',
+        tags:(j.job_required_skills||j.job_highlights?.Qualifications||[]).slice(0,5),
+        logo:j.employer_logo?'🏢':'💼',
+        url:j.job_apply_link||j.job_google_link||'#',
+      }));
+      setLive(items);
+      if(!items.length){
+        setErr(`JSearch returned 0 results for "${queryStr}". Try a broader title (e.g. "developer") or remove the experience filter.`);
+      }
+    }catch(ex){setErr('Live search failed: '+(ex.message||'unknown'));}
+    setLoading(false);
+  };
+  return(
+    <div>
+      <div style={{marginBottom:22}}>
+        <h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>💼 Job Finder</h2>
+        <div style={{display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}>
+          <p style={{color:'var(--muted)',fontSize:14}}>Browse curated listings or search with AI / live RapidAPI</p>
+          <span style={{padding:'3px 10px',borderRadius:20,fontSize:11,fontWeight:600,background:(userRapidKey||RAPIDAPI_KEY)?'rgba(16,185,129,0.2)':'rgba(99,102,241,0.2)',color:(userRapidKey||RAPIDAPI_KEY)?'#6ee7b7':'#a5b4fc'}}>
+            {(userRapidKey||RAPIDAPI_KEY)?'✅ RapidAPI':'🤖 AI search active'}
+          </span>
+        </div>
+      </div>
+      <div className="card" style={{marginBottom:18}}>
+        <div style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:12,marginBottom:12}}>
+          <input className="inp" placeholder='🔍 Job title or keyword (e.g. "frontend developer")' value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==='Enter'&&liveSearch()}/>
+          <select className="inp" style={{cursor:'pointer'}} value={loc} onChange={e=>setLoc(e.target.value)}><option value="">📍 All Locations</option>{['Bangalore','Mumbai','Hyderabad','Pune','Chennai','Delhi','Gurgaon','Noida','Remote'].map(l=><option key={l}>{l}</option>)}</select>
+          <select className="inp" style={{cursor:'pointer'}} value={exp} onChange={e=>setExp(e.target.value)}><option value="">🎯 Experience</option><option value="under_3_years_experience">Under 3 years</option><option value="more_than_3_years_experience">3+ years</option><option value="no_experience">Fresher</option></select>
+          <select className="inp" style={{cursor:'pointer'}} value={type} onChange={e=>setType(e.target.value)}><option value="">📌 Type</option>{['Full-time','Internship','Part-time','Contract'].map(t=><option key={t}>{t}</option>)}</select>
+        </div>
+        <div style={{display:'flex',gap:10,flexWrap:'wrap',alignItems:'center'}}>
+          <button className="btn btn-p" onClick={liveSearch} disabled={loading} style={{padding:'10px 18px',fontSize:13}}>
+            {loading?'⏳ Searching…':(userRapidKey||RAPIDAPI_KEY)?'⚡ Live Search (RapidAPI)':'🤖 Search with AI'}
+          </button>
+          <button className="btn btn-g" onClick={()=>{setLive([]);setErr('');setAiMode(false);}} style={{padding:'10px 18px',fontSize:13}}>📋 Show Curated</button>
+          {!(userRapidKey||RAPIDAPI_KEY)&&<span style={{fontSize:11,color:'#64748b'}}>No RapidAPI key — using Groq AI · Add key in Profile → API Keys</span>}
+        </div>
+        {err&&<div style={{marginTop:10,background:'rgba(239,68,68,0.08)',borderRadius:8,padding:'8px 12px',color:'#fca5a5',fontSize:12}}>{err}</div>}
+      </div>
+      {live.length>0?(
+        <React.Fragment>
+          <div style={{marginBottom:12,display:'flex',alignItems:'center',gap:10}}>
+            <span style={{color:'var(--muted)',fontSize:13}}>{live.length} results for "{q}"</span>
+            {aiMode&&<span style={{padding:'2px 10px',borderRadius:20,fontSize:11,fontWeight:600,background:'rgba(99,102,241,0.2)',color:'#a5b4fc'}}>🤖 AI Generated</span>}
+          </div>
+          {live.map(j=>(
+            <div key={j.id} className="job-card">
+              <div style={{display:'flex',alignItems:'flex-start',justifyContent:'space-between',gap:12}}>
+                <div style={{display:'flex',alignItems:'center',gap:13}}>
+                  <div style={{width:46,height:46,borderRadius:12,background:aiMode?'rgba(99,102,241,0.25)':'rgba(99,102,241,0.2)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:22,flexShrink:0}}>{j.logo}</div>
+                  <div><div style={{fontWeight:700,fontSize:15,marginBottom:2}}>{j.title}</div><div style={{color:'var(--muted)',fontSize:13}}>{j.company} · {j.loc}</div></div>
+                </div>
+              </div>
+              <div style={{display:'flex',gap:7,flexWrap:'wrap',margin:'11px 0'}}>
+                <span className="badge bp">{j.type}</span>
+                <span className="badge bg2">💰 {j.salary}</span>
+                <span className="badge bb">🎯 {j.exp}</span>
+                {(j.tags||[]).map(t=><span key={t} className="badge" style={{background:'rgba(255,255,255,0.07)',color:'var(--muted)'}}>{t}</span>)}
+              </div>
+              <a href={j.url||'#'} target="_blank" rel="noreferrer"><button className="btn btn-p" style={{padding:'8px 18px',fontSize:13}}>Apply Now →</button></a>
+            </div>
+          ))}
+        </React.Fragment>
+      ):(
+        <React.Fragment>
+          <div style={{marginBottom:12,color:'var(--muted)',fontSize:13}}>{filtered.length} curated jobs — search above for more</div>
+          {filtered.map(j=><JobCard key={j.id} job={j}/>)}
+          {!filtered.length&&<div className="card" style={{textAlign:'center',padding:40,color:'var(--muted)'}}>😔 No jobs match your filter.</div>}
+        </React.Fragment>
+      )}
+    </div>
+  );
+}
+
+/* ── BOOKS ── */
+const BOOKS=[
+  {id:1,title:'Clean Code',author:'Robert C. Martin',branch:'CSE',rating:4.8,price:299,img:'📘',tag:'Bestseller'},
+  {id:2,title:'GATE CSE 2025',author:'Made Easy',branch:'CSE',rating:4.6,price:699,img:'📗',tag:'Popular'},
+  {id:3,title:'Engineering Maths',author:'B.S. Grewal',branch:'ECE',rating:4.7,price:549,img:'📙',tag:'Classic'},
+  {id:4,title:'Signals & Systems',author:'Oppenheim',branch:'ECE',rating:4.5,price:799,img:'📕',tag:'Premium'},
+  {id:5,title:'Strength of Materials',author:'R.K. Bansal',branch:'MECH',rating:4.4,price:449,img:'📒',tag:'Essential'},
+  {id:6,title:'Fluid Mechanics',author:'R.K. Rajput',branch:'MECH',rating:4.3,price:399,img:'📓',tag:'Essential'},
+  {id:7,title:'Building Materials',author:'S.K. Duggal',branch:'CIVIL',rating:4.2,price:349,img:'📔',tag:'Basic'},
+  {id:8,title:'Geotechnical Engg',author:'Arora',branch:'CIVIL',rating:4.5,price:499,img:'📃',tag:'Popular'},
+  {id:9,title:'Laxmikant Polity',author:'M. Laxmikant',branch:'UPSC',rating:4.9,price:549,img:'📘',tag:'Must Have'},
+  {id:10,title:'Bipin Chandra History',author:'Bipin Chandra',branch:'UPSC',rating:4.7,price:399,img:'📗',tag:'Classic'},
+  {id:11,title:'Quantitative Aptitude',author:'R.S. Aggarwal',branch:'SSC',rating:4.6,price:449,img:'📙',tag:'Bestseller'},
+  {id:12,title:'Verbal & Reasoning',author:'R.S. Aggarwal',branch:'SSC',rating:4.5,price:349,img:'📕',tag:'Popular'},
+];
+function BookCard({book}){
+  return(
+    <div className="card" style={{textAlign:'center',transition:'transform .2s,box-shadow .2s',cursor:'pointer'}} onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-4px)';e.currentTarget.style.boxShadow='0 12px 40px rgba(99,102,241,0.2)'}} onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='none'}}>
+      <div style={{fontSize:46,marginBottom:10}}>{book.img}</div>
+      <span className="badge bp" style={{marginBottom:8}}>{book.tag}</span>
+      <div style={{fontWeight:700,fontSize:13,marginBottom:4,lineHeight:1.4}}>{book.title}</div>
+      <div style={{color:'var(--muted)',fontSize:12,marginBottom:7}}>{book.author}</div>
+      <div style={{color:'#fbbf24',fontSize:12,marginBottom:9}}>{'★'.repeat(Math.floor(book.rating))} {book.rating}</div>
+      <div style={{fontWeight:800,color:'#10b981',marginBottom:11}}>₹{book.price}</div>
+      <a href={book.affLink||('https://www.amazon.in/s?k='+encodeURIComponent(book.title)+'&tag=1000673-21')} target="_blank" rel="noreferrer"><button className="btn btn-p" style={{width:'100%',fontSize:13}}>{book.affLink?'Open Link':'Buy on Amazon'}</button></a>
+    </div>
+  );
+}
+function BooksSection(){
+  const [branch,setBranch]=useState('All');
+  const [adminBooks]=useStore('cp_admin_books',[]);
+  const branches=['All','Admin Picks','CSE','ECE','MECH','CIVIL','UPSC','SSC'];
+  // Normalize admin-added books into the same shape
+  const adminAsBooks=adminBooks.map(b=>({id:'a'+b.id,title:b.title,author:b.author||'Admin',branch:'Admin',rating:5,price:0,img:'🆕',tag:'New from Admin',affLink:b.affLink}));
+  const merged=[...adminAsBooks,...BOOKS];
+  const shown=branch==='All'?merged:branch==='Admin Picks'?adminAsBooks:merged.filter(b=>b.branch===branch);
+  return(
+    <div>
+      <div style={{marginBottom:22}}><h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>📚 Books Library</h2><p style={{color:'var(--muted)',fontSize:14}}>Curated books + live admin picks. New admin uploads appear here automatically.</p></div>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:20}}>
+        {branches.map(b=><button key={b} className={'tab-b'+(branch===b?' on':'')} onClick={()=>setBranch(b)}>{b}{b==='Admin Picks'&&adminAsBooks.length?` (${adminAsBooks.length})`:''}</button>)}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(190px,1fr))',gap:14}}>
+        {shown.map(b=><BookCard key={b.id} book={b}/>)}
+      </div>
+      {!shown.length&&<div className="card" style={{textAlign:'center',padding:30,color:'var(--muted)'}}>No books in this category yet.</div>}
+    </div>
+  );
+}
+
+/* ── CHAT ── */
+const GROUPS=[{id:1,name:'CSE Students',icon:'💻',count:234},{id:2,name:'Job Alerts',icon:'💼',count:89},{id:3,name:'Doubt Solver',icon:'🤔',count:156},{id:4,name:'Study Group',icon:'📚',count:67},{id:5,name:'Teachers Lounge',icon:'👩‍🏫',count:42}];
+const INIT_MSGS={1:[{from:'Priya',text:'Anyone done React Module 5?',time:'10:30',me:false},{from:'You',text:'Yes! Hooks are amazing 🔥',time:'10:32',me:true}],2:[{from:'Bot',text:'New: Frontend Dev at Google — Apply now!',time:'09:00',me:false}],3:[{from:'Rahul',text:'Stuck on binary trees 😅',time:'11:00',me:false},{from:'You',text:'Check GFG — great article there!',time:'11:02',me:true}],4:[{from:'Anita',text:'Study session tonight 9PM?',time:'08:00',me:false}],5:[{from:'Prof. Kumar',text:'Class rescheduled to tomorrow',time:'07:30',me:false}]};
+function ChatSection({user}){
+  const [group,setGroup]=useState(1);const [msgs,setMsgs]=useState(INIT_MSGS);const [input,setInput]=useState('');const bottomRef=useRef(null);
+  useEffect(()=>{bottomRef.current?.scrollIntoView({behavior:'smooth'});},[msgs,group]);
+  const send=()=>{if(!input.trim())return;const time=new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'});setMsgs(prev=>({...prev,[group]:[...(prev[group]||[]),{from:'You',text:input.trim(),time,me:true}]}));setInput('');};
+  return(
+    <div style={{display:'flex',height:'calc(100vh - 100px)',background:'var(--bg2)',borderRadius:16,overflow:'hidden',border:'1px solid var(--border)'}}>
+      <div style={{width:190,borderRight:'1px solid var(--border)',overflowY:'auto',flexShrink:0}}>
+        <div style={{padding:'14px 12px',borderBottom:'1px solid var(--border)',fontWeight:700,fontSize:12,color:'var(--muted)',letterSpacing:1}}>GROUPS</div>
+        {GROUPS.map(g=>(
+          <div key={g.id} onClick={()=>setGroup(g.id)} style={{padding:'12px 13px',cursor:'pointer',background:group===g.id?'rgba(99,102,241,0.15)':'transparent',borderLeft:group===g.id?'3px solid #8b5cf6':'3px solid transparent',transition:'all .2s'}}>
+            <div style={{display:'flex',alignItems:'center',gap:9}}><span style={{fontSize:17}}>{g.icon}</span><div><div style={{fontWeight:600,fontSize:13}}>{g.name}</div><div style={{fontSize:11,color:'var(--muted)'}}>{g.count} members</div></div></div>
+          </div>
+        ))}
+      </div>
+      <div style={{flex:1,display:'flex',flexDirection:'column'}}>
+        <div style={{padding:'13px 17px',borderBottom:'1px solid var(--border)',display:'flex',alignItems:'center',gap:11}}><span style={{fontSize:20}}>{GROUPS.find(g=>g.id===group)?.icon}</span><div><div style={{fontWeight:700,fontSize:14}}>{GROUPS.find(g=>g.id===group)?.name}</div><div style={{fontSize:12,color:'var(--muted)'}}>{GROUPS.find(g=>g.id===group)?.count} members</div></div></div>
+        <div style={{flex:1,overflowY:'auto',padding:'14px',display:'flex',flexDirection:'column',gap:2}}>
+          {(msgs[group]||[]).map((m,i)=>(
+            <div key={i} style={{display:'flex',flexDirection:'column',alignItems:m.me?'flex-end':'flex-start'}}>
+              {!m.me&&<div style={{fontSize:11,color:'var(--muted)',marginBottom:2,marginLeft:2}}>{m.from}</div>}
+              <div className={'msg-bubble '+(m.me?'msg-me':'msg-other')}>{m.text}</div>
+              <div style={{fontSize:10,color:'var(--muted)',marginTop:2}}>{m.time}</div>
+            </div>
+          ))}
+          <div ref={bottomRef}/>
+        </div>
+        <div style={{padding:'11px 14px',borderTop:'1px solid var(--border)',display:'flex',gap:9}}>
+          <input className="inp" placeholder="Type a message..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>e.key==='Enter'&&send()} style={{flex:1}}/>
+          <button className="btn btn-p" onClick={send} style={{padding:'10px 18px',flexShrink:0}}>Send →</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── WHITEBOARD (front camera + audio + saved recordings) ── */
+function TeacherWhiteboard({onClose,user}){
+  const canvasRef=useRef(null);const wrapRef=useRef(null);const videoRef=useRef(null);const mrRef=useRef(null);const streamRef=useRef(null);
+  const drawRef=useRef(false);const startRef=useRef({x:0,y:0});const snapRef=useRef(null);
+  const recognRef=useRef(null);const audioMrRef=useRef(null);
+  const [tool,setTool]=useState('pen');const [color,setColor]=useState('#ffffff');const [bgCol,setBgCol]=useState('#1a1535');const [size,setSize]=useState(3);const [shape,setShape]=useState('rect');
+  const [slides,setSlides]=useState([]);const [curSlide,setCurSlide]=useState(0);
+  const [camOn,setCamOn]=useState(false);const [recording,setRecording]=useState(false);const [recChunks,setRecChunks]=useState([]);
+  const [voiceMode,setVoiceMode]=useState(false);const [voiceText,setVoiceText]=useState('');const [audioRec,setAudioRec]=useState(false);
+  useEffect(()=>{
+    const wrap=wrapRef.current;if(!wrap)return;
+    const ro=new ResizeObserver(entries=>{
+      const {width:w,height:h}=entries[0].contentRect;const c=canvasRef.current;if(!c)return;
+      const ctx=c.getContext('2d');const snap=c.width>0?ctx.getImageData(0,0,c.width,c.height):null;
+      c.width=Math.floor(w);c.height=Math.floor(h);ctx.fillStyle=bgCol;ctx.fillRect(0,0,c.width,c.height);
+      if(snap)try{ctx.putImageData(snap,0,0);}catch(e){}
+    });
+    ro.observe(wrap);return()=>ro.disconnect();
+  },[bgCol]);
+  const getPos=e=>{const c=canvasRef.current;const r=c.getBoundingClientRect();const src=e.touches?e.touches[0]:e;return{x:(src.clientX-r.left)*(c.width/r.width),y:(src.clientY-r.top)*(c.height/r.height)};};
+  const onDown=e=>{e.preventDefault();const ctx=canvasRef.current.getContext('2d');const pos=getPos(e);startRef.current=pos;drawRef.current=true;if(tool==='pen'||tool==='eraser'){ctx.beginPath();ctx.moveTo(pos.x,pos.y);}else snapRef.current=ctx.getImageData(0,0,canvasRef.current.width,canvasRef.current.height);};
+  const drawShape=(ctx,x0,y0,x1,y1)=>{
+    ctx.strokeStyle=color;ctx.lineWidth=size;ctx.beginPath();
+    const w=x1-x0,h=y1-y0,cx=(x0+x1)/2,cy=(y0+y1)/2,r=Math.min(Math.abs(w),Math.abs(h))/2;
+    if(shape==='rect')ctx.rect(x0,y0,w,h);
+    else if(shape==='circle')ctx.arc(cx,cy,r,0,Math.PI*2);
+    else if(shape==='line'){ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);}
+    else if(shape==='arrow'){ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);const a=Math.atan2(y1-y0,x1-x0);ctx.moveTo(x1,y1);ctx.lineTo(x1-16*Math.cos(a-0.4),y1-16*Math.sin(a-0.4));ctx.moveTo(x1,y1);ctx.lineTo(x1-16*Math.cos(a+0.4),y1-16*Math.sin(a+0.4));}
+    else if(shape==='triangle'){ctx.moveTo(cx,y0);ctx.lineTo(x0,y1);ctx.lineTo(x1,y1);ctx.closePath();}
+    else if(shape==='diamond'){ctx.moveTo(cx,y0);ctx.lineTo(x1,cy);ctx.lineTo(cx,y1);ctx.lineTo(x0,cy);ctx.closePath();}
+    else if(shape==='star'){for(let i=0;i<10;i++){const rad=Math.PI/5*i-Math.PI/2,rr=i%2===0?r:r*0.4;if(i===0)ctx.moveTo(cx+rr*Math.cos(rad),cy+rr*Math.sin(rad));else ctx.lineTo(cx+rr*Math.cos(rad),cy+rr*Math.sin(rad));}ctx.closePath();}
+    else if(shape==='hexagon'){for(let i=0;i<6;i++){const rad=Math.PI/3*i-Math.PI/6;if(i===0)ctx.moveTo(cx+r*Math.cos(rad),cy+r*Math.sin(rad));else ctx.lineTo(cx+r*Math.cos(rad),cy+r*Math.sin(rad));}ctx.closePath();}
+    else if(shape==='pentagon'){for(let i=0;i<5;i++){const rad=Math.PI*2/5*i-Math.PI/2;if(i===0)ctx.moveTo(cx+r*Math.cos(rad),cy+r*Math.sin(rad));else ctx.lineTo(cx+r*Math.cos(rad),cy+r*Math.sin(rad));}ctx.closePath();}
+    else if(shape==='parallelogram'){ctx.moveTo(x0+w*0.2,y0);ctx.lineTo(x1,y0);ctx.lineTo(x1-w*0.2,y1);ctx.lineTo(x0,y1);ctx.closePath();}
+    else ctx.rect(x0,y0,w,h);
+    ctx.stroke();
+  };
+  const onMove=e=>{e.preventDefault();if(!drawRef.current)return;const ctx=canvasRef.current.getContext('2d');const pos=getPos(e);if(tool==='pen'){ctx.strokeStyle=color;ctx.lineWidth=size;ctx.lineCap='round';ctx.lineJoin='round';ctx.lineTo(pos.x,pos.y);ctx.stroke();}else if(tool==='eraser'){ctx.strokeStyle=bgCol;ctx.lineWidth=size*5;ctx.lineCap='round';ctx.lineTo(pos.x,pos.y);ctx.stroke();}else if(tool==='shape'){ctx.putImageData(snapRef.current,0,0);drawShape(ctx,startRef.current.x,startRef.current.y,pos.x,pos.y);}};
+  const onUp=()=>{drawRef.current=false;};
+  const clearBoard=()=>{const c=canvasRef.current;const ctx=c.getContext('2d');ctx.fillStyle=bgCol;ctx.fillRect(0,0,c.width,c.height);};
+  const saveBoard=()=>{const a=document.createElement('a');a.download='whiteboard.png';a.href=canvasRef.current.toDataURL();a.click();};
+  const uploadImg=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=ev=>{const img=new Image();img.onload=()=>{const c=canvasRef.current;const ctx=c.getContext('2d');const sc=Math.min(c.width/img.width,c.height/img.height,1)*0.7;const w=img.width*sc,h=img.height*sc;ctx.drawImage(img,(c.width-w)/2,(c.height-h)/2,w,h);};img.src=ev.target.result;};reader.readAsDataURL(file);};
+  const uploadSlides=e=>{Array.from(e.target.files||[]).forEach(file=>{const reader=new FileReader();reader.onload=ev=>setSlides(prev=>[...prev,ev.target.result]);reader.readAsDataURL(file);});};
+  const applySlide=idx=>{const img=new Image();img.onload=()=>{const c=canvasRef.current;const ctx=c.getContext('2d');ctx.fillStyle=bgCol;ctx.fillRect(0,0,c.width,c.height);ctx.drawImage(img,0,0,c.width,c.height);};img.src=slides[idx];setCurSlide(idx);};
+  // Attach stream to <video> only after it mounts (camOn=true → re-render → useEffect fires)
+  useEffect(()=>{
+    if(camOn&&streamRef.current&&videoRef.current){
+      videoRef.current.srcObject=streamRef.current;
+      const p=videoRef.current.play();
+      if(p&&p.catch)p.catch(err=>console.warn('video.play():',err));
+    }
+  },[camOn]);
+  const startCamera=async()=>{
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({
+        video:{facingMode:{ideal:'user'},width:{ideal:1280},height:{ideal:720}},
+        audio:{echoCancellation:true,noiseSuppression:true,sampleRate:44100},
+      });
+      streamRef.current=stream;
+      setCamOn(true); // triggers re-render → <video> stays mounted → useEffect attaches stream
+    }catch(e){alert('Camera/mic access denied: '+e.message);}
+  };
+  const stopCamera=()=>{
+    if(streamRef.current){streamRef.current.getTracks().forEach(t=>t.stop());streamRef.current=null;}
+    if(videoRef.current)videoRef.current.srcObject=null;
+    if(mrRef.current&&recording)mrRef.current.stop();
+    setCamOn(false);setRecording(false);
+  };
+  const startRecording=()=>{
+    if(!canvasRef.current)return;
+    // Composite stream: whiteboard canvas video + camera audio (and camera as PIP via MediaRecorder over the cam stream itself for simplicity)
+    const camStream=streamRef.current;
+    const canvasStream=canvasRef.current.captureStream(30);
+    const tracks=[...canvasStream.getVideoTracks()];
+    if(camStream){camStream.getAudioTracks().forEach(t=>tracks.push(t));}
+    const composite=new MediaStream(tracks);
+    const chunks=[];
+    let mime='video/webm;codecs=vp9,opus';
+    if(!window.MediaRecorder||!MediaRecorder.isTypeSupported(mime))mime='video/webm';
+    const mr=new MediaRecorder(composite,{mimeType:mime});
+    mr.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+    mr.onstop=async()=>{
+      const blob=new Blob(chunks,{type:'video/webm'});
+      // Save into per-user recordings list (base64 in localStorage; warn if too large)
+      try{
+        const b64=await new Promise(res=>{const r=new FileReader();r.onloadend=()=>res(r.result);r.readAsDataURL(blob);});
+        const rec={id:Date.now(),title:'Class recording '+new Date().toLocaleString(),size:blob.size,date:new Date().toISOString(),owner:user?.email||'guest',data:b64};
+        const key='cp_recordings_'+(user?.email||'guest');
+        const arr=Store.get(key,[]);
+        // keep only last 10 to avoid localStorage overflow
+        arr.unshift(rec);while(arr.length>10)arr.pop();
+        Store.set(key,arr);
+        Store.push('cp_admin_feed',{id:Date.now(),type:'recording',msg:`${user?.role||'user'} ${user?.name||'Someone'} saved a class recording (${(blob.size/1024/1024).toFixed(1)} MB)`,time:new Date().toISOString()});
+      }catch(e){console.warn('Recording save failed (size?):',e);}
+      // Also offer immediate download
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download='class-recording.webm';a.click();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+    };
+    mr.start(1000);
+    mrRef.current=mr;
+    setRecording(true);
+  };
+  const stopRecording=()=>{mrRef.current?.stop();setRecording(false);};
+
+  /* ── VOICE / SPEECH-TO-TEXT ── */
+  const toggleVoice=()=>{
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){alert('Speech recognition not supported. Please use Chrome or Edge.');return;}
+    if(voiceMode){recognRef.current?.stop();setVoiceMode(false);return;}
+    const r=new SR();
+    r.continuous=true;r.interimResults=true;r.lang='en-IN';
+    r.onresult=e=>{
+      let final='';
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        if(e.results[i].isFinal)final+=e.results[i][0].transcript+' ';
+      }
+      if(final)setVoiceText(p=>p+final);
+    };
+    r.onerror=()=>setVoiceMode(false);
+    r.onend=()=>setVoiceMode(false);
+    r.start();recognRef.current=r;setVoiceMode(true);
+  };
+  const insertVoiceToCanvas=()=>{
+    if(!voiceText.trim())return;
+    const c=canvasRef.current;const ctx=c.getContext('2d');
+    ctx.fillStyle=color;const fs=Math.max(size*4,18);ctx.font=`bold ${fs}px sans-serif`;
+    const maxW=c.width-60;const words=voiceText.trim().split(' ');
+    let line='';let y=Math.min(80,c.height/4);
+    for(const w of words){
+      const test=(line?line+' ':'')+w;
+      if(ctx.measureText(test).width>maxW&&line){ctx.fillText(line,30,y);line=w;y+=fs+8;}
+      else line=test;
+    }
+    if(line)ctx.fillText(line,30,y);
+    setVoiceText('');
+  };
+
+  /* ── AUDIO-ONLY RECORDER ── */
+  const startAudioOnly=async()=>{
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
+      const chunks=[];
+      let mime='audio/webm;codecs=opus';
+      if(!window.MediaRecorder||!MediaRecorder.isTypeSupported(mime))mime='audio/webm';
+      const mr=new MediaRecorder(stream,{mimeType:mime});
+      mr.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+      mr.onstop=()=>{
+        stream.getTracks().forEach(t=>t.stop());
+        const blob=new Blob(chunks,{type:'audio/webm'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');a.href=url;a.download='voice-note-'+Date.now()+'.webm';a.click();
+        setTimeout(()=>URL.revokeObjectURL(url),1000);
+      };
+      mr.start(500);audioMrRef.current=mr;setAudioRec(true);
+    }catch(e){alert('Microphone access denied: '+e.message);}
+  };
+  const stopAudioOnly=()=>{audioMrRef.current?.stop();setAudioRec(false);};
+
+  const COLORS=['#ffffff','#ef4444','#f59e0b','#10b981','#3b82f6','#8b5cf6','#ec4899','#14b8a6','#f97316','#000000'];
+  const SHAPES=['rect','circle','line','arrow','triangle','diamond','star','hexagon','pentagon','parallelogram'];
+  return(
+    <div className="wb-wrap">
+      <div className="wb-toolbar">
+        <button className="wb-btn" onClick={onClose} style={{color:'#fca5a5'}}>✕ Close</button>
+        <div className="wb-sep"/>
+        {[['pen','✏️ Pen'],['eraser','🧹 Erase'],['shape','⬜ Shape']].map(([t,l])=><button key={t} className={'wb-btn'+(tool===t?' on':'')} onClick={()=>setTool(t)}>{l}</button>)}
+        <div className="wb-sep"/>
+        {tool==='shape'&&<select value={shape} onChange={e=>setShape(e.target.value)} style={{background:'rgba(255,255,255,0.1)',border:'1px solid rgba(255,255,255,0.2)',borderRadius:7,padding:'5px 9px',color:'#e2e8f0',cursor:'pointer',fontSize:12}}>{SHAPES.map(s=><option key={s} value={s}>{s.charAt(0).toUpperCase()+s.slice(1)}</option>)}</select>}
+        <div className="wb-sep"/>
+        {COLORS.map(c=><div key={c} onClick={()=>setColor(c)} style={{width:20,height:20,borderRadius:'50%',background:c,cursor:'pointer',border:color===c?'3px solid #fff':'2px solid rgba(255,255,255,0.2)',transition:'transform .15s',transform:color===c?'scale(1.25)':'scale(1)',flexShrink:0}}/>)}
+        <input type="color" value={color} onChange={e=>setColor(e.target.value)} style={{width:26,height:26,border:'none',borderRadius:6,cursor:'pointer',background:'none',flexShrink:0}}/>
+        <div className="wb-sep"/>
+        <span style={{fontSize:11,color:'#94a3b8',flexShrink:0}}>BG:</span>
+        <input type="color" value={bgCol} onChange={e=>{setBgCol(e.target.value);clearBoard();}} style={{width:26,height:26,border:'none',borderRadius:6,cursor:'pointer',flexShrink:0}}/>
+        <div className="wb-sep"/>
+        <input type="range" min={1} max={20} value={size} onChange={e=>setSize(+e.target.value)} style={{width:65}}/>
+        <span style={{fontSize:11,color:'#a5b4fc',flexShrink:0}}>{size}px</span>
+        <div className="wb-sep"/>
+        <button className="wb-btn" onClick={clearBoard}>🗑️ Clear</button>
+        <button className="wb-btn" onClick={saveBoard}>💾 Save</button>
+        <div className="wb-sep"/>
+        <label className="wb-btn" style={{cursor:'pointer'}}>🖼️ Image<input type="file" accept="image/*" style={{display:'none'}} onChange={uploadImg}/></label>
+        <label className="wb-btn" style={{cursor:'pointer'}}>📑 Slides<input type="file" accept="image/*" multiple style={{display:'none'}} onChange={uploadSlides}/></label>
+        <div className="wb-sep"/>
+        {!camOn?(
+          <button className="wb-btn" onClick={startCamera} style={{color:'#6ee7b7'}}>📷 Camera</button>
+        ):(
+          <React.Fragment>
+            <button className="wb-btn on" onClick={stopCamera} style={{color:'#fca5a5'}}>📷 Stop Cam</button>
+            {!recording?(
+              <button className="wb-btn" onClick={startRecording} style={{color:'#fcd34d',animation:'recPulse 2s infinite',borderRadius:8}}>⏺ Record</button>
+            ):(
+              <button className="wb-btn" onClick={stopRecording} style={{color:'#fca5a5',border:'1px solid #ef4444'}}>⏹ Stop Rec</button>
+            )}
+          </React.Fragment>
+        )}
+        {recording&&<span style={{fontSize:11,color:'#ef4444',fontWeight:700,animation:'blink 1s infinite'}}>● LIVE</span>}
+        <div className="wb-sep"/>
+        <button className={'wb-btn'+(voiceMode?' on':'')} onClick={toggleVoice} style={{color:voiceMode?'#ef4444':'#6ee7b7'}}>{voiceMode?'🔴 Stop Voice':'🎤 Voice'}</button>
+        {!audioRec
+          ?<button className="wb-btn" onClick={startAudioOnly} style={{color:'#fcd34d'}}>🎙 Audio</button>
+          :<button className="wb-btn" onClick={stopAudioOnly} style={{color:'#fca5a5',border:'1px solid #ef4444'}}>⏹ Stop Audio</button>
+        }
+        {audioRec&&<span style={{fontSize:11,color:'#f59e0b',fontWeight:700,animation:'blink 1s infinite'}}>● REC</span>}
+      </div>
+      {(voiceMode||voiceText)&&(
+        <div style={{background:'rgba(15,12,41,0.95)',borderBottom:'1px solid rgba(255,255,255,0.1)',padding:'8px 14px',display:'flex',alignItems:'center',gap:10,flexWrap:'wrap'}}>
+          <span style={{fontSize:12,color:voiceMode?'#ef4444':'#6ee7b7',flexShrink:0}}>{voiceMode?'🔴 Listening...':'✓ Done'}</span>
+          <div style={{flex:1,fontSize:13,color:'#e2e8f0',minWidth:100,fontStyle:voiceText?'normal':'italic',opacity:voiceText?1:0.5}}>{voiceText||'Start speaking...'}</div>
+          {voiceText&&<button className="wb-btn" onClick={insertVoiceToCanvas} style={{color:'#a5b4fc',fontSize:11}}>➕ Insert to Canvas</button>}
+          {voiceText&&<button className="wb-btn" onClick={()=>setVoiceText('')} style={{fontSize:11}}>✕ Clear</button>}
+        </div>
+      )}
+      <div style={{display:'flex',flex:1,overflow:'hidden',position:'relative'}}>
+        {slides.length>0&&(
+          <div style={{width:120,background:'rgba(15,12,41,0.95)',borderRight:'1px solid rgba(255,255,255,0.1)',overflowY:'auto',padding:8,display:'flex',flexDirection:'column',gap:8}}>
+            {slides.map((s,i)=>(
+              <div key={i} onClick={()=>applySlide(i)} style={{borderRadius:7,overflow:'hidden',border:curSlide===i?'2px solid #6366f1':'2px solid transparent',cursor:'pointer'}}>
+                <img src={s} alt={'slide '+i} style={{width:'100%',display:'block'}}/>
+                <div style={{fontSize:10,textAlign:'center',padding:'3px 0',color:curSlide===i?'#a5b4fc':'#64748b'}}>Slide {i+1}</div>
+              </div>
+            ))}
+          </div>
+        )}
+        <div ref={wrapRef} className="wb-canvas-area">
+          <canvas ref={canvasRef} onMouseDown={onDown} onMouseMove={onMove} onMouseUp={onUp} onMouseLeave={onUp} onTouchStart={onDown} onTouchMove={onMove} onTouchEnd={onUp}/>
+        </div>
+        {/* video always rendered so videoRef is always available; hidden via display:none */}
+        <div style={{position:'absolute',bottom:16,right:16,zIndex:10,borderRadius:12,overflow:'hidden',border:'2px solid #6366f1',boxShadow:'0 8px 32px rgba(0,0,0,0.6)',background:'#000',display:camOn?'block':'none'}}>
+          <video ref={videoRef} autoPlay muted playsInline style={{width:200,height:150,display:'block',objectFit:'cover',transform:'scaleX(-1)'}}/>
+          {recording&&<div style={{position:'absolute',top:8,right:8,width:10,height:10,borderRadius:'50%',background:'#ef4444',animation:'blink 1s infinite'}}/>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── RECORDINGS (per user) ── */
+function RecordingsPage({user,toast}){
+  const key='cp_recordings_'+(user?.email||'guest');
+  const [list,setList]=useStore(key,[]);
+  const remove=id=>{setList(p=>p.filter(r=>r.id!==id));toast&&toast('Recording removed','info');};
+  return(
+    <div>
+      <div style={{marginBottom:22}}>
+        <h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>🎥 My Recordings</h2>
+        <p style={{color:'var(--muted)',fontSize:14}}>Class videos you recorded with the whiteboard. Stored locally on this device.</p>
+      </div>
+      {!list.length&&<div className="card" style={{textAlign:'center',padding:40,color:'var(--muted)'}}>📭 No recordings yet. Start the camera + microphone in the Whiteboard, then hit ⏺ Record.</div>}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',gap:14}}>
+        {list.map(r=>(
+          <div key={r.id} className="card">
+            <video src={r.data} controls style={{width:'100%',borderRadius:10,marginBottom:10,background:'#000'}}/>
+            <div style={{fontWeight:700,fontSize:13,marginBottom:3}}>{r.title}</div>
+            <div style={{fontSize:11,color:'var(--muted)',marginBottom:10}}>{(r.size/1024/1024).toFixed(1)} MB · {new Date(r.date).toLocaleString()}</div>
+            <div style={{display:'flex',gap:8}}>
+              <a href={r.data} download={(r.title||'recording')+'.webm'}><button className="btn btn-g" style={{padding:'6px 12px',fontSize:12}}>⬇ Download</button></a>
+              <button className="btn btn-r" style={{padding:'6px 12px',fontSize:12}} onClick={()=>remove(r.id)}>Remove</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── ADMIN DASHBOARD (enhanced) ── */
+function AdminKeysTab(){
+  const [groqTest,setGroqTest]=useState('');
+  const [groqTesting,setGroqTesting]=useState(false);
+  const groqOk=!!GROQ_DEMO_KEY;
+  const rapidOk=!!(RAPIDAPI_KEY);
+  const testGroq=async()=>{
+    setGroqTesting(true);setGroqTest('');
+    const r=await groqAsk('Reply with exactly two words: Groq OK','');
+    setGroqTest(r);setGroqTesting(false);
+  };
+  return(
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+      <div className="card">
+        <h3 style={{fontWeight:700,marginBottom:16,fontSize:14}}>🤖 Groq AI Key (Platform Demo)</h3>
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:14,padding:'12px',background:'rgba(255,255,255,0.04)',borderRadius:10}}>
+          <span style={{fontSize:26}}>{groqOk?'✅':'⚠️'}</span>
+          <div>
+            <div style={{fontWeight:600,fontSize:14,marginBottom:2}}>{groqOk?'Configured':'Not configured'}</div>
+            <div style={{fontSize:12,color:'var(--muted)'}}>{groqOk?`${GROQ_DEMO_KEY.slice(0,10)}${'•'.repeat(14)} · all users can generate AI content`:'Set GROQ_DEMO_KEY in Render env vars'}</div>
+          </div>
+        </div>
+        {groqOk?(
+          <div>
+            <button className="btn btn-g" style={{padding:'8px 16px',fontSize:12,marginBottom:10}} disabled={groqTesting} onClick={testGroq}>{groqTesting?'⏳ Testing…':'▶ Test Key Now'}</button>
+            {groqTest&&<div style={{background:'rgba(16,185,129,0.1)',border:'1px solid rgba(16,185,129,0.3)',borderRadius:8,padding:'8px 12px',fontSize:13,color:'#6ee7b7',marginBottom:10}}>✓ {groqTest}</div>}
+          </div>
+        ):(
+          <div style={{background:'rgba(245,158,11,0.1)',border:'1px solid rgba(245,158,11,0.3)',borderRadius:8,padding:'10px 12px',fontSize:12,color:'#fcd34d',marginBottom:10}}>
+            Add <strong>GROQ_DEMO_KEY=gsk_…</strong> to Render → Environment and redeploy.<br/>Get a free key at console.groq.com
+          </div>
+        )}
+        <div style={{padding:'10px 12px',background:'rgba(99,102,241,0.08)',borderRadius:8}}>
+          <div style={{fontSize:12,fontWeight:600,color:'#a5b4fc',marginBottom:6}}>Powers these features:</div>
+          <div style={{fontSize:12,color:'var(--muted)',lineHeight:1.9}}>
+            • 🎯 Important Topics — per-topic AI explanations<br/>
+            • 📋 Study Plan Generator — personalised exam plans<br/>
+            • 💼 Job Finder — AI job search (when no RapidAPI key)<br/>
+            • Users can override with their own key in Profile → API Keys
+          </div>
+        </div>
+      </div>
+      <div className="card">
+        <h3 style={{fontWeight:700,marginBottom:16,fontSize:14}}>🔎 RapidAPI Key (Live Job Search)</h3>
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:14,padding:'12px',background:'rgba(255,255,255,0.04)',borderRadius:10}}>
+          <span style={{fontSize:26}}>{rapidOk?'✅':'🤖'}</span>
+          <div>
+            <div style={{fontWeight:600,fontSize:14,marginBottom:2}}>{rapidOk?'Configured — live search active':'Not configured — AI fallback active'}</div>
+            <div style={{fontSize:12,color:'var(--muted)'}}>{rapidOk?`Host: ${RAPIDAPI_JOBS_HOST}`:'Job Finder uses Groq AI to generate listings'}</div>
+          </div>
+        </div>
+        {!rapidOk&&(
+          <div style={{background:'rgba(99,102,241,0.08)',border:'1px solid rgba(99,102,241,0.2)',borderRadius:8,padding:'10px 12px',fontSize:12,color:'#a5b4fc',marginBottom:10}}>
+            Job Finder works via Groq AI fallback. To enable real-time listings:<br/>
+            Add <strong>RAPIDAPI_KEY</strong> in Render env vars — subscribe to JSearch on rapidapi.com (free tier).
+          </div>
+        )}
+        <div style={{padding:'10px 12px',background:'rgba(99,102,241,0.08)',borderRadius:8}}>
+          <div style={{fontSize:12,fontWeight:600,color:'#a5b4fc',marginBottom:6}}>Key priority order:</div>
+          <div style={{fontSize:12,color:'var(--muted)',lineHeight:1.9}}>
+            1. User's own key (Profile → API Keys) — highest priority<br/>
+            2. Platform RAPIDAPI_KEY (this key)<br/>
+            3. Groq AI fallback — always available
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+function AdminDashboard({toast,addNotif}){
+  const [tab,setTab]=useState('overview');
+  // Hooks must be declared before they're used in derived values below
+  const [adminBooks,setAdminBooks]=useStore('cp_admin_books',[{id:1,title:'Admin Uploaded Book',author:'Admin',affLink:'https://amazon.in',active:true}]);
+  const [adminFeed]=useStore('cp_admin_feed',[]);
+  const [allUsers]=useStore('cp_users',[]);
+  const [pdfs,setPdfs]=useState([
+    {id:1,name:'DSA Notes Vol.1',by:'Prof. Rao',role:'teacher',status:'pending',date:'3 Apr 2025'},
+    {id:2,name:'Web Dev Guide',by:'Amit Kumar',role:'student',status:'pending',date:'4 Apr 2025'},
+    {id:3,name:'GATE Prep 2025',by:'Priya S.',role:'student',status:'approved',date:'1 Apr 2025'},
+    {id:4,name:'OS Concepts',by:'Prof. Singh',role:'teacher',status:'rejected',date:'2 Apr 2025'},
+  ]);
+  const seedUsers=[{name:'Priya S.',email:'priya@e.com',role:'student',status:'active',joined:'Jan 2025'},{name:'Rahul K.',email:'rahul@e.com',role:'student',status:'active',joined:'Feb 2025'},{name:'Prof. Rao',email:'rao@e.com',role:'teacher',status:'active',joined:'Dec 2024'}];
+  const users=[
+    ...(allUsers||[]).map(u=>({name:u.name,email:u.email,role:u.role,status:'active',joined:new Date(u.createdAt||Date.now()).toLocaleDateString('en',{month:'short',year:'numeric'})})),
+    ...seedUsers,
+  ];
+  const [bookTitle,setBookTitle]=useState('');const [bookAuthor,setBookAuthor]=useState('');const [bookLink,setBookLink]=useState('');
+  const approve=i=>{setPdfs(p=>p.map((x,idx)=>idx===i?{...x,status:'approved'}:x));toast('PDF approved!','success');addNotif('Admin approved PDF: '+pdfs[i].name);};
+  const reject=i=>{setPdfs(p=>p.map((x,idx)=>idx===i?{...x,status:'rejected'}:x));toast('PDF rejected','error');addNotif('Admin rejected PDF: '+pdfs[i].name);};
+  const addBook=()=>{
+    if(!bookTitle)return;
+    const nb={id:Date.now(),title:bookTitle,author:bookAuthor,affLink:bookLink||'https://amazon.in',active:true,addedAt:new Date().toISOString()};
+    setAdminBooks(p=>[...p,nb]);
+    Store.push('cp_admin_feed',{id:Date.now(),type:'book',msg:`📚 New book added by Admin: "${nb.title}"`,time:new Date().toISOString()});
+    setBookTitle('');setBookAuthor('');setBookLink('');
+    toast('Book added — visible to all teachers and students','success');
+    addNotif&&addNotif('You added a book: '+nb.title);
+  };
+  const handleUploadPdf=e=>{const file=e.target.files[0];if(!file)return;setPdfs(p=>[{id:Date.now(),name:file.name.replace(/\.[^.]+$/,''),by:'Admin',role:'admin',status:'approved',date:'Today'},...p]);toast('PDF uploaded by Admin!','success');addNotif('Admin uploaded PDF: '+file.name);e.target.value='';};
+  return(
+    <div>
+      <div style={{marginBottom:22}}><h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>🛡️ Admin Dashboard</h2><p style={{color:'var(--muted)',fontSize:14}}>Manage platform, users, content and notifications</p></div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(150px,1fr))',gap:12,marginBottom:22}}>
+        {[['👥','Total Users','1,248','#6366f1'],['👩‍🏫','Teachers','34','#8b5cf6'],['📄','Pending PDFs',pdfs.filter(p=>p.status==='pending').length+'','#f59e0b'],['💰','Revenue','₹2.4L','#10b981']].map(([ic,lb,vl,cl])=>(
+          <div key={lb} className="card" style={{display:'flex',alignItems:'center',gap:11}}>
+            <div style={{width:40,height:40,borderRadius:10,background:`${cl}22`,display:'flex',alignItems:'center',justifyContent:'center',fontSize:18}}>{ic}</div>
+            <div><div style={{fontWeight:800,fontSize:19,color:cl}}>{vl}</div><div style={{fontSize:12,color:'var(--muted)'}}>{lb}</div></div>
+          </div>
+        ))}
+      </div>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:18}}>
+        {[['overview','📊 Overview'],['users','👥 Users'],['pdfs','📄 PDFs'],['books','📚 Books'],['upload','📤 Upload'],['keys','🔑 Platform Keys']].map(([t,l])=>(
+          <button key={t} className={'tab-b'+(tab===t?' on':'')} onClick={()=>setTab(t)}>{l}</button>
+        ))}
+      </div>
+
+      {tab==='users'&&(
+        <div className="card" style={{overflowX:'auto'}}>
+          <table style={{width:'100%',borderCollapse:'collapse'}}>
+            <thead><tr style={{borderBottom:'1px solid var(--border)'}}>{['Name','Email','Role','Status','Joined','Action'].map(h=><th key={h} style={{padding:'10px 12px',textAlign:'left',fontSize:12,color:'var(--muted)',fontWeight:600}}>{h}</th>)}</tr></thead>
+            <tbody>{users.map((u,i)=>(
+              <tr key={i} style={{borderBottom:'1px solid var(--border)'}}>
+                <td style={{padding:'11px 12px',fontSize:14,fontWeight:600}}>{u.name}</td>
+                <td style={{padding:'11px 12px',fontSize:13,color:'var(--muted)'}}>{u.email}</td>
+                <td style={{padding:'11px 12px'}}><span className={'badge '+(u.role==='teacher'?'bp':'bb')}>{u.role}</span></td>
+                <td style={{padding:'11px 12px'}}><span className={'badge '+(u.status==='active'?'bg2':'br')}>{u.status}</span></td>
+                <td style={{padding:'11px 12px',fontSize:13,color:'var(--muted)'}}>{u.joined}</td>
+                <td style={{padding:'11px 12px'}}><button className="btn btn-g" style={{padding:'5px 12px',fontSize:12}} onClick={()=>toast('Action taken','info')}>Manage</button></td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      )}
+
+      {tab==='pdfs'&&(
+        <div className="card">
+          <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>📄 PDF Approval Queue (Teachers + Students)</h3>
+          {pdfs.map((p,i)=>(
+            <div key={p.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'12px',background:'rgba(255,255,255,0.04)',borderRadius:10,marginBottom:9,flexWrap:'wrap',gap:8}}>
+              <div>
+                <div style={{fontWeight:600,fontSize:14}}>{p.name}</div>
+                <div style={{fontSize:12,color:'var(--muted)'}}>by {p.by} <span className={'badge '+(p.role==='teacher'?'bp':'bb')} style={{marginLeft:6}}>{p.role}</span> · {p.date}</div>
+              </div>
+              <div style={{display:'flex',gap:7,alignItems:'center',flexWrap:'wrap'}}>
+                <span className={'badge '+(p.status==='approved'?'bg2':p.status==='rejected'?'br':'by')}>{p.status}</span>
+                {p.status==='pending'&&(
+                  <React.Fragment>
+                    <button className="btn" style={{background:'rgba(16,185,129,0.2)',color:'#6ee7b7',padding:'5px 11px',fontSize:12,borderRadius:8,border:'1px solid rgba(16,185,129,0.3)'}} onClick={()=>approve(i)}>✓ Approve</button>
+                    <button className="btn" style={{background:'rgba(239,68,68,0.2)',color:'#fca5a5',padding:'5px 11px',fontSize:12,borderRadius:8,border:'1px solid rgba(239,68,68,0.3)'}} onClick={()=>reject(i)}>✕ Reject</button>
+                  </React.Fragment>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab==='books'&&(
+        <div>
+          <div className="card" style={{marginBottom:16}}>
+            <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>➕ Add Book with Affiliate Link</h3>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:12}}>
+              <div><label style={{fontSize:12,color:'var(--muted)',display:'block',marginBottom:5}}>Book Title</label><input className="inp" placeholder="Clean Code" value={bookTitle} onChange={e=>setBookTitle(e.target.value)}/></div>
+              <div><label style={{fontSize:12,color:'var(--muted)',display:'block',marginBottom:5}}>Author</label><input className="inp" placeholder="Robert C. Martin" value={bookAuthor} onChange={e=>setBookAuthor(e.target.value)}/></div>
+            </div>
+            <div style={{marginBottom:12}}><label style={{fontSize:12,color:'var(--muted)',display:'block',marginBottom:5}}>Amazon Affiliate Link (tag=1000673-21)</label><input className="inp" placeholder="https://www.amazon.in/...?tag=1000673-21" value={bookLink} onChange={e=>setBookLink(e.target.value)}/></div>
+            <button className="btn btn-p" onClick={addBook}>Add Book to Library</button>
+          </div>
+          <div className="card">
+            <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>📚 Admin-Added Books</h3>
+            {adminBooks.map((b,i)=>(
+              <div key={b.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'10px 12px',background:'rgba(255,255,255,0.04)',borderRadius:10,marginBottom:8}}>
+                <div><div style={{fontWeight:600,fontSize:14}}>{b.title}</div><div style={{fontSize:12,color:'var(--muted)'}}>{b.author}</div></div>
+                <div style={{display:'flex',gap:8}}>
+                  <a href={b.affLink} target="_blank" rel="noreferrer"><button className="btn btn-g" style={{padding:'5px 12px',fontSize:12}}>View Link</button></a>
+                  <button className="btn btn-r" style={{padding:'5px 12px',fontSize:12}} onClick={()=>setAdminBooks(p=>p.filter(x=>x.id!==b.id))}>Remove</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {tab==='upload'&&(
+        <div className="card" style={{maxWidth:500}}>
+          <h3 style={{fontWeight:700,marginBottom:6,fontSize:15}}>📤 Admin PDF Upload</h3>
+          <p style={{color:'var(--muted)',fontSize:13,marginBottom:16}}>Upload PDFs directly to the platform (auto-approved)</p>
+          <label className="btn btn-p" style={{cursor:'pointer',display:'inline-flex',alignItems:'center',gap:8,marginBottom:16}}>
+            📄 Choose PDF to Upload
+            <input type="file" accept=".pdf,.doc,.docx" style={{display:'none'}} onChange={handleUploadPdf}/>
+          </label>
+          <div style={{background:'rgba(99,102,241,0.08)',borderRadius:10,padding:14}}>
+            <div style={{fontSize:13,fontWeight:700,color:'#a5b4fc',marginBottom:8}}>Recently Uploaded</div>
+            {pdfs.filter(p=>p.role==='admin').map((p,i)=>(
+              <div key={i} style={{display:'flex',justifyContent:'space-between',fontSize:13,padding:'6px 0',borderBottom:'1px solid var(--border)'}}><span>{p.name}</span><span className="badge bg2">{p.status}</span></div>
+            ))}
+            {!pdfs.filter(p=>p.role==='admin').length&&<div style={{color:'var(--muted)',fontSize:13}}>No PDFs uploaded yet</div>}
+          </div>
+        </div>
+      )}
+
+      {tab==='keys'&&<AdminKeysTab/>}
+
+      {tab==='overview'&&(
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16}}>
+          <div className="card">
+            <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>📈 Recent Activity (live)</h3>
+            {(adminFeed.length?adminFeed:[{id:0,type:'info',msg:'No activity yet — invite users to sign up.',time:new Date().toISOString()}]).slice(0,8).map(ev=>{
+              const ic=ev.type==='signup'?'🟢':ev.type==='login'?'🔑':ev.type==='book'?'📚':ev.type==='recording'?'🎥':'•';
+              return(
+                <div key={ev.id} style={{display:'flex',alignItems:'flex-start',gap:9,padding:'8px 0',borderBottom:'1px solid var(--border)'}}>
+                  <span style={{flexShrink:0}}>{ic}</span>
+                  <div style={{flex:1}}><div style={{fontSize:13}}>{ev.msg}</div><div style={{fontSize:11,color:'var(--muted)'}}>{new Date(ev.time).toLocaleString()}</div></div>
+                </div>
+              );
+            })}
+          </div>
+          <div className="card">
+            <h3 style={{fontWeight:700,marginBottom:14,fontSize:14}}>💰 Revenue</h3>
+            {[['Premium Plans','₹1.8L',75],['Book Affiliate','₹0.4L',17],['Job Listings','₹0.2L',8]].map(([lb,am,pct])=>(
+              <div key={lb} style={{marginBottom:13}}>
+                <div style={{display:'flex',justifyContent:'space-between',fontSize:13,marginBottom:5}}><span>{lb}</span><span style={{color:'#10b981',fontWeight:700}}>{am}</span></div>
+                <div style={{height:6,background:'rgba(255,255,255,0.08)',borderRadius:3}}><div style={{height:'100%',width:pct+'%',background:'linear-gradient(90deg,#10b981,#6ee7b7)',borderRadius:3}}/></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── PROFILE ── */
+function ProfilePage({user,toast,target,setTarget}){
+  const [tab,setTab]=useState('profile');
+  const [name,setName]=useState(user.name);
+  const [bio,setBio]=useState('');
+  const [apiKey,setApiKey]=useState('');
+  const [groqKey,setGroqKey]=useState(localStorage.getItem('groq_key')||'');
+  const tgt=TARGETS.find(t=>t.id===target);
+  return(
+    <div>
+      <div style={{marginBottom:22}}><h2 style={{fontWeight:800,fontSize:22,marginBottom:4}}>👤 Profile</h2><p style={{color:'var(--muted)',fontSize:14}}>Manage your account settings and target</p></div>
+      <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:18}}>
+        {[['profile','Profile'],['target','🎯 Target'],['api','API Keys'],['billing','Billing']].map(([t,l])=><button key={t} className={'tab-b'+(tab===t?' on':'')} onClick={()=>setTab(t)}>{l}</button>)}
+      </div>
+
+      {tab==='profile'&&(
+        <div style={{maxWidth:500}}>
+          <div className="card">
+            <div style={{display:'flex',alignItems:'center',gap:18,marginBottom:20}}>
+              <div style={{width:68,height:68,borderRadius:'50%',background:'linear-gradient(135deg,#6366f1,#8b5cf6)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:26,fontWeight:800,color:'#fff'}}>{(name||'U')[0].toUpperCase()}</div>
+              <div>
+                <div style={{fontWeight:800,fontSize:17}}>{name}</div>
+                <div style={{color:'var(--muted)',fontSize:13}}>{user.email}</div>
+                <div style={{display:'flex',gap:6,marginTop:5,flexWrap:'wrap'}}><span className="badge bp">{user.role}</span>{tgt&&<span className="badge bb">{tgt.icon} {tgt.label}</span>}</div>
+              </div>
+            </div>
+            <div style={{marginBottom:13}}><label style={{fontSize:13,color:'var(--muted)',display:'block',marginBottom:5}}>Full Name</label><input className="inp" value={name} onChange={e=>setName(e.target.value)}/></div>
+            <div style={{marginBottom:16}}><label style={{fontSize:13,color:'var(--muted)',display:'block',marginBottom:5}}>Bio</label><textarea className="inp" rows={3} placeholder="Tell us about yourself..." value={bio} onChange={e=>setBio(e.target.value)} style={{resize:'vertical'}}/></div>
+            <div style={{marginBottom:14}}>
+              <label style={{fontSize:13,color:'var(--muted)',display:'block',marginBottom:5}}>🤖 Groq API Key (your own)</label>
+              <input className="inp" type="password" placeholder="gsk_..." value={groqKey} onChange={e=>{setGroqKey(e.target.value);localStorage.setItem('groq_key',e.target.value);}}/>
+              <div style={{fontSize:11,color:'var(--muted)',marginTop:4}}>Free key at <a href="https://console.groq.com" target="_blank" rel="noreferrer" style={{color:'#a5b4fc'}}>console.groq.com</a>. If empty, the platform's demo key is used (rate-limited).</div>
+            </div>
+            <div style={{marginBottom:16}}>
+              <label style={{fontSize:13,color:'var(--muted)',display:'block',marginBottom:5}}>🔎 RapidAPI Key (for live job search)</label>
+              <input className="inp" type="password" placeholder="rapidapi_..." defaultValue={localStorage.getItem('rapidapi_key')||''} onChange={e=>localStorage.setItem('rapidapi_key',e.target.value)}/>
+              <div style={{fontSize:11,color:'var(--muted)',marginTop:4}}>Subscribe to <a href="https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch" target="_blank" rel="noreferrer" style={{color:'#a5b4fc'}}>JSearch</a> on RapidAPI and paste the key here.</div>
+            </div>
+            <button className="btn btn-p" onClick={()=>toast('Profile saved!','success')}>Save Changes</button>
+          </div>
+        </div>
+      )}
+
+      {tab==='target'&&(
+        <div style={{maxWidth:680}}>
+          <div className="card" style={{marginBottom:14}}>
+            <div style={{fontWeight:700,fontSize:14,marginBottom:4}}>Current Target</div>
+            {tgt?<div style={{display:'flex',alignItems:'center',gap:10,padding:'10px 14px',background:'rgba(99,102,241,0.15)',borderRadius:10,border:'1px solid rgba(99,102,241,0.3)'}}><span style={{fontSize:24}}>{tgt.icon}</span><div><div style={{fontWeight:700}}>{tgt.label}</div><div style={{fontSize:12,color:'var(--muted)'}}>{tgt.cat}</div></div></div>:<div style={{color:'var(--muted)',fontSize:13}}>No target set yet</div>}
+          </div>
+          {[...new Set(TARGETS.map(t=>t.cat))].map(cat=>(
+            <div key={cat} style={{marginBottom:16}}>
+              <div style={{fontSize:12,fontWeight:700,color:'#64748b',letterSpacing:1,marginBottom:10}}>{cat.toUpperCase()}</div>
+              <div style={{display:'flex',flexWrap:'wrap',gap:10}}>
+                {TARGETS.filter(t=>t.cat===cat).map(t=>(
+                  <div key={t.id} onClick={()=>{setTarget(t.id);toast('Target updated to '+t.label,'success');}} style={{display:'flex',alignItems:'center',gap:8,padding:'9px 14px',borderRadius:11,cursor:'pointer',border:target===t.id?'2px solid #6366f1':'2px solid rgba(255,255,255,0.1)',background:target===t.id?'rgba(99,102,241,0.2)':'rgba(255,255,255,0.04)',transition:'all .2s'}}>
+                    <span style={{fontSize:17}}>{t.icon}</span><span style={{fontSize:13,fontWeight:target===t.id?700:400,color:target===t.id?'#a5b4fc':'var(--text)'}}>{t.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {tab==='api'&&(
+        <div style={{maxWidth:500}}>
+          <div className="card">
+            <h3 style={{fontWeight:700,marginBottom:6,fontSize:15}}>🔑 API Access</h3>
+            <p style={{color:'var(--muted)',fontSize:13,marginBottom:15}}>Generate API keys to access CareerPilot data programmatically.</p>
+            {apiKey?<div style={{marginBottom:14}}><div style={{background:'rgba(99,102,241,0.1)',border:'1px solid rgba(99,102,241,0.3)',borderRadius:10,padding:'12px',fontFamily:'monospace',fontSize:12,color:'#a5b4fc',wordBreak:'break-all'}}>{apiKey}</div><p style={{color:'var(--muted)',fontSize:12,marginTop:5}}>⚠️ Copy now — not shown again</p></div>:<div style={{background:'rgba(255,255,255,0.04)',borderRadius:10,padding:14,marginBottom:14,textAlign:'center',color:'var(--muted)',fontSize:13}}>No key generated yet</div>}
+            <button className="btn btn-p" onClick={()=>{setApiKey('cp_'+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2));toast('API key generated!','success');}}>Generate New Key</button>
+          </div>
+        </div>
+      )}
+
+      {tab==='billing'&&(
+        <div style={{maxWidth:500}}>
+          <div className="card">
+            <h3 style={{fontWeight:700,marginBottom:14,fontSize:15}}>💳 Current Plan</h3>
+            <div style={{background:'linear-gradient(135deg,rgba(99,102,241,0.2),rgba(139,92,246,0.2))',border:'1px solid rgba(99,102,241,0.3)',borderRadius:12,padding:18,marginBottom:16}}><div style={{fontWeight:800,fontSize:17,marginBottom:3}}>🆓 Free Plan</div><div style={{color:'var(--muted)',fontSize:13}}>Access to basic features</div></div>
+            {[['Basic','₹199/mo','Unlimited jobs, books and chat'],['Pro','₹499/mo','Everything + Whiteboard and API'],['Elite','₹999/mo','Everything + 1:1 mentorship']].map(([plan,price,feat])=>(
+              <div key={plan} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'11px',background:'rgba(255,255,255,0.04)',borderRadius:10,marginBottom:8}}>
+                <div><div style={{fontWeight:700,fontSize:14}}>{plan}</div><div style={{fontSize:12,color:'var(--muted)'}}>{feat}</div></div>
+                <div style={{display:'flex',alignItems:'center',gap:9}}><span style={{fontWeight:800,color:'#a5b4fc'}}>{price}</span><button className="btn btn-p" style={{padding:'6px 13px',fontSize:12}} onClick={()=>toast(plan+' plan selected!','success')}>Upgrade</button></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── MAIN APP SHELL ── */
+function MainApp({user,target,setTarget,onLogout}){
+  const [page,setPage]=useState('home');
+  const [dark,setDark]=useState(true);
+  const [showWB,setShowWB]=useState(false);
+  const [notif,setNotif]=useState(null);
+  const [notifList,setNotifList]=useState([{id:1,msg:'Welcome to CareerPilot!',time:'now',read:false}]);
+  const [showNotifPanel,setShowNotifPanel]=useState(false);
+  useEffect(()=>{document.body.className=dark?'':'light';},[dark]);
+  const toast=(msg,type='info')=>{setNotif({msg,type});setTimeout(()=>setNotif(null),3000);};
+  const addNotif=(msg)=>setNotifList(p=>[{id:Date.now(),msg,time:new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit'}),read:false},...p]);
+  const unread=notifList.filter(n=>!n.read).length;
+  const markAllRead=()=>setNotifList(p=>p.map(n=>({...n,read:true})));
+  const isTeacher=user.role==='teacher';const isAdmin=user.role==='admin';const isStudent=user.role==='student';
+  const navItems=[
+    {id:'home',icon:'🏠',label:'Dashboard'},
+    ...(isStudent?[
+      {id:'routine',icon:'📅',label:'Study Routine'},
+      {id:'tasks',icon:'📋',label:'Task Manager'},
+      {id:'topics',icon:'🎯',label:'Important Topics'},
+      {id:'notes',icon:'📝',label:'Notes Library'},
+      {id:'govtjobs',icon:'🏛️',label:'Govt Job Alerts'},
+      {id:'performance',icon:'📊',label:'Performance'},
+    ]:[]),
+    {id:'jobs',icon:'💼',label:'Job Finder'},
+    {id:'books',icon:'📚',label:'Books Library'},
+    {id:'chat',icon:'💬',label:'Chat'},
+    ...(isTeacher||isAdmin?[{id:'whiteboard',icon:'🖌️',label:'Whiteboard'},{id:'recordings',icon:'🎥',label:'Recordings'}]:[]),
+    ...(isAdmin?[{id:'admin',icon:'🛡️',label:'Admin'}]:[]),
+    {id:'profile',icon:'👤',label:'Profile'},
+  ];
+  return(
+    <div style={{display:'flex',minHeight:'100vh',background:'var(--bg)'}}>
+      <aside style={{width:220,background:'var(--bg2)',borderRight:'1px solid var(--border)',display:'flex',flexDirection:'column',position:'fixed',top:0,left:0,bottom:0,zIndex:100}}>
+        <div style={{padding:'16px 14px',borderBottom:'1px solid var(--border)'}}>
+          <div style={{display:'flex',alignItems:'center',gap:9}}>
+            <div style={{width:33,height:33,borderRadius:9,background:'linear-gradient(135deg,#6366f1,#8b5cf6)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:16}}>🚀</div>
+            <span style={{fontWeight:800,fontSize:15,background:'linear-gradient(135deg,#a5b4fc,#c084fc)',WebkitBackgroundClip:'text',WebkitTextFillColor:'transparent'}}>CareerPilot</span>
+          </div>
+        </div>
+        <div style={{padding:'12px 14px',borderBottom:'1px solid var(--border)'}}>
+          <div style={{display:'flex',alignItems:'center',gap:9}}>
+            <div style={{width:34,height:34,borderRadius:50,background:'linear-gradient(135deg,#6366f1,#8b5cf6)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:13,color:'#fff'}}>{(user.name||'U')[0].toUpperCase()}</div>
+            <div style={{flex:1,overflow:'hidden'}}><div style={{fontWeight:600,fontSize:13,overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{user.name}</div><div style={{fontSize:11,color:'var(--muted)',textTransform:'capitalize'}}>{user.role}</div></div>
+            <div style={{position:'relative',cursor:'pointer'}} onClick={()=>setShowNotifPanel(!showNotifPanel)}>
+              <span style={{fontSize:18}}>🔔</span>
+              {unread>0&&<div style={{position:'absolute',top:-4,right:-4,width:16,height:16,borderRadius:'50%',background:'#ef4444',display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,color:'#fff',fontWeight:700}}>{unread}</div>}
+            </div>
+          </div>
+          {showNotifPanel&&(
+            <div style={{position:'absolute',left:14,top:100,width:270,background:'var(--bg2)',border:'1px solid var(--border)',borderRadius:14,zIndex:200,boxShadow:'0 16px 48px rgba(0,0,0,0.4)',maxHeight:300,overflow:'hidden',display:'flex',flexDirection:'column'}}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'12px 14px',borderBottom:'1px solid var(--border)'}}><span style={{fontWeight:700,fontSize:13}}>🔔 Notifications</span><button style={{background:'none',border:'none',color:'#6366f1',cursor:'pointer',fontSize:12}} onClick={markAllRead}>Mark all read</button></div>
+              <div style={{overflowY:'auto',flex:1}}>
+                {notifList.map(n=>(
+                  <div key={n.id} style={{padding:'10px 14px',borderBottom:'1px solid var(--border)',background:n.read?'transparent':'rgba(99,102,241,0.08)'}}>
+                    <div style={{fontSize:13}}>{n.msg}</div>
+                    <div style={{fontSize:11,color:'var(--muted)',marginTop:2}}>{n.time}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        <nav style={{flex:1,padding:'8px 7px',overflowY:'auto'}}>
+          {navItems.map(n=>(
+            <div key={n.id} className={'nav-i'+(page===n.id?' on':'')} onClick={()=>{if(n.id==='whiteboard'){setShowWB(true);}else{setPage(n.id);setShowNotifPanel(false);}}}>
+              <span style={{fontSize:16}}>{n.icon}</span><span style={{fontSize:13}}>{n.label}</span>
+            </div>
+          ))}
+        </nav>
+        <div style={{padding:'8px 7px',borderTop:'1px solid var(--border)'}}>
+          <div className="nav-i" onClick={()=>setDark(!dark)}><span style={{fontSize:16}}>{dark?'☀️':'🌙'}</span><span style={{fontSize:13}}>{dark?'Light Mode':'Dark Mode'}</span></div>
+          <div className="nav-i" onClick={onLogout}><span style={{fontSize:16}}>🚪</span><span style={{fontSize:13}}>Logout</span></div>
+        </div>
+      </aside>
+      <main style={{marginLeft:220,flex:1,padding:'24px',minHeight:'100vh',overflow:'auto'}}>
+        <div className="fade-in">
+          {page==='home'&&<HomeDash user={user} toast={toast} target={target}/>}
+          {page==='routine'&&<StudyRoutine/>}
+          {page==='tasks'&&<TaskManager/>}
+          {page==='topics'&&<ImportantTopics target={target}/>}
+          {page==='notes'&&<NotesLibrary/>}
+          {page==='govtjobs'&&<GovtJobAlerts target={target}/>}
+          {page==='performance'&&<PerformanceDash/>}
+          {page==='jobs'&&<JobFinder/>}
+          {page==='books'&&<BooksSection/>}
+          {page==='chat'&&<ChatSection user={user}/>}
+          {page==='admin'&&<AdminDashboard toast={toast} addNotif={addNotif}/>}
+          {page==='recordings'&&<RecordingsPage user={user} toast={toast}/>}
+          {page==='profile'&&<ProfilePage user={user} toast={toast} target={target} setTarget={setTarget}/>}
+        </div>
+      </main>
+      {showWB&&<TeacherWhiteboard onClose={()=>setShowWB(false)} user={user}/>}
+      {notif&&(
+        <div style={{position:'fixed',bottom:22,right:22,zIndex:9999,background:notif.type==='success'?'rgba(16,185,129,0.92)':notif.type==='error'?'rgba(239,68,68,0.92)':'rgba(99,102,241,0.92)',backdropFilter:'blur(12px)',borderRadius:12,padding:'11px 18px',color:'#fff',fontWeight:600,fontSize:14,animation:'fadeUp .3s ease',boxShadow:'0 8px 32px rgba(0,0,0,0.3)'}}>
+          {notif.msg}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── APP ROUTER ── */
+function App(){
+  const [screen,setScreen]=useState('landing'); // landing|role|target|auth|app
+  const [role,setRole]=useState('student');
+  const [target,setTarget]=useState('gate-cs');
+  const [user,setUser]=useState(null);
+  const handleLogin=u=>{setUser(u);setScreen('app');};
+  const handleLogout=()=>{try{if(sb&&SB_LIVE)sb.auth.signOut();}catch(_){}setUser(null);setScreen('landing');};
+  // Handle Google OAuth redirect callback ONLY
+  // (do NOT fire on email/password login — that would override the selected role with 'student')
+  useEffect(()=>{
+    if(!sb||!SB_LIVE)return;
+    // Supabase puts #access_token=... in the URL hash after a Google OAuth redirect
+    const isOAuthReturn=window.location.hash.includes('access_token');
+    const {data:{subscription}}=sb.auth.onAuthStateChange((event,session)=>{
+      if(event==='SIGNED_IN'&&session&&isOAuthReturn){
+        // OAuth callback — safe to auto-login because role is in user_metadata
+        const u=session.user;
+        const name=u.user_metadata?.full_name||u.user_metadata?.name||u.email.split('@')[0];
+        const r=u.user_metadata?.role||'student';
+        handleLogin({email:u.email,name,role:r});
+        // Clean the hash so a page refresh doesn't re-trigger
+        window.history.replaceState({},document.title,window.location.pathname);
+      }
+      if(event==='SIGNED_OUT'){setUser(null);setScreen('landing');}
+    });
+    return()=>subscription.unsubscribe();
+  },[]);
+  if(screen==='landing') return <LandingPage onEnter={()=>setScreen('role')}/>;
+  if(screen==='role')    return <RoleSelectPage onSelect={r=>{setRole(r);setScreen('auth');}}/>;
+  if(screen==='target')  return <TargetSelectPage onSelect={t=>{setTarget(t);setScreen('auth');}} onBack={()=>setScreen('auth')}/>;
+  if(screen==='auth')    return <AuthPage role={role} onBack={()=>setScreen('role')} onLogin={handleLogin}/>;
+  if(screen==='app'&&user) return <MainApp user={user} target={target} setTarget={setTarget} onLogout={handleLogout}/>;
+  return <LandingPage onEnter={()=>setScreen('role')}/>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body>
 </html>
+
